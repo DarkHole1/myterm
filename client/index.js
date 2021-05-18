@@ -22,7 +22,6 @@ const socket = io();
 // Two-directional binding
 term.onData(data => socket.emit('data', data));
 socket.on('data', (data) => {
-  // console.log(data)
   term.write(data)
 });
 
