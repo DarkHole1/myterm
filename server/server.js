@@ -8,6 +8,11 @@ const log = require('debug')('app:server');
 const TCPSocket = require('./socket');
 
 app.use(require('./static'));
+app.use(require('./auth'));
+
+app.get('/test', (req, res) => {
+  res.json('helloworld');
+})
 
 io.on('connection', (socket) => {
   log('Client connected');
