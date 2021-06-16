@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "node server/server.js"
+  },
   "dependencies": {
     "debug": "^2.6.9",
     "express": "^4.17.1",
