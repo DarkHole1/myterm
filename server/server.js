@@ -6,6 +6,8 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const log = require('debug')('app:server');
 const TCPSocket = require('./socket');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedTopology: true})
 
 app.use(require('./static'));
 app.use(require('./auth'));
