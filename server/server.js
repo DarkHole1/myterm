@@ -12,8 +12,8 @@ mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedT
 app.use(require('./static'));
 app.use(require('./auth'));
 
-app.get('/test', (req, res) => {
-  res.json('helloworld');
+app.get('/terminals', (req, res) => {
+  res.json(req.user.terminals.map(({ name }) => name));
 })
 
 io.on('connection', (socket) => {

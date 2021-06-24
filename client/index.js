@@ -28,6 +28,11 @@ socket.on('data', (data) => {
 // Status handling
 socket.on('status', setStatus);
 
+// Fetch terminal list
+fetch('/terminals').then(res => res.json()).then(res => {
+  log('Get %o', res);
+});
+
 // Connecting logic
 document.getElementById('form').addEventListener('submit', connect);
 function connect(e) {
