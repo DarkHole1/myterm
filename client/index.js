@@ -28,18 +28,16 @@ socket.on('data', (data) => {
 // Status handling
 socket.on('status', setStatus);
 
+const terminalsEl = document.getElementById('terminals');
 // Fetch terminal list
 fetch('/terminals').then(res => res.json()).then(res => {
   log('Get %o', res);
+  terminalsEl.innerHTML = '';
+  for(const [id, el] of Object.entries(res)) {
+    const li = document.createElement('li');
+    li.innerText = el;
+    li.addEventListener('click', () => {
+      socket.emit('client', [id]);
+    });
+  }
 });
-
-// Connecting logic
-document.getElementById('form').addEventListener('submit', connect);
-function connect(e) {
-  e.preventDefault();
-
-  const host = document.getElementById('host').value;
-  const port = parseInt(document.getElementById('port').value);
-  debug('Connecting to %o %o', host, port);
-  socket.emit('client', [host, port]);
-}
