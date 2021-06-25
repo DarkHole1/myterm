@@ -21,7 +21,7 @@ io.on('connection', async (socket) => {
   log('Client connected');
   let client = null;
 
-  const res = socker.handshake;
+  const req = socket.handshake;
   const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
   const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
   const user = await User.findOne({ name: login, password: password });

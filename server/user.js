@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     password: String,
     terminals: [{
         name: String,
-        ip: String,
+        host: String,
         port: Number,
         readonly: Boolean
     }]

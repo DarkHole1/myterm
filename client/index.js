@@ -39,5 +39,6 @@ fetch('/terminals').then(res => res.json()).then(res => {
     li.addEventListener('click', () => {
       socket.emit('client', [id]);
     });
+    terminalsEl.appendChild(li);
   }
 });
