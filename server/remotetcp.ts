@@ -30,3 +30,5 @@ class RemoteTCP {
         this._socket.destroy();
     }
 }
+
+export default RemoteTCP;
