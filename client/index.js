@@ -10,6 +10,7 @@ fetch('/terminals').then(res => res.json()).then(res => {
     const link = document.createElement('a');
     link.innerText = el;
     link.href = '/terminal#' + el;
+    link.target = '_blank';
     terminalsEl.appendChild(link);
   }
 });
