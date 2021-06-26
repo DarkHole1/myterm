@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     name: String,
@@ -11,4 +11,8 @@ const userSchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model("User", userSchema);
+userSchema.statics.findByCredentials = function(creds: Credentials) {
+    return this.find(creds.getCredentials());
+}
+
+export default mongoose.model("User", userSchema);
