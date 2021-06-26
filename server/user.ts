@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.findByCredentials = function(creds: Credentials) {
-    return this.find(creds.getCredentials());
+    return this.findOne(creds.getCredentials());
 }
 
 export default mongoose.model("User", userSchema);
