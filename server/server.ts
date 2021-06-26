@@ -1,20 +1,22 @@
-const express = require('express');
+import express from 'express';
+import http from 'http';
+import { Server } from "socket.io";
+import initializeSockets from './socket-handler';
+
 const app = express();
-const http = require('http');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
 const io = new Server(server);
 const log = require('debug')('app:server');
-const TCPSocket = require('./socket');
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedTopology: true})
-const User = require('./user');
+
+initializeSockets(io);
 
 app.use(require('./auth'));
 app.use(require('./static'));
 
-app.get('/terminals', (req, res) => {
-  res.json(req.user.terminals.map(({ name }) => name));
+app.get('/terminals', (req: any, res) => {
+  res.json(req.user.terminals.map(({ name }: any) => name));
 })
 
 server.listen(3000)
