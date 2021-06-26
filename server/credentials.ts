@@ -17,3 +17,5 @@ class Credentials {
         return new Credentials(login, password);
     }
 }
+
+export default Credentials;
