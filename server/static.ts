@@ -1,15 +1,16 @@
-const path = require('path');
-const express = require('express');
+import path from 'path';
+import express from 'express';
+import debug from 'debug';
+
 const router = express.Router();
-const log = require('debug')('app:static');
+const log = debug('app:static');
 
 const STATIC = {
-  '/': '../client/index.html',
-  '/index.js': '../client/index.js',
-  '/debug.js': '../client/debug.js',
   '/xterm.css': '../node_modules/xterm/css/xterm.css',
   '/xterm.js': '../node_modules/xterm/lib/xterm.js',
 }
+
+router.use(express.static(path.join(__dirname, '../client')));
 
 for(let [url, filepath] of Object.entries(STATIC)) {
   router.get(url, (req, res) => {
@@ -18,4 +19,4 @@ for(let [url, filepath] of Object.entries(STATIC)) {
   })
 }
 
-module.exports = router;
+export default router;
