@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "module": "system",
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+    //   "outFile": "dist/server.js",
+      "sourceMap": true
+    }
+}
