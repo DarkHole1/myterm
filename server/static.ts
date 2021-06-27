@@ -8,6 +8,7 @@ const log = debug('app:static');
 const STATIC = {
   '/xterm.css': '../node_modules/xterm/css/xterm.css',
   '/xterm.js': '../node_modules/xterm/lib/xterm.js',
+  '/xterm-addon-fit.js': '../node_modules/xterm-addon-fit/lib/xterm-addon-fit.js'
 }
 
 router.use(express.static(path.join(__dirname, '../client')));

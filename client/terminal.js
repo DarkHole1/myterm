@@ -1,9 +1,15 @@
 // Logging
 const log = debug('app:frontend');
 
+// Fit addon
+const fitAddon = new FitAddon.FitAddon();
+
 // Terminal initialization
 const term = new Terminal();
+term.loadAddon(fitAddon);
 term.open(document.getElementById('terminal'));
+
+fitAddon.fit();
 
 // Socket.io initialization
 const socket = io();
