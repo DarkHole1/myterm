@@ -2,6 +2,8 @@ import express from 'express';
 import http from 'http';
 import { Server } from "socket.io";
 import initializeSockets from './socket-handler';
+import AuthMiddleware from './auth';
+import StaticMiddleware from './static';
 
 const app = express();
 const server = http.createServer(app);
@@ -12,8 +14,8 @@ mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedT
 
 initializeSockets(io);
 
-app.use(require('./auth'));
-app.use(require('./static'));
+app.use(AuthMiddleware);
+app.use(StaticMiddleware);
 
 app.get('/terminals', (req: any, res) => {
   res.json(req.user.terminals.map(({ name }: any) => name));

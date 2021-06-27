@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Credentials from './credentials';
 
 interface IUser extends mongoose.Model<null> {
     findByCredentials(creds: Credentials): any

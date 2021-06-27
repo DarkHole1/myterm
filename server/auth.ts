@@ -2,7 +2,7 @@ import Credentials from './credentials';
 import User from "./user";
 
 export default async function(req: any, res: any, next: any) {
-  const creds = Credentials.fromBasicAuth(res.headers.auth)
+  const creds = Credentials.fromBasicAuth(req.headers.authorization)
   const user = await User.findByCredentials(creds);
   if (user) {
     req.user = user;

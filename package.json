@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node server/server.js"
+    "start": "./node_modules/.bin/ts-node server/server.ts"
   },
   "dependencies": {
     "@types/debug": "^4.1.5",

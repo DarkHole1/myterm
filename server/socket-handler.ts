@@ -1,5 +1,6 @@
 import RemoteTCP from './remotetcp';
 import User from './user';
+import Credentials from './credentials';
 import debug from 'debug';
 const log = debug('app:socket');
 
