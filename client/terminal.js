@@ -10,6 +10,9 @@ term.loadAddon(fitAddon);
 term.open(document.getElementById('terminal'));
 
 fitAddon.fit();
+window.addEventListener('resize', e => {
+  fitAddon.fit();
+})
 
 // Socket.io initialization
 const socket = io();
