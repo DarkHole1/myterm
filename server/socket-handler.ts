@@ -28,6 +28,7 @@ export default function(io: any, config: Config): void {
       
             client = new RemoteTCP({ host, port, readonly });
             client.attach(socket);
+            log("Sessions %o", config.recordSessions);
             if(config.recordSessions) {
                 client.history(history, config.sessionBytesCount, config.dropBytes);
             }

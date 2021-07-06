@@ -6,7 +6,7 @@ import AuthMiddleware from './auth';
 import StaticMiddleware from './static';
 import Config from './config';
 
-const config = new Config('../config.json');
+const config = new Config('config.json');
 
 const app = express();
 const server = http.createServer(app);

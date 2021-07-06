@@ -7,6 +7,7 @@ class RemoteTCP {
     private _socket: net.Socket;
     private _readonly: boolean;
     private _id: string;
+    private _attached: any;
 
     constructor({ host, port, readonly }: { host: string, port: number, readonly: boolean }) {
         this._id = `${host}:${port}`;
@@ -18,6 +19,7 @@ class RemoteTCP {
     }
 
     attach(socket: any): void {
+        this._attached = socket;
         this._socket.on('data', (data) => {
             log('Data received from socket, sending to client');
             socket.emit('data', data);
@@ -36,9 +38,12 @@ class RemoteTCP {
     }
 
     history(history: any, length: number, drop: number): void {
+        log("History enabled %o", history);
         if(this._id in history) {
-            this._socket.write(history[this._id]);
+            log("Has history, writing to attached");
+            this._attached.emit('data', history[this._id]);
         } else {
+            log("Has no history ;(");
             history[this._id] = Buffer.alloc(0);
         }
         this._socket.on('data', data => {
