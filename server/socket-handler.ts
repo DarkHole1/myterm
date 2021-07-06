@@ -1,10 +1,13 @@
 import RemoteTCP from './remotetcp';
 import User from './user';
 import Credentials from './credentials';
+import Config from './config';
 import debug from 'debug';
 const log = debug('app:socket');
 
-export default function(io: any): void {
+let history: any = {};
+
+export default function(io: any, config: Config): void {
     io.on('connection', async (socket: any) => {
         log('Client connected');
         let client: RemoteTCP = null;
@@ -25,6 +28,9 @@ export default function(io: any): void {
       
             client = new RemoteTCP({ host, port, readonly });
             client.attach(socket);
+            if(config.recordSessions) {
+                client.history(history, config.sessionBytesCount, config.dropBytes);
+            }
         });
       })
 }

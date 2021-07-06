@@ -15,7 +15,7 @@ const log = require('debug')('app:server');
 import mongoose from 'mongoose';
 mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedTopology: true})
 
-initializeSockets(io);
+initializeSockets(io, config);
 
 app.use(AuthMiddleware);
 app.use(StaticMiddleware);
