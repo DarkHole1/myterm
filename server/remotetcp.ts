@@ -19,11 +19,15 @@ class RemoteTCP {
 
     constructor({ host, socket, port, readonly }: Params) {
         // TODO: Socket
+        if(socket) {
+            this._socket = socket;
+        } else {
+            this._socket = new net.Socket();
+            this._socket.connect(port, host, () => {
+                log('Connected to %s:%d', host, port);
+            });
+        }
         this._id = `${host}:${port}`;
-        this._socket = new net.Socket();
-        this._socket.connect(port, host, () => {
-            log('Connected to %s:%d', host, port);
-        });
         this._readonly = readonly;
     }
 
