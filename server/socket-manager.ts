@@ -1,6 +1,9 @@
 import { Socket } from 'net';
 import RemoteTCP from './remotetcp';
 import Config from './config';
+import debug from 'debug';
+
+const log = debug('app:socket-manager');
 
 type SocketMap = {
     [key: string]: {
@@ -19,7 +22,9 @@ class SocketManager {
     private static _sockets: SocketMap = {};
     static get({ host, port, readonly, config }: Params): [RemoteTCP, Buffer] {
         const id = `${host}:${port}`;
-        if(id !in this._sockets) {
+        log('Data %o', this._sockets);
+        if(!(id in this._sockets)) {
+            log('Creating socket %s', id);
             const socket = new Socket;
             socket.connect(port, host);
             this._sockets[id] = {
