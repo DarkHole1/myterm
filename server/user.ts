@@ -1,11 +1,25 @@
 import mongoose from 'mongoose';
+import { isTypeQueryNode } from 'typescript';
 import Credentials from './credentials';
 
-interface IUser extends mongoose.Model<null> {
-    findByCredentials(creds: Credentials): any
+type Terminal = {
+    name: string,
+    host: string,
+    port: number,
+    readonly: boolean
 }
 
-const userSchema = new mongoose.Schema({
+interface IUser {
+    name: string,
+    password: string,
+    terminals: Terminal[]
+}
+
+interface IUserModel extends mongoose.Model<null> {
+    findByCredentials(creds: Credentials): IUser
+}
+
+const userSchema = new mongoose.Schema<IUser, IUserModel>({
     name: String,
     password: String,
     terminals: [{
@@ -20,5 +34,5 @@ userSchema.statics.findByCredentials = function(creds: Credentials) {
     return this.findOne(creds.getCredentials());
 }
 
-const User: IUser = mongoose.model<null, IUser>("User", userSchema);
+const User = mongoose.model<IUser, IUserModel>("User", userSchema);
 export default User;
