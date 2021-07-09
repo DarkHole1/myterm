@@ -1,4 +1,5 @@
 import RemoteTCP from './remotetcp';
+import SocketManager from './socket-manager';
 import User from './user';
 import Credentials from './credentials';
 import Config from './config';
@@ -22,15 +23,14 @@ export default function(io: any, config: Config): void {
                 return;
             }
             log('Connecting to remote');
-            const { host, port, readonly }: { 
-                    host: string, port: number, readonly: boolean
-                } = user.terminals.filter((el: any) => el.name == name)[0];
+            const { host, port, readonly } = user.terminals.filter((el: any) => el.name == name)[0];
       
-            client = new RemoteTCP({ host, port, readonly });
+            let history;
+            [client, history] = SocketManager.get({ host, port, readonly, config });
             client.attach(socket);
             log("Sessions %o", config.recordSessions);
             if(config.recordSessions) {
-                client.history(history, config.sessionBytesCount, config.dropBytes);
+                socket.emit('data', history);
             }
         });
       })
