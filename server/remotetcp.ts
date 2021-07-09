@@ -3,6 +3,13 @@ import debug from 'debug';
 
 const log = debug('app:remote:tcp');
 
+type Params = { 
+    socket?: net.Socket,
+    host?: string, 
+    port?: number, 
+    readonly: boolean
+}
+
 class RemoteTCP {
     private _socket: net.Socket;
     private _readonly: boolean;
@@ -10,7 +17,8 @@ class RemoteTCP {
     private _attached: any;
     private _history: any;
 
-    constructor({ host, port, readonly }: { host: string, port: number, readonly: boolean }) {
+    constructor({ host, socket, port, readonly }: Params) {
+        // TODO: Socket
         this._id = `${host}:${port}`;
         this._socket = new net.Socket();
         this._socket.connect(port, host, () => {
