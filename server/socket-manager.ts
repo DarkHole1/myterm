@@ -1,5 +1,6 @@
 import { Socket } from 'net';
 import RemoteTCP from './remotetcp';
+import Config from './config';
 
 type SocketMap = {
     [key: string]: {
@@ -10,26 +11,39 @@ type SocketMap = {
 type Params = {
     host: string,
     port: number,
-    readonly: boolean
+    readonly: boolean,
+    config: Config
 }
 
 class SocketManager {
-    private static _sockets: SocketMap;
-    static get({ host, port, readonly }: Params): RemoteTCP {
+    private static _sockets: SocketMap = {};
+    static get({ host, port, readonly, config }: Params): [RemoteTCP, Buffer] {
         const id = `${host}:${port}`;
         if(id !in this._sockets) {
-            return new RemoteTCP({
+            const socket = new Socket;
+            socket.connect(port, host);
+            this._sockets[id] = {
+                socket,
+                history: Buffer.alloc(0)
+            }
+            if(config.recordSessions) {
+                socket.on('data', data => {
+                    let { history } = this._sockets[id];
+                    history = Buffer.concat([history, data]);
+                    if(history.length > config.sessionBytesCount) {
+                        history = history.slice(config.dropBytes);
+                    }
+                    this._sockets[id].history = history;
+                });
+            }
+        }
+        return [
+            new RemoteTCP({
                 socket: this._sockets[id].socket,
                 readonly
-            });
-        }
-        const socket = new Socket;
-        socket.connect(port, host);
-        this._sockets[id] = {
-            socket,
-            history: Buffer.alloc(0)
-        }
-        return ;
+            }),
+            this._sockets[id].history
+        ];
     }
 }
 
