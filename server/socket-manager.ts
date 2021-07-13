@@ -41,6 +41,11 @@ class SocketManager {
                     this._sockets[id].history = history;
                 });
             }
+
+            socket.on('error', err => {
+                log("Error in socket: %o", err);
+                delete this._sockets[id];
+            });
         }
         return [
             new RemoteTCP({
