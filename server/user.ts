@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { isTypeQueryNode } from 'typescript';
 import Credentials from './credentials';
 
 type Terminal = {
