@@ -10,6 +10,7 @@ type Terminal = {
 
 interface IUser {
     name: string,
+    admin: boolean
     password: string,
     terminals: Terminal[]
 }
@@ -19,14 +20,39 @@ interface IUserModel extends mongoose.Model<null> {
 }
 
 const userSchema = new mongoose.Schema<IUser, IUserModel>({
-    name: String,
-    password: String,
-    terminals: [{
-        name: String,
-        host: String,
-        port: Number,
-        readonly: Boolean
-    }]
+    name: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    admin: {
+        type: Boolean,
+        default: false
+    },
+    terminals: {
+        type: [{
+            name: {
+                type: String,
+                required: true,
+            },
+            host: {
+                type: String,
+                required: true
+            },
+            port: {
+                type: Number,
+                required: true
+            },
+            readonly: {
+                type: Boolean,
+                default: true
+            }
+        }],
+        default: (): [] => []
+    }
 });
 
 userSchema.statics.findByCredentials = function(creds: Credentials) {
