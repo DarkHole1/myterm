@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema<IUser, IUserModel>({
 });
 
 userSchema.statics.findByCredentials = function(creds: Credentials) {
-    return this.findOne(creds.getCredentials());
+    return this.findOne(creds.getCredentials()).populate('terminals.terminal');
 }
 
 const User = mongoose.model<IUser, IUserModel>("User", userSchema);
