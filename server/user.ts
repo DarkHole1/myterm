@@ -1,10 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import Credentials from './credentials';
+import type { ITerminal } from './terminal';
 
-type Terminal = {
-    name: string,
-    host: string,
-    port: number,
+type TerminalInfo = {
+    terminal: ITerminal,
     readonly: boolean
 }
 
@@ -12,7 +11,7 @@ interface IUser {
     name: string,
     admin: boolean
     password: string,
-    terminals: Terminal[]
+    terminals: TerminalInfo[]
 }
 
 interface IUserModel extends mongoose.Model<null> {
@@ -34,16 +33,9 @@ const userSchema = new mongoose.Schema<IUser, IUserModel>({
     },
     terminals: {
         type: [{
-            name: {
-                type: String,
-                required: true,
-            },
-            host: {
-                type: String,
-                required: true
-            },
-            port: {
-                type: Number,
+            terminal: {
+                type: Schema.Types.ObjectId,
+                ref: 'Terminal',
                 required: true
             },
             readonly: {

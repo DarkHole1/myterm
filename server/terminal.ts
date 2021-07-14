@@ -23,3 +23,7 @@ const terminalSchema = new Schema<ITerminal>({
 
 const Terminal = model<ITerminal>("Terminal", terminalSchema);
 export default Terminal;
+
+export type {
+    ITerminal
+};
