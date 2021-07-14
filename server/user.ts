@@ -15,7 +15,7 @@ interface IUser {
 }
 
 interface IUserModel extends mongoose.Model<null> {
-    findByCredentials(creds: Credentials): IUser
+    findByCredentials(creds: Credentials): Promise<IUser>
 }
 
 const userSchema = new mongoose.Schema<IUser, IUserModel>({
