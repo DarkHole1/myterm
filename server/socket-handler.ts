@@ -1,6 +1,6 @@
 import RemoteTCP from './remotetcp';
 import SocketManager from './socket-manager';
-import User from './user';
+import User, { TerminalInfo } from './user';
 import Credentials from './credentials';
 import Config from './config';
 import debug from 'debug';
@@ -23,7 +23,7 @@ export default function(io: any, config: Config): void {
                 return;
             }
             log('Connecting to remote');
-            const { host, port, readonly } = user.terminals.filter((el: any) => el.name == name)[0];
+            const { terminal: { host, port }, readonly } = user.terminals.filter((el: TerminalInfo) => el.terminal.name == name)[0];
       
             let history;
             [client, history] = SocketManager.get({ host, port, readonly, config });

@@ -53,3 +53,7 @@ userSchema.statics.findByCredentials = function(creds: Credentials) {
 
 const User = mongoose.model<IUser, IUserModel>("User", userSchema);
 export default User;
+
+export type {
+    TerminalInfo
+}
