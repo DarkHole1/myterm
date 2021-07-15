@@ -5,6 +5,7 @@ import initializeSockets from './socket-handler';
 import AuthMiddleware from './auth';
 import StaticMiddleware from './static';
 import Config from './config';
+import { TerminalInfo } from './user';
 
 const config = new Config('config.json');
 
@@ -21,7 +22,7 @@ app.use(AuthMiddleware);
 app.use(StaticMiddleware);
 
 app.get('/terminals', (req: any, res) => {
-  res.json(req.user.terminals.map(({ name }: any) => name));
+  res.json(req.user.terminals.map((info: TerminalInfo) => info.terminal.name));
 })
 
 server.listen(3000)

@@ -1,6 +1,9 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 import Credentials from './credentials';
-import type { ITerminal } from './terminal';
+import { ITerminal } from './terminal';
+
+// Need model to be build before use
+require('./terminal');
 
 type TerminalInfo = {
     terminal: ITerminal,
@@ -14,11 +17,11 @@ interface IUser {
     terminals: TerminalInfo[]
 }
 
-interface IUserModel extends mongoose.Model<null> {
+interface IUserModel extends Model<null> {
     findByCredentials(creds: Credentials): Promise<IUser>
 }
 
-const userSchema = new mongoose.Schema<IUser, IUserModel>({
+const userSchema = new Schema<IUser, IUserModel>({
     name: {
         type: String,
         required: true
@@ -51,7 +54,7 @@ userSchema.statics.findByCredentials = function(creds: Credentials) {
     return this.findOne(creds.getCredentials()).populate('terminals.terminal');
 }
 
-const User = mongoose.model<IUser, IUserModel>("User", userSchema);
+const User = model<IUser, IUserModel>("User", userSchema);
 export default User;
 
 export type {
