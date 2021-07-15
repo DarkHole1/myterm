@@ -13,6 +13,15 @@ fetch('/terminals').then(res => res.json()).then(res => {
     link.href = '/terminal.html#' + el.name;
     link.target = '_blank';
 
+    if(el.readonly) {
+      // <span class="badge rounded-pill bg-primary">read only</span>
+      const badge = document.createElement('span');
+      badge.innerText = 'read only';
+      badge.classList.add('badge', 'rounded-pill', 'bg-primary');
+
+      link.appendChild(badge);
+    }
+
     const li = document.createElement('li');
     li.appendChild(link);
 
