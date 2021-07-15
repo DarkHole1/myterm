@@ -32,4 +32,12 @@ app.get('/terminals', (req: any, res) => {
   }));
 })
 
+app.get('/terminalsInfo', (req: any, res) => {
+  if(req.user.admin) {
+    res.json(req.user.terminals.map((el: TerminalInfo) => el.terminal));
+  } else {
+    res.json([]);
+  }
+})
+
 server.listen(3000)

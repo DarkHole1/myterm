@@ -10,21 +10,21 @@
   </head>
   <body>
     <div class="container">
-      <h1>Терминал</h1>
+      <h1>Редактирование</h1>
       <form action="postedit">
         <div class="mb-3">
-          <label for="ip" class="form-label">IP address</label>
-          <input type="text" class="form-control" id="ip" name="ip">
+          <label for="host" class="form-label">IP address</label>
+          <input type="text" class="form-control" id="host" name="ip">
         </div>
         <div class="mb-3">
           <label for="port" class="form-label">Port</label>
           <input type="number" class="form-control" id="port" name="port">
         </div>
         <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" name="newName">
+          <label for="newName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="newName" name="newName">
         </div>
-        <input type="hidden" value="???" name="name">
+        <input type="hidden" value="???" name="name" id="name">
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
