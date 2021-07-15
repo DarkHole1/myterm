@@ -22,7 +22,14 @@ app.use(AuthMiddleware);
 app.use(StaticMiddleware);
 
 app.get('/terminals', (req: any, res) => {
-  res.json(req.user.terminals.map((info: TerminalInfo) => info.terminal.name));
+  res.json(req.user.terminals.map((info: TerminalInfo) => {
+    return {
+      id: info.terminal._id,
+      name: info.terminal.name,
+      readonly: info.readonly,
+      editable: req.user.admin
+    }
+  }));
 })
 
 server.listen(3000)

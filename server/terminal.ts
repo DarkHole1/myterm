@@ -1,6 +1,7 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, ObjectId } from 'mongoose';
 
 type ITerminal = {
+    _id: ObjectId,
     name: string,
     host: string,
     port: number

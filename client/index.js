@@ -9,8 +9,8 @@ fetch('/terminals').then(res => res.json()).then(res => {
   terminalsEl.innerHTML = '';
   for(const el of res) {
     const link = document.createElement('a');
-    link.innerText = el + ' ';
-    link.href = '/terminal.html#' + el;
+    link.innerText = el.name + ' ';
+    link.href = '/terminal.html#' + el.name;
     link.target = '_blank';
 
     const li = document.createElement('li');
