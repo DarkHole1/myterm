@@ -1,7 +1,6 @@
-import { Schema, model, ObjectId } from 'mongoose';
+import { Schema, model, ObjectId, Document } from 'mongoose';
 
 type ITerminal = {
-    _id: ObjectId,
     name: string,
     host: string,
     port: number
@@ -25,6 +24,7 @@ const terminalSchema = new Schema<ITerminal>({
 const Terminal = model<ITerminal>("Terminal", terminalSchema);
 export default Terminal;
 
+type TerminalType = ITerminal & Document<any, any>;
 export type {
-    ITerminal
+    TerminalType as ITerminal
 };

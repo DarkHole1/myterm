@@ -50,6 +50,7 @@ app.get('/postedit', (req: any, res) => {
         t.host = req.query.host;
         t.port = req.query.port;
         t.name = req.query.newName;
+        t.save();
       });
   }
   res.redirect('/');
