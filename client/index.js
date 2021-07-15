@@ -22,6 +22,17 @@ fetch('/terminals').then(res => res.json()).then(res => {
       link.appendChild(badge);
     }
 
+    if(el.editable) {
+      // <button type="button" class="btn btn-outline-primary" style="margin-left: 1em;">Edit</button>
+      const btn = document.createElement('a');
+      btn.textContent = "Edit";
+      btn.classList.add('btn', 'btn-outline-primary');
+      btn.style.marginLeft = '1em';
+      btn.href = '/edit.html#' + el.name;
+
+      link.appendChild(btn);
+    }
+
     const li = document.createElement('li');
     li.appendChild(link);
 
