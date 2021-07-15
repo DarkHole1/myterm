@@ -14,6 +14,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 const log = require('debug')('app:server');
 import mongoose from 'mongoose';
+import { ITerminal } from './terminal';
 mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedTopology: true})
 
 initializeSockets(io, config);
@@ -38,6 +39,20 @@ app.get('/terminalsInfo', (req: any, res) => {
   } else {
     res.json([]);
   }
+})
+
+app.get('/postedit', (req: any, res) => {
+  if(req.user.admin) {
+    req.user.terminals
+      .map((e: TerminalInfo) => e.terminal)
+      .filter((t: ITerminal) => t.name == req.query.name)
+      .forEach((t: ITerminal) => {
+        t.host = req.query.host;
+        t.port = req.query.port;
+        t.name = req.query.newName;
+      });
+  }
+  res.redirect('/');
 })
 
 server.listen(3000)
