@@ -9,5 +9,5 @@ fetch('/terminalsInfo').then(res => res.json()).then(res => {
     byId('host').value = terminal.host;
     byId('port').value = terminal.port;
     byId('name').value = terminalId;
-    byId('newName').value = terminalId;
+    byId('id').value = terminalId;
 })
