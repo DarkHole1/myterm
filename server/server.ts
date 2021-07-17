@@ -15,6 +15,7 @@ const io = new Server(server);
 const log = require('debug')('app:server');
 import mongoose from 'mongoose';
 import { ITerminal } from './terminal';
+import SocketManager from './socket-manager';
 mongoose.connect('mongodb://mongodb/myterm', {useNewUrlParser: true, useUnifiedTopology: true})
 
 initializeSockets(io, config);
@@ -55,6 +56,14 @@ app.get('/postedit', (req: any, res) => {
     }
   }
   res.redirect('/');
+})
+
+app.get('/restart', (req: any, res) => {
+  const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id);
+  if(terminalInfo != null) {
+    const { host, port } = terminalInfo.terminal;
+    SocketManager.restart({ host, port, config });
+  }
 })
 
 server.listen(3000)
