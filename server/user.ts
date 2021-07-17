@@ -56,6 +56,15 @@ userSchema.statics.findByCredentials = function(creds: Credentials) {
     return this.findOne(creds.getCredentials()).populate('terminals.terminal');
 }
 
+userSchema.methods.getTerminalById = function(id: ObjectId | string) {
+    for (const terminal of this.terminals) {
+        if(terminal.terminal._id == id) {
+            return terminal;
+        }
+    }
+    return null;
+}
+
 const User = model<IUser, IUserModel>("User", userSchema);
 export default User;
 
