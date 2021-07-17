@@ -28,7 +28,7 @@ fetch('/terminals').then(res => res.json()).then(res => {
       btn.textContent = "Edit";
       btn.classList.add('btn', 'btn-outline-primary');
       btn.style.marginLeft = '1em';
-      btn.href = '/edit.html#' + el.name;
+      btn.href = '/edit.html#' + el.id;
 
       link.appendChild(btn);
     }
