@@ -59,11 +59,14 @@ app.get('/postedit', (req: any, res) => {
 })
 
 app.get('/restart', (req: any, res) => {
+  log('Restarting terminal %o', req.query);
   const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id);
   if(terminalInfo != null) {
     const { host, port } = terminalInfo.terminal;
     SocketManager.restart({ host, port, config });
   }
+
+  res.redirect('/');
 })
 
 server.listen(3000)
