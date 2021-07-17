@@ -10,7 +10,7 @@ fetch('/terminals').then(res => res.json()).then(res => {
   for(const el of res) {
     const link = document.createElement('a');
     link.innerText = el.name + ' ';
-    link.href = '/terminal.html#' + el.name;
+    link.href = '/terminal.html#' + el.id;
     link.target = '_blank';
 
     if(el.readonly) {
