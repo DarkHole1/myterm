@@ -43,13 +43,15 @@ app.get('/terminalsInfo', (req: any, res) => {
 
 app.get('/postedit', (req: any, res) => {
   if(req.user.admin) {
-    const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query);
+    log('Trying change terminal')
+    const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id);
     if(terminalInfo != null) {
       const { terminal } = terminalInfo;
       terminal.host = req.query.host;
       terminal.port = req.query.port;
       terminal.name = req.query.newName;
       terminal.save();
+      log('Changes succesfull');
     }
   }
   res.redirect('/');
