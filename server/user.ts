@@ -1,4 +1,4 @@
-import { Schema, model, Model } from 'mongoose';
+import { Schema, model, Model, ObjectId } from 'mongoose';
 import Credentials from './credentials';
 import { ITerminal } from './terminal';
 
@@ -15,6 +15,8 @@ interface IUser {
     admin: boolean
     password: string,
     terminals: TerminalInfo[]
+
+    getTerminalById(id: ObjectId | string): TerminalInfo;
 }
 
 interface IUserModel extends Model<null> {
