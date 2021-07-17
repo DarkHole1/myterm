@@ -43,15 +43,14 @@ app.get('/terminalsInfo', (req: any, res) => {
 
 app.get('/postedit', (req: any, res) => {
   if(req.user.admin) {
-    req.user.terminals
-      .map((e: TerminalInfo) => e.terminal)
-      .filter((t: ITerminal) => t.name == req.query.name)
-      .forEach((t: ITerminal) => {
-        t.host = req.query.host;
-        t.port = req.query.port;
-        t.name = req.query.newName;
-        t.save();
-      });
+    const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query);
+    if(terminalInfo != null) {
+      const { terminal } = terminalInfo;
+      terminal.host = req.query.host;
+      terminal.port = req.query.port;
+      terminal.name = req.query.newName;
+      terminal.save();
+    }
   }
   res.redirect('/');
 })
