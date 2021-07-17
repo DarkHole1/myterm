@@ -33,6 +33,14 @@ fetch('/terminals').then(res => res.json()).then(res => {
       link.appendChild(btn);
     }
 
+    const btn = document.createElement('a');
+    btn.textContent = "Restart";
+    btn.classList.add('btn', 'btn-outline-danger');
+    btn.style.marginLeft = '0.5em';
+    btn.href = '/restart?id=' + el.id;
+
+    link.appendChild(btn);
+
     const li = document.createElement('li');
     li.appendChild(link);
 
