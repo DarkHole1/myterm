@@ -28,5 +28,3 @@ term.onData(data => socket.emit('data', data));
 socket.on('data', (data) => {
   term.write(new Uint8Array(data));
 });
-
-socket.emit('client', terminalName);
