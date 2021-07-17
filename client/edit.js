@@ -8,6 +8,6 @@ fetch('/terminalsInfo').then(res => res.json()).then(res => {
     const byId = document.getElementById.bind(document);
     byId('host').value = terminal.host;
     byId('port').value = terminal.port;
-    byId('name').value = terminalId;
     byId('id').value = terminalId;
+    byId('newName').value = terminal.name;
 })
