@@ -10,6 +10,7 @@ services:
         environment: 
             - DEBUG=app:*
     mongodb:
+        restart: unless-stopped
         image: mongo
         ports: 
             - 27017:27017
