@@ -25,7 +25,7 @@ import Container from "./components/Container.vue";
 
 export default defineComponent({
   components: { TerminalBlock, Container },
-  data: () => {
+  data() {
     return {
       terminals: [
         {
