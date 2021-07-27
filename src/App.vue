@@ -22,57 +22,19 @@ body {
 import { defineComponent } from "vue";
 import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
-import API from './API';
+import API, { Terminal } from './API';
 
 export default defineComponent({
   components: { TerminalBlock, Container },
   provide: {
     api: API
   },
+  async mounted() {
+    this.terminals = await API.fetchTerminalsList();
+  },
   data() {
     return {
-      terminals: [
-        {
-          name: "SW_SERVICE",
-          canEdit: true,
-          canRestart: true,
-        },
-        {
-          name: "ISP1",
-          canEdit: false,
-          canRestart: true,
-        },
-        {
-          name: "ISP2",
-          canEdit: true,
-          canRestart: false,
-        },
-        {
-          name: "SW1",
-          canEdit: true,
-          canRestart: true,
-        },
-        {
-          name: "SW2",
-          canEdit: true,
-          canRestart: true,
-        },
-        {
-          name: "R1",
-          canEdit: true,
-          canRestart: true,
-        },
-        {
-          name: "_unused1",
-          canEdit: true,
-          canRestart: true,
-        },
-        {
-          name: "_unused2",
-          canEdit: true,
-          canRestart: true,
-        },
-      ],
+      terminals: [] as Terminal[]
     };
   },
 });
