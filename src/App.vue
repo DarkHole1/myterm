@@ -1,36 +1,33 @@
 <template>
-    <div class="container">
-        <div class="terminal" v-for="terminal in terminals" :key="terminal.name">
-            <div class="logo"><i class="fas fa-terminal"></i></div>
-            <h2 class="name">{{ terminal.name }}</h2>
-            <div class="actions">
-                <button class="action restart" v-if="terminal.canRestart"><i class="fas fa-redo"></i></button>
-                <button class="action edit" v-if="terminal.canEdit"><i class="fas fa-pencil-alt"></i></button>
-            </div>
-        </div>
-    </div>
+  <Container>
+    <TerminalBlock
+      :terminalData="terminal"
+      v-for="terminal in terminals"
+      :key="terminal.name"
+    />
+  </Container>
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
-@import url('https://use.fontawesome.com/releases/v5.15.3/css/all.css');
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
+@import url("https://use.fontawesome.com/releases/v5.15.3/css/all.css");
 
 body {
-  font-family: 'Ubuntu Mono', monospace;
+  font-family: "Ubuntu Mono", monospace;
   background: #313131;
 }
 
 .container {
-    width: 50%;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .terminal {
   background: #171717;
-  color: #EDEDED;
+  color: #ededed;
   width: 180px;
   height: 180px;
   padding: 20px;
@@ -74,14 +71,14 @@ body {
   padding: 0.3em;
   border-radius: 0.3em;
   border: none;
-  color: #EDEDED;
+  color: #ededed;
   background: none;
   font-size: 1.2rem;
   margin-left: 0.2em;
 }
 
 .terminal > .actions > .restart {
-  background: #DA0037;
+  background: #da0037;
 }
 
 .terminal > .actions > .edit {
@@ -90,44 +87,57 @@ body {
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
+import TerminalBlock from "./components/TerminalBlock.vue";
+import Container from './components/Container.vue';
+
 export default defineComponent({
-    data: () => {
-        return {
-            terminals: [{
-                name: 'SW_SERVICE',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: 'ISP1',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: 'ISP2',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: 'SW1',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: 'SW2',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: 'R1',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: '_unused1',
-                canEdit: true,
-                canRestart: true
-            }, {
-                name: '_unused2',
-                canEdit: true,
-                canRestart: true
-            }]
-        }
-    }
-})
+  components: { TerminalBlock, Container },
+  data: () => {
+    return {
+      terminals: [
+        {
+          name: "SW_SERVICE",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "ISP1",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "ISP2",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "SW1",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "SW2",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "R1",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "_unused1",
+          canEdit: true,
+          canRestart: true,
+        },
+        {
+          name: "_unused2",
+          canEdit: true,
+          canRestart: true,
+        },
+      ],
+    };
+  },
+});
 </script>
