@@ -1,10 +1,10 @@
 class Terminal {
-    
+
 }
 
 class API {
-    static fetchTerminalsList(): Promise<any> {
-        return Promise.resolve(null);
+    static fetchTerminalsList(): Promise<Terminal[]> {
+        return Promise.resolve([]);
     }
 }
 

@@ -22,9 +22,13 @@ body {
 import { defineComponent } from "vue";
 import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
+import API from './API';
 
 export default defineComponent({
   components: { TerminalBlock, Container },
+  provide: {
+    api: API
+  },
   data() {
     return {
       terminals: [
