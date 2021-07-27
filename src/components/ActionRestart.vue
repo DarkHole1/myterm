@@ -1,5 +1,5 @@
 <template>
-    <button class="action restart"><i class="fas fa-redo"></i></button>
+    <button class="action restart"><i class="fas fa-undo"></i></button>
 </template>
 
 <style scoped>

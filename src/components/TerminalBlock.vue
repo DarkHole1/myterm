@@ -1,7 +1,7 @@
 <template>
   <div class="terminal">
     <Logo />
-    <h2 class="name">{{ terminalData.name }}</h2>
+    <h2 class="name"><i class="fas fa-lock" v-if="terminalData.readonly"></i> {{ terminalData.name }}</h2>
     <div class="actions">
       <ActionRestart v-if="terminalData.canRestart" />
       <ActionEdit v-if="terminalData.canEdit" />
