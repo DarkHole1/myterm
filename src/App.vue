@@ -103,13 +103,13 @@ export default defineComponent({
         },
         {
           name: "ISP1",
-          canEdit: true,
+          canEdit: false,
           canRestart: true,
         },
         {
           name: "ISP2",
           canEdit: true,
-          canRestart: true,
+          canRestart: false,
         },
         {
           name: "SW1",
