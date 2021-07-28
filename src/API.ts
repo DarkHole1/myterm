@@ -1,59 +1,59 @@
 class Terminal {
+    public readonly id: string
+    public name: string
+    public readonly: boolean
+    public canEdit: boolean
+    public canRestart: boolean
 
+    public host?: string
+    public port?: number
+    
+    constructor(data: any) {
+        this.id = data.id;
+        this.name = data.name;
+        this.readonly = data.readonly;
+        this.canEdit = data.editable;
+        this.canRestart = true;
+
+        this.host = data.host;
+        this.port = data.port;
+    }
+
+    update() {
+        // TODO
+    }
 }
+
+const TEST_DATA = [
+    {
+        id: "fffeee",
+        name: "SW_SERVICE",
+        editable: true,
+        readonly: true
+    },
+    {
+        id: "fffeee",
+        name: "ISP1",
+        editable: false,
+        readonly: false
+    },
+    {
+        id: "fffeee",
+        name: "ISP2",
+        editable: true,
+        readonly: false
+    },
+    {
+        id: "fffeee",
+        name: "SW1",
+        editable: true,
+        readonly: false
+    },
+];
 
 class API {
     static fetchTerminalsList(): Promise<Terminal[]> {
-        return Promise.resolve([
-            {
-                name: "SW_SERVICE",
-                canEdit: true,
-                canRestart: true,
-                readonly: true
-            },
-            {
-                name: "ISP1",
-                canEdit: false,
-                canRestart: true,
-                readonly: false
-            },
-            {
-                name: "ISP2",
-                canEdit: true,
-                canRestart: false,
-                readonly: false
-            },
-            {
-                name: "SW1",
-                canEdit: true,
-                canRestart: true,
-                readonly: false
-            },
-            {
-                name: "SW2",
-                canEdit: true,
-                canRestart: true,
-                readonly: false
-            },
-            {
-                name: "R1",
-                canEdit: true,
-                canRestart: true,
-                readonly: false
-            },
-            {
-                name: "_unused1",
-                canEdit: true,
-                canRestart: true,
-                readonly: false
-            },
-            {
-                name: "_unused2",
-                canEdit: true,
-                canRestart: true,
-                readonly: false
-            },
-        ]);
+        return Promise.resolve(TEST_DATA.map(d => new Terminal(d)));
     }
 }
 
