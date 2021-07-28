@@ -1,5 +1,5 @@
 <template>
-  <div class="terminal">
+  <div class="terminal" @click="open">
     <Logo />
     <h2 class="name"><i class="fas fa-lock" v-if="terminalData.readonly"></i> {{ terminalData.name }}</h2>
     <div class="actions">
@@ -65,7 +65,15 @@ import { Terminal } from "@/API";
 
 export default defineComponent({
   props: {
-    terminalData: Object as PropType<Terminal>
+    terminalData: {
+      type: Object as PropType<Terminal>,
+      required: true
+    }
+  },
+  methods: {
+    open() {
+      window.open(this.terminalData.link(), '_blank');
+    }
   },
   components: { Logo, ActionRestart, ActionEdit },
 });
