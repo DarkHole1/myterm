@@ -8,7 +8,7 @@ class Terminal {
     public host?: string
     public port?: number
     
-    constructor(data: any) {
+    public constructor(data: any) {
         this.id = data.id;
         this.name = data.name;
         this.readonly = data.readonly;
@@ -19,7 +19,7 @@ class Terminal {
         this.port = data.port;
     }
 
-    update() {
+    public update(): void {
         // TODO
     }
 }

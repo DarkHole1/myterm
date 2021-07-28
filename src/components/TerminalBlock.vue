@@ -57,13 +57,16 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import Logo from "./Logo.vue";
 import ActionRestart from "./ActionRestart.vue";
 import ActionEdit from "./ActionEdit.vue";
+import { Terminal } from "@/API";
 
 export default defineComponent({
-  props: ["terminalData"],
+  props: {
+    terminalData: Object as PropType<Terminal>
+  },
   components: { Logo, ActionRestart, ActionEdit },
 });
 </script>
