@@ -9052,6 +9052,11 @@ vue-eslint-parser@^7.0.0, vue-eslint-parser@^7.9.0:
     lodash "^4.17.21"
     semver "^6.3.0"
 
+vue-final-modal@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/vue-final-modal/-/vue-final-modal-3.3.1.tgz#c3291f565f4852056725ddbf59bed1241828b0ba"
+  integrity sha512-g15BdCcg+dtjcj4iL3yAcWxJDd/w2fQ1CdyMkuhvn24zXQcbcUB7p4orPzDWPaxm54qV4IBqk8mlC8tiWA1fvA==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
