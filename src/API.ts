@@ -7,7 +7,7 @@ class Terminal {
 
     public host?: string
     public port?: number
-    
+
     public constructor(data: any) {
         this.id = data.id;
         this.name = data.name;
@@ -21,6 +21,10 @@ class Terminal {
 
     public update(): void {
         // TODO
+    }
+
+    public link(): string {
+        return `/terminal.html#${this.id}`;
     }
 }
 
