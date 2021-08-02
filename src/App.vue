@@ -1,7 +1,8 @@
 <template>
   <div>
     <vue-final-modal v-model="restartModalShow" name="restartModal" :drag="true" content-class="modal-content" classes="modal-container">
-      <div style="background: white; width: 100px; display">Hello world</div>
+      <div style="font-size: 1.5rem">Вы действительно хотите перезагрузить %TERMINAL_NAME%?</div>
+      <button>Да</button><button>Нет</button>
     </vue-final-modal>
     <Container>
       <TerminalBlock
@@ -23,13 +24,22 @@ body {
 }
 
 .modal-content {
+  position: relative;
   display: flex;
+  flex-direction: column;
+  max-height: 90%;
+  margin: 0 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: .25rem;
+  background: #fff;
 }
 
 .modal-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 </style>
 
