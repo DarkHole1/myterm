@@ -1,8 +1,8 @@
 <template>
   <div>
     <vue-final-modal v-model="restartModalShow" name="restartModal" :drag="true" content-class="modal-content" classes="modal-container">
-      <div style="font-size: 1.5rem">Вы действительно хотите перезагрузить %TERMINAL_NAME%?</div>
-      <VButtonDanger>Да</VButtonDanger><button>Нет</button>
+      <div style="font-size: 1.5rem; margin-bottom: 1rem;">Вы действительно хотите перезагрузить %TERMINAL_NAME%?</div>
+      <VButtonDanger>Да</VButtonDanger><VButton>Нет</VButton>
     </vue-final-modal>
     <Container>
       <TerminalBlock
@@ -49,9 +49,10 @@ import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
 import API, { Terminal } from './API';
 import VButtonDanger from './components/VButtonDanger.vue';
+import VButton from './components/VButton.vue';
 
 export default defineComponent({
-  components: { TerminalBlock, Container, VButtonDanger },
+  components: { TerminalBlock, Container, VButtonDanger, VButton },
   provide: {
     api: API
   },

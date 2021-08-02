@@ -3,8 +3,7 @@
 </template>
 <style scoped>
 button {
-    background: #da0037;
-    color: white;
+    background: transparent;
     padding: .25rem .5rem;
     border-width: 1px;
     border-radius: .25rem;
