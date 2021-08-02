@@ -1,11 +1,16 @@
 <template>
-  <Container>
-    <TerminalBlock
-      :terminalData="terminal"
-      v-for="terminal in terminals"
-      :key="terminal.name"
-    />
-  </Container>
+  <div>
+    <vue-final-modal v-model="restartModalShow" name="restartModal" :drag="true" content-class="modal-content" classes="modal-container">
+      <div style="background: white; width: 100px; display">Hello world</div>
+    </vue-final-modal>
+    <Container>
+      <TerminalBlock
+        :terminalData="terminal"
+        v-for="terminal in terminals"
+        :key="terminal.name"
+      />
+    </Container>
+  </div>
 </template>
 
 <style>
@@ -15,6 +20,16 @@
 body {
   font-family: "Ubuntu Mono", monospace;
   background: #313131;
+}
+
+.modal-content {
+  display: flex;
+}
+
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
 
@@ -34,7 +49,8 @@ export default defineComponent({
   },
   data() {
     return {
-      terminals: [] as Terminal[]
+      terminals: [] as Terminal[],
+      restartModalShow: true
     };
   },
 });
