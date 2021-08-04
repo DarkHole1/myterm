@@ -39,7 +39,7 @@ export default defineComponent({
     components: { VButton, VButtonDanger },
     data() {
         return {
-            show: true
+            show: false
         }
     }, 
     methods: {
