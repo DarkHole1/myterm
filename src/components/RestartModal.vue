@@ -1,6 +1,6 @@
 <template>
-    <vue-final-modal v-model="show" name="restartModal" content-class="modal-content" classes="modal-container">
-      <div class="title">Вы действительно хотите перезагрузить %TERMINAL_NAME%?</div>
+    <vue-final-modal v-model="show" name="restartModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
+      <div class="title">Вы действительно хотите перезагрузить {{ params.name }}?</div>
       <VButtonDanger @click="handleClick(true)">Да</VButtonDanger>
       <VButton @click="handleClick(false)">Нет</VButton>
     </vue-final-modal>
@@ -39,13 +39,22 @@ export default defineComponent({
     components: { VButton, VButtonDanger },
     data() {
         return {
-            show: false
+            show: false,
+            params: {
+              name: '',
+              cb: () => void 0
+            }
         }
     }, 
     methods: {
       handleClick(answer: boolean) {
-        alert(answer);
+        if(answer) {
+          this.params.cb();
+        }
         this.show = false;
+      },
+      handleOpen(event: any) {
+        this.params = event.ref.params;
       }
     }
 })
