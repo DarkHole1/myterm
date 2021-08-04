@@ -1,5 +1,5 @@
 <template>
-    <button><slot></slot></button>
+    <button @click="$emit('click')"><slot></slot></button>
 </template>
 <style scoped>
 button {
@@ -13,3 +13,9 @@ button {
     margin: 0.2rem;
 }
 </style>
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
+    emits: ["click"]
+})
+</script>
