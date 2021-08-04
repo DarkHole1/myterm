@@ -1,8 +1,8 @@
 <template>
     <vue-final-modal v-model="show" name="restartModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
       <div class="title">Вы действительно хотите перезагрузить {{ params.name }}?</div>
-      <VButtonDanger @click="handleClick(true)">Да</VButtonDanger>
-      <VButton @click="handleClick(false)">Нет</VButton>
+      <VButtonDanger @click="handleClick(true)">Отправить</VButtonDanger>
+      <VButton @click="handleClick(false)">Отмена</VButton>
     </vue-final-modal>
 </template>
 <style>
@@ -39,9 +39,9 @@ export default defineComponent({
     components: { VButton, VButtonDanger },
     data() {
         return {
-            show: false,
+            show: true,
             params: {
-              name: '',
+              name: '%TERMINAL_NAME%',
               cb: () => void 0
             }
         }
@@ -55,7 +55,7 @@ export default defineComponent({
       },
       // eslint-disable-next-line
       handleOpen(event: any) {
-        this.params = event.ref.params;
+        // this.params = event.ref.params;
       }
     }
 })

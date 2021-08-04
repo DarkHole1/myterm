@@ -1,6 +1,7 @@
 <template>
   <div>
     <RestartModal />
+    <EditModal />
     <Container>
       <TerminalBlock
         :terminalData="terminal"
@@ -25,20 +26,21 @@ body {
 import { defineComponent } from "vue";
 import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
-import API, { Terminal } from './API';
-import RestartModal from './components/RestartModal.vue'
+import API, { Terminal } from "./API";
+import RestartModal from "./components/RestartModal.vue";
+import EditModal from "./components/EditModal.vue";
 
 export default defineComponent({
-  components: { TerminalBlock, Container, RestartModal },
+  components: { TerminalBlock, Container, RestartModal, EditModal },
   provide: {
-    api: API
+    api: API,
   },
   async mounted() {
     this.terminals = await API.fetchTerminalsList();
   },
   data() {
     return {
-      terminals: [] as Terminal[]
+      terminals: [] as Terminal[],
     };
   },
 });

@@ -8,6 +8,7 @@ class Terminal {
     public host?: string
     public port?: number
 
+    // eslint-disable-next-line
     public constructor(data: any) {
         this.id = data.id;
         this.name = data.name;
