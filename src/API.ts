@@ -23,6 +23,10 @@ class Terminal {
         // TODO
     }
 
+    public restart(): void {
+        // TODO
+    }
+
     public link(): string {
         return `/terminal.html#${this.id}`;
     }

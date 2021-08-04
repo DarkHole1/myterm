@@ -77,7 +77,9 @@ export default defineComponent({
     handleRestart() {
       this.$vfm.show('restartModal', {
         name: this.terminalData.name,
-        cb: () => void 0
+        cb: () => {
+          this.terminalData.restart()
+        }
       })
     }
   },
