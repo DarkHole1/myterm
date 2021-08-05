@@ -1,6 +1,18 @@
 <template>
     <vue-final-modal v-model="show" name="restartModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
-      <div class="title">Вы действительно хотите перезагрузить {{ params.name }}?</div>
+      <div class="title">Редактирование {{ name }}</div>
+      <div class="pair">
+        <label for="host" class="form-label">IP адрес</label>
+        <input type="text" class="form-control" id="host">
+      </div>
+      <div class="pair">
+        <label for="port" class="form-label">Порт</label>
+        <input type="number" class="form-control" id="port" name="port">
+      </div>
+      <div class="pair">
+        <label for="newName" class="form-label">Название</label>
+        <input type="text" class="form-control" id="newName" name="newName">
+      </div>
       <VButtonDanger @click="handleClick(true)">Отправить</VButtonDanger>
       <VButton @click="handleClick(false)">Отмена</VButton>
     </vue-final-modal>
@@ -29,6 +41,17 @@
   justify-content: center;
   align-items: flex-start;
 }
+
+.pair {
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pair > input {
+  font-size: 1.2rem;
+  font-family: "Ubuntu Mono", monospace;
+} 
 </style>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -40,16 +63,14 @@ export default defineComponent({
     data() {
         return {
             show: true,
-            params: {
-              name: '%TERMINAL_NAME%',
-              cb: () => void 0
-            }
+            name: '%TERMINAL_NAME%',
+            cb: () => void 0
         }
     }, 
     methods: {
       handleClick(answer: boolean) {
         if(answer) {
-          this.params.cb();
+          this.cb();
         }
         this.show = false;
       },
