@@ -1,21 +1,27 @@
 <template>
-    <vue-final-modal v-model="show" name="restartModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
-      <div class="title">Редактирование {{ name }}</div>
-      <div class="pair">
-        <label for="host" class="form-label">IP адрес</label>
-        <input type="text" class="form-control" id="host">
-      </div>
-      <div class="pair">
-        <label for="port" class="form-label">Порт</label>
-        <input type="number" class="form-control" id="port" name="port">
-      </div>
-      <div class="pair">
-        <label for="newName" class="form-label">Название</label>
-        <input type="text" class="form-control" id="newName" name="newName">
-      </div>
-      <VButtonDanger @click="handleClick(true)">Отправить</VButtonDanger>
-      <VButton @click="handleClick(false)">Отмена</VButton>
-    </vue-final-modal>
+  <vue-final-modal
+    v-model="show"
+    name="restartModal"
+    content-class="modal-content"
+    classes="modal-container"
+    @beforeOpen="handleOpen"
+  >
+    <div class="title">Редактирование {{ name }}</div>
+    <div class="pair">
+      <label for="host" class="form-label">IP адрес</label>
+      <input type="text" class="form-control" id="host" v-model="host" />
+    </div>
+    <div class="pair">
+      <label for="port" class="form-label">Порт</label>
+      <input type="number" class="form-control" id="port" v-model.number="port" />
+    </div>
+    <div class="pair">
+      <label for="newName" class="form-label">Название</label>
+      <input type="text" class="form-control" id="newName" v-model="newName" />
+    </div>
+    <VButtonDanger @click="handleClick(true)">Отправить</VButtonDanger>
+    <VButton @click="handleClick(false)">Отмена</VButton>
+  </vue-final-modal>
 </template>
 <style>
 .title {
@@ -32,7 +38,7 @@
   margin-top: 1.5rem;
   padding: 1rem;
   border: 1px solid #e2e8f0;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   background: #fff;
 }
 
@@ -51,7 +57,7 @@
 .pair > input {
   font-size: 1.2rem;
   font-family: "Ubuntu Mono", monospace;
-} 
+}
 </style>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -64,6 +70,9 @@ export default defineComponent({
         return {
             show: true,
             name: '%TERMINAL_NAME%',
+            host: "Test",
+            port: 0,
+            newName: '%TERMINAL_NAME%',
             cb: () => void 0
         }
     }, 
