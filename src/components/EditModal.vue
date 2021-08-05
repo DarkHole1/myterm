@@ -73,13 +73,20 @@ export default defineComponent({
             host: "Test",
             port: 0,
             newName: '%TERMINAL_NAME%',
-            cb: () => void 0
+            id: '',
+            // eslint-disable-next-line
+            cb: (data: any) => void 0
         }
     }, 
     methods: {
       handleClick(answer: boolean) {
         if(answer) {
-          this.cb();
+          this.cb({
+            host: this.host,
+            port: this.port,
+            name: this.newName,
+            id: this.id
+          });
         }
         this.show = false;
       },
