@@ -92,7 +92,12 @@ export default defineComponent({
       },
       // eslint-disable-next-line
       handleOpen(event: any) {
-        // this.params = event.ref.params;
+        const { host, port, name, id } = event.ref.params;
+        this.host = host;
+        this.port = port;
+        this.name = name;
+        this.newName = name;
+        this.id = id;
       }
     }
 })
