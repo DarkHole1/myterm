@@ -4,7 +4,7 @@
     <h2 class="name"><i class="fas fa-lock" v-if="terminalData.readonly"></i> {{ terminalData.name }}</h2>
     <div class="actions">
       <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
-      <ActionEdit v-if="terminalData.canEdit" />
+      <ActionEdit v-if="terminalData.canEdit" @click="handleEdit" />
     </div>
   </div>
 </template>
@@ -81,6 +81,18 @@ export default defineComponent({
           this.terminalData.restart()
         }
       })
+    },
+    handleEdit() {
+      this.$vfm.show('editModal', {
+        name: this.terminalData.name,
+        host: this.terminalData.host,
+        port: this.terminalData.port,
+        // eslint-disable-next-line
+        cb: (data: any) => {
+          const { host, port, name } = data;
+          this.terminalData.updateData({ host, port, name }); 
+        }
+      });
     }
   },
   components: { Logo, ActionRestart, ActionEdit },

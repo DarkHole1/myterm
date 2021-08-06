@@ -24,6 +24,14 @@ class Terminal {
         // TODO
     }
 
+    // eslint-disable-next-line
+    public updateData({ name, host, port }: any): void {
+        this.name = name;
+        this.host = host;
+        this.port = port;
+        this.update();
+    }
+
     public restart(): void {
         // TODO
     }
@@ -38,7 +46,9 @@ const TEST_DATA = [
         id: "fffeee",
         name: "SW_SERVICE",
         editable: true,
-        readonly: true
+        readonly: true,
+        host: '192.168.0.1',
+        port: 8080
     },
     {
         id: "fffeee",

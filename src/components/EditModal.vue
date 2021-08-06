@@ -1,7 +1,7 @@
 <template>
   <vue-final-modal
     v-model="show"
-    name="restartModal"
+    name="editModal"
     content-class="modal-content"
     classes="modal-container"
     @beforeOpen="handleOpen"
@@ -68,12 +68,11 @@ export default defineComponent({
     components: { VButton, VButtonDanger },
     data() {
         return {
-            show: true,
+            show: false,
             name: '%TERMINAL_NAME%',
             host: "Test",
             port: 0,
             newName: '%TERMINAL_NAME%',
-            id: '',
             // eslint-disable-next-line
             cb: (data: any) => void 0
         }
@@ -84,20 +83,19 @@ export default defineComponent({
           this.cb({
             host: this.host,
             port: this.port,
-            name: this.newName,
-            id: this.id
+            name: this.newName
           });
         }
         this.show = false;
       },
       // eslint-disable-next-line
       handleOpen(event: any) {
-        const { host, port, name, id } = event.ref.params;
+        const { host, port, name, cb } = event.ref.params.value;
         this.host = host;
         this.port = port;
         this.name = name;
         this.newName = name;
-        this.id = id;
+        this.cb = cb;
       }
     }
 })
