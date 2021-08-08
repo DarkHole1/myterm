@@ -64,6 +64,9 @@ class SocketManager {
 
     static restart({ host, port, config }: RestartParams): void {
         const id = `${host}:${port}`;
+        if(!(id in this._sockets)) {
+            return;
+        }
         this._sockets[id].socket.destroy();
         
         const socket = new Socket;

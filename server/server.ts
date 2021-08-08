@@ -23,7 +23,7 @@ initializeSockets(io, config);
 
 app.use(AuthMiddleware);
 app.use(StaticMiddleware);
-app.use('/api/', APIMiddleware);
+app.use('/api/', APIMiddleware(config));
 
 app.get('/terminals', (req: any, res) => {
   res.json(req.user.terminals.map((info: TerminalInfo) => {
