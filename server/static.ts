@@ -11,7 +11,7 @@ const STATIC = {
   '/xterm-addon-fit.js': './node_modules/xterm-addon-fit/lib/xterm-addon-fit.js'
 }
 
-router.use(express.static(path.join(__dirname, './client')));
+router.use(express.static(path.join(__dirname, './dist')));
 
 for(let [url, filepath] of Object.entries(STATIC)) {
   router.get(url, (req, res) => {
