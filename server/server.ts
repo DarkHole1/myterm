@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import initializeSockets from './socket-handler';
 import AuthMiddleware from './auth';
 import StaticMiddleware from './static';
+import APIMiddleware from './api';
 import Config from './config';
 import { TerminalInfo } from './user';
 
@@ -22,6 +23,7 @@ initializeSockets(io, config);
 
 app.use(AuthMiddleware);
 app.use(StaticMiddleware);
+app.use('/api/', APIMiddleware);
 
 app.get('/terminals', (req: any, res) => {
   res.json(req.user.terminals.map((info: TerminalInfo) => {
