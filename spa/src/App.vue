@@ -6,7 +6,7 @@
       <TerminalBlock
         :terminalData="terminal"
         v-for="terminal in terminals"
-        :key="terminal.name"
+        :key="terminal.id"
       />
     </Container>
   </div>

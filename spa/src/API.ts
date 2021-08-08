@@ -1,9 +1,9 @@
 class Terminal {
     public readonly id: string
     public name: string
-    public readonly: boolean
-    public canEdit: boolean
-    public canRestart: boolean
+    public readonly readonly: boolean
+    public readonly canEdit: boolean
+    public readonly canRestart: boolean
 
     public host?: string
     public port?: number
@@ -20,8 +20,18 @@ class Terminal {
         this.port = data.port;
     }
 
-    public update(): void {
-        // TODO
+    public async update(): Promise<boolean> {
+        const params = new URLSearchParams([
+            ['id', this.id],
+            ['name', this.name],
+            ['host', this.host+''],
+            ['port', this.port+'']
+        ]);
+        const res = await fetch(`/api/terminal.update?${params.toString()}`, {
+            method: 'POST'
+        })
+        const data: {success: boolean} = await res.json();
+        return data.success; 
     }
 
     // eslint-disable-next-line
@@ -41,38 +51,11 @@ class Terminal {
     }
 }
 
-const TEST_DATA = [
-    {
-        id: "fffeee",
-        name: "SW_SERVICE",
-        editable: true,
-        readonly: true,
-        host: '192.168.0.1',
-        port: 8080
-    },
-    {
-        id: "fffeee",
-        name: "ISP1",
-        editable: false,
-        readonly: false
-    },
-    {
-        id: "fffeee",
-        name: "ISP2",
-        editable: true,
-        readonly: false
-    },
-    {
-        id: "fffeee",
-        name: "SW1",
-        editable: true,
-        readonly: false
-    },
-];
-
 class API {
-    static fetchTerminalsList(): Promise<Terminal[]> {
-        return Promise.resolve(TEST_DATA.map(d => new Terminal(d)));
+    static async fetchTerminalsList(): Promise<Terminal[]> {
+        const res = await fetch('/api/terminal.list');
+        const data = await res.json();
+        return data.map((d: any) => new Terminal(d));
     }
 }
 
