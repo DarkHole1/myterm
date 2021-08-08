@@ -35,11 +35,11 @@ class Terminal {
     }
 
     // eslint-disable-next-line
-    public updateData({ name, host, port }: any): void {
+    public updateData({ name, host, port }: any): Promise<boolean> {
         this.name = name;
         this.host = host;
         this.port = port;
-        this.update();
+        return this.update();
     }
 
     public restart(): void {
