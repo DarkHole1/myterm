@@ -50,6 +50,7 @@ function init(config: Config) {
             const { host, port } = terminalInfo.terminal;
             SocketManager.restart({ host, port, config });
             res.json({ success: true });
+            return;
         }
         res.json({ success: false });
     })

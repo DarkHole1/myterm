@@ -42,8 +42,15 @@ class Terminal {
         return this.update();
     }
 
-    public restart(): void {
-        // TODO
+    public async restart(): Promise<boolean> {
+        const params = new URLSearchParams([
+            ['id', this.id]
+        ]);
+        const res = await fetch(`/api/terminal.restart?${params.toString()}`, {
+            method: 'POST'
+        })
+        const data: {success: boolean} = await res.json();
+        return data.success; 
     }
 
     public link(): string {
