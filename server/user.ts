@@ -19,7 +19,7 @@ interface IUser {
     getTerminalById(id: ObjectId | string): TerminalInfo;
 }
 
-interface IUserModel extends Model<null> {
+interface IUserModel extends Model<IUser> {
     findByCredentials(creds: Credentials): Promise<IUser>
 }
 

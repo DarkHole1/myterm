@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
-/spa/dist
-.config.json
+/dist
+
 
 # local env files
 .env.local
