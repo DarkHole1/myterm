@@ -14,12 +14,12 @@ window.addEventListener('resize', e => {
   fitAddon.fit();
 })
 
-const terminalName = decodeURI(location.hash.slice(1));
+const terminalId = decodeURI(location.hash.slice(1));
 
 // Socket.io initialization
 const socket = io({
   query: {
-    terminal: terminalName
+    terminal: terminalId
   }
 });
 
@@ -28,3 +28,8 @@ term.onData(data => socket.emit('data', data));
 socket.on('data', (data) => {
   term.write(new Uint8Array(data));
 });
+
+// Getting terminal name
+fetch(`/api/terminal.get?id=${terminalId}`).then(res => res.json()).then(res => {
+  document.title = res.name;
+})
