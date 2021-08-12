@@ -2,6 +2,7 @@
 node_modules
 /spa/dist
 .config.json
+ssl
 
 # local env files
 .env.local

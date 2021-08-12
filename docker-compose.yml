@@ -9,6 +9,8 @@ services:
             - mongodb
         environment: 
             - DEBUG=app:*
+        volumes: 
+            - ./ssl:/app/ssl
     mongodb:
         restart: unless-stopped
         image: mongo
