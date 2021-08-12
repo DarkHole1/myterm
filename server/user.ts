@@ -69,5 +69,5 @@ const User = model<IUser, IUserModel>("User", userSchema);
 export default User;
 
 export type {
-    TerminalInfo
+    TerminalInfo, IUser
 }

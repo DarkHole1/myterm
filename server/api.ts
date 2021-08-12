@@ -1,13 +1,21 @@
 import { Router } from 'express';
-import { TerminalInfo } from './user';
+import { IUser, TerminalInfo } from './user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
 const log = debug('app:api');
 
+declare global {
+    namespace Express {
+        interface Request {
+            user: IUser
+        }
+    }
+}
+
 function init(config: Config) {
     const router = Router();
-    router.get('/terminal.list', (req: any, res) => {
+    router.get('/terminal.list', (req, res) => {
         res.json(req.user.terminals.map((info: TerminalInfo) => {
             let res = {
                 id: info.terminal._id,
@@ -25,15 +33,15 @@ function init(config: Config) {
         }));
     })
 
-    router.post('/terminal.update', (req: any, res) => {
+    router.post('/terminal.update', (req, res) => {
         if (req.user.admin) {
             log('Trying change terminal')
-            const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id);
+            const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id.toString());
             if (terminalInfo != null) {
                 const { terminal } = terminalInfo;
-                terminal.host = req.query.host;
-                terminal.port = req.query.port;
-                terminal.name = req.query.name;
+                terminal.host = req.query.host.toString();
+                terminal.port = parseInt(req.query.port.toString());
+                terminal.name = req.query.name.toString();
                 terminal.save();
                 log('Changes succesfull');
                 res.json({ success: true });
@@ -43,9 +51,10 @@ function init(config: Config) {
         res.json({ success: false });
     })
 
-    router.post('/terminal.restart', (req: any, res) => {
+    router.post('/terminal.restart', (req, res) => {
         log('Restarting terminal %o', req.query);
-        const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id);
+        const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id.toString());
+        log('Terminal info found: {}', terminalInfo);
         if (terminalInfo != null) {
             const { host, port } = terminalInfo.terminal;
             SocketManager.restart({ host, port, config });
