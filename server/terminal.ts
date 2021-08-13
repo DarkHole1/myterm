@@ -18,6 +18,11 @@ const terminalSchema = new Schema<ITerminal>({
     port: {
         type: Number,
         required: true
+    },
+    serverId: {
+        type: Number,
+        required: true,
+        default: 1
     }
 });
 
