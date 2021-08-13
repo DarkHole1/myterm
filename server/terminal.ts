@@ -3,7 +3,8 @@ import { Schema, model, ObjectId, Document } from 'mongoose';
 type ITerminal = {
     name: string,
     host: string,
-    port: number
+    port: number,
+    serverId: number
 }
 
 const terminalSchema = new Schema<ITerminal>({

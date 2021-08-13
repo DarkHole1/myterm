@@ -21,7 +21,8 @@ function init(config: Config) {
                 id: info.terminal._id,
                 name: info.terminal.name,
                 readonly: info.readonly,
-                editable: req.user.admin
+                editable: req.user.admin,
+                serverId: info.terminal.serverId
             };
             if (req.user.admin) {
                 Object.assign(res, {
@@ -74,7 +75,8 @@ function init(config: Config) {
             id: info.terminal._id,
             name: info.terminal.name,
             readonly: info.readonly,
-            editable: req.user.admin
+            editable: req.user.admin,
+            serverId: info.terminal.serverId
         };
         if (req.user.admin) {
             Object.assign(result, {
