@@ -6,6 +6,10 @@
 .action.edit {
   background: #346751 !important;
 }
+
+.action.edit:hover {
+  background: #3f7e63 !important;
+}
 </style>
 <script lang="ts">
 import { defineComponent } from 'vue'
