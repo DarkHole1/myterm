@@ -3,6 +3,15 @@ import Credentials from './credentials';
 import { ITerminal } from './terminal';
 import './terminal';
 
+interface AllTerminalData {
+    name: string,
+    host?: string,
+    port?: number,
+    readonly: boolean,
+    serverName: string,
+    serverId: number
+} 
+
 type TerminalInfo = {
     terminal: ITerminal,
     readonly: boolean
@@ -15,6 +24,7 @@ interface IUser {
     terminals: TerminalInfo[]
 
     getTerminalById(id: ObjectId | string): TerminalInfo;
+    getTerminalsData(): AllTerminalData[];
 }
 
 interface IUserModel extends Model<IUser> {
@@ -66,6 +76,21 @@ userSchema.methods.getTerminalById = function(id: ObjectId | string) {
         }
     }
     return null;
+}
+
+userSchema.methods.getTerminalsData = function(): AllTerminalData[] {
+    const user = this as IUser;
+    return user.terminals.map(terminal => {
+        let res = {
+            ...terminal.terminal.getData(),
+            readonly: terminal.readonly
+        };
+        if(!this.admin) {
+            delete res.host;
+            delete res.port;
+        }
+        return res;
+    });
 }
 
 const User = model<IUser, IUserModel>("User", userSchema);
