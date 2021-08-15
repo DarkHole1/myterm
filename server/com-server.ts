@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 
 interface ICOMServer {
     name: string,
@@ -18,6 +18,7 @@ const serverSchema = new Schema<ICOMServer>({
 
 const COMServer = model<ICOMServer>('COMServer', serverSchema);
 export default COMServer;
+type ICOMServerType = ICOMServer & Document; 
 export type {
-    ICOMServer
+    ICOMServerType as ICOMServer
 }
