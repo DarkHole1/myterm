@@ -9,11 +9,14 @@ services:
             - mongodb
         environment: 
             - DEBUG=app:*
-            - mongodb://mongodb/myterm
+            - MONGODB_URI=mongodb://root:toor@mongodb/myterm?authSource=admin
         volumes: 
             - ./ssl:/app/ssl
     mongodb:
         restart: unless-stopped
         image: mongo
+        environment: 
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=toor
         ports: 
             - 27017:27017
