@@ -1,5 +1,6 @@
 import { Schema, model, ObjectId, Document } from 'mongoose';
 import { ICOMServer } from './com-server';
+import './com-server';
 
 type ITerminal = {
     name: string,

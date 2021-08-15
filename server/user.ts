@@ -1,9 +1,7 @@
 import { Schema, model, Model, ObjectId } from 'mongoose';
 import Credentials from './credentials';
 import { ITerminal } from './terminal';
-
-// Need model to be build before use
-require('./terminal');
+import './terminal';
 
 type TerminalInfo = {
     terminal: ITerminal,
@@ -53,7 +51,12 @@ const userSchema = new Schema<IUser, IUserModel>({
 });
 
 userSchema.statics.findByCredentials = function(creds: Credentials) {
-    return this.findOne(creds.getCredentials()).populate('terminals.terminal');
+    return this
+        .findOne(creds.getCredentials())
+        .populate({
+            path: 'terminals.terminal',
+            populate: 'server'
+        });
 }
 
 userSchema.methods.getTerminalById = function(id: ObjectId | string) {

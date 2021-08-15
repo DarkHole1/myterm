@@ -1,9 +1,12 @@
+import { debug } from 'debug';
 import Credentials from './credentials';
 import User from "./user";
+const log = debug('app:auth');
 
 export default async function(req: any, res: any, next: any) {
   const creds = Credentials.fromBasicAuth(req.headers.authorization)
   const user = await User.findByCredentials(creds);
+  log('User %o', user.terminals[0]);
   if (user) {
     req.user = user;
     return next()
