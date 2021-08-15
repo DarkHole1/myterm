@@ -1,6 +1,4 @@
 import express from 'express';
-import http from 'http';
-import https from 'https';
 import { Server } from "socket.io";
 import initializeSockets from './socket-handler';
 import AuthMiddleware from './auth';
@@ -16,8 +14,11 @@ const app = express();
 const server = init(app);
 const io = new Server(server);
 const log = require('debug')('app:server');
+log('Starting server...');
 import mongoose from 'mongoose';
-mongoose.connect('mongodb://mongodb/myterm', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.mongodbURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+    log('DB connected, error: %o', err);
+})
 
 initializeSockets(io, config);
 
@@ -25,4 +26,6 @@ app.use(AuthMiddleware);
 app.use(StaticMiddleware);
 app.use('/api/', APIMiddleware(config));
 
-server.listen(3000)
+server.listen(3000, () => {
+   log('Server listening on port 3000'); 
+})

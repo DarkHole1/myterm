@@ -9,6 +9,7 @@ services:
             - mongodb
         environment: 
             - DEBUG=app:*
+            - mongodb://mongodb/myterm
         volumes: 
             - ./ssl:/app/ssl
     mongodb:
