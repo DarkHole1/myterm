@@ -2,7 +2,7 @@ import { model, Schema, Document } from "mongoose";
 
 interface ICOMServer {
     name: string,
-    ip: string
+    host: string
 }
 
 const serverSchema = new Schema<ICOMServer>({
@@ -10,7 +10,7 @@ const serverSchema = new Schema<ICOMServer>({
         type: String,
         required: true
     },
-    ip: {
+    host: {
         type: String,
         required: true
     }
