@@ -1,6 +1,7 @@
 class Terminal {
     public readonly id: string
     public name: string
+    public serverId: number
     public readonly readonly: boolean
     public readonly canEdit: boolean
     public readonly canRestart: boolean
@@ -12,6 +13,7 @@ class Terminal {
     public constructor(data: any) {
         this.id = data.id;
         this.name = data.name;
+        this.serverId = data.serverId;
         this.readonly = data.readonly;
         this.canEdit = data.editable;
         this.canRestart = true;

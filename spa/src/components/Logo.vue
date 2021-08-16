@@ -4,9 +4,9 @@
 
 <style scoped>
 .logo {
-  font-size: 5rem;
+  /* font-size: 5rem; */
   text-align: left;
   margin-left: 0.3em;
-  transition: 0.5s;
+  /* transition: 0.5s; */
 }
 </style>
