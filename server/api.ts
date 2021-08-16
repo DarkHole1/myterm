@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { IUser, TerminalInfo } from './user';
+import User, { IUser, TerminalInfo } from './user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
@@ -16,22 +16,9 @@ declare global {
 function init(config: Config) {
     const router = Router();
     router.get('/terminal.list', (req, res) => {
-        res.json(req.user.terminals.map((info: TerminalInfo) => {
-            let res = {
-                id: info.terminal._id,
-                name: info.terminal.name,
-                readonly: info.readonly,
-                editable: req.user.admin,
-                serverId: info.terminal.serverId
-            };
-            if (req.user.admin) {
-                Object.assign(res, {
-                    host: info.terminal.host,
-                    port: info.terminal.port
-                })
-            }
-            return res;
-        }));
+        res.json(req.user.getTerminalsData().map(term => Object.assign({}, term, {
+            editable: req.user.admin
+        })));
     })
 
     router.post('/terminal.update', (req, res) => {
