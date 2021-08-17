@@ -3,6 +3,15 @@
     <RestartModal />
     <EditModal />
     <Container>
+      <ServerCollapse>
+        <TerminalBlock
+          :terminalData="terminal"
+          v-for="terminal in terminals"
+          :key="terminal.id"
+        />
+      </ServerCollapse>
+    </Container>
+    <Container>
       <TerminalBlock
         :terminalData="terminal"
         v-for="terminal in terminals"
@@ -29,9 +38,16 @@ import Container from "./components/Container.vue";
 import API, { Terminal } from "./API";
 import RestartModal from "./components/RestartModal.vue";
 import EditModal from "./components/EditModal.vue";
+import ServerCollapse from "./components/ServerCollapse.vue";
 
 export default defineComponent({
-  components: { TerminalBlock, Container, RestartModal, EditModal },
+  components: {
+    TerminalBlock,
+    Container,
+    RestartModal,
+    EditModal,
+    ServerCollapse,
+  },
   provide: {
     api: API,
   },

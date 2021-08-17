@@ -13,7 +13,7 @@
 
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 @media (min-width: 768px) {
   .container {
