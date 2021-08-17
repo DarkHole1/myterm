@@ -100,5 +100,5 @@ class API {
 
 export default API;
 export type {
-    Terminal
+    Terminal, COMServer
 };

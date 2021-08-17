@@ -3,20 +3,17 @@
     <RestartModal />
     <EditModal />
     <Container>
-      <ServerCollapse>
+      <ServerCollapse
+        v-for="server in servers"
+        :key="server.id"
+        :server="server"
+      >
         <TerminalBlock
           :terminalData="terminal"
-          v-for="terminal in terminals"
+          v-for="terminal in server.terminals"
           :key="terminal.id"
         />
       </ServerCollapse>
-    </Container>
-    <Container>
-      <TerminalBlock
-        :terminalData="terminal"
-        v-for="terminal in terminals"
-        :key="terminal.id"
-      />
     </Container>
   </div>
 </template>
@@ -35,7 +32,7 @@ body {
 import { defineComponent } from "vue";
 import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
-import API, { Terminal } from "./API";
+import API, { COMServer } from "./API";
 import RestartModal from "./components/RestartModal.vue";
 import EditModal from "./components/EditModal.vue";
 import ServerCollapse from "./components/ServerCollapse.vue";
@@ -52,11 +49,11 @@ export default defineComponent({
     api: API,
   },
   async mounted() {
-    this.terminals = await API.fetchTerminalsList();
+    this.servers = await API.fetchTerminalsListByServer();
   },
   data() {
     return {
-      terminals: [] as Terminal[],
+      servers: [] as COMServer[],
     };
   },
 });

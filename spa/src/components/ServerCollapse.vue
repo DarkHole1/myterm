@@ -1,9 +1,10 @@
 <template>
   <div class="root">
     <div class="header" @click="show = !show">
-      <i class="fas fa-plus-circle" v-if="show"></i>
+      <i class="fas fa-plus-circle" v-if="!show"></i>
       <i class="fas fa-minus-circle" v-else></i>
-      Hello world
+      {{ server.name }}
+      <span v-if="server.host">({{ server.host }})</span>
     </div>
     <div class="content" v-if="show">
       <slot />
@@ -12,7 +13,7 @@
 </template>
 <style scoped>
 .root {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 .header {
   color: #ededed;
@@ -20,10 +21,10 @@
   font-family: "Ubuntu Mono", monospace;
 }
 .content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 </style>
 
@@ -31,6 +32,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+    props: ['server'],
     data() {
         return {
             show: false
