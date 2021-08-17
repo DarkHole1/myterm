@@ -1,7 +1,8 @@
 class Terminal {
     public readonly id: string
     public name: string
-    public serverId: number
+    public readonly serverId: number
+    public readonly serverName: string;
     public readonly readonly: boolean
     public readonly canEdit: boolean
     public readonly canRestart: boolean
@@ -14,6 +15,7 @@ class Terminal {
         this.id = data.id;
         this.name = data.name;
         this.serverId = data.serverId;
+        this.serverName = data.serverName;
         this.readonly = data.readonly;
         this.canEdit = data.editable;
         this.canRestart = true;
@@ -60,11 +62,39 @@ class Terminal {
     }
 }
 
+class COMServer {
+    public readonly terminals: Terminal[];
+    public readonly name: string;
+    public readonly id: number;
+    public readonly host?: string;
+
+    constructor(id: number, props: { name: string, host?: string }, terminals: Terminal[]) {
+        this.id = id;
+        this.name = props.name;
+        this.host = props.host;
+        this.terminals = terminals;
+    }
+}
+
 class API {
     static async fetchTerminalsList(): Promise<Terminal[]> {
         const res = await fetch('/api/terminal.list');
         const data = await res.json();
+        // eslint-disable-next-line
         return data.map((d: any) => new Terminal(d));
+    }
+
+    static async fetchTerminalsListByServer(): Promise<COMServer[]> {
+        const terminals = await this.fetchTerminalsList();
+        const map: Map<number, {name: string, host?: string}> = new Map();
+        for (const terminal of terminals) {
+            if(terminal.serverId in map) continue;
+            map.set(terminal.serverId, {
+                name: terminal.serverName,
+                host: terminal.host
+            })
+        }
+        return Array.from(map.entries()).map(([id, value]) => new COMServer(id, value, terminals.filter(e => e.serverId == id)));
     }
 }
 
