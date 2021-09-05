@@ -65,11 +65,11 @@ class Terminal {
 class COMServer {
     public readonly terminals: Terminal[];
     public readonly name: string;
-    public readonly id: number;
+    // public readonly id: number;
     public readonly host?: string;
 
-    constructor(id: number, props: { name: string, host?: string }, terminals: Terminal[]) {
-        this.id = id;
+    constructor(props: { name: string, host?: string }, terminals: Terminal[]) {
+        // this.id = id;
         this.name = props.name;
         this.host = props.host;
         this.terminals = terminals;
@@ -86,15 +86,15 @@ class API {
 
     static async fetchTerminalsListByServer(): Promise<COMServer[]> {
         const terminals = await this.fetchTerminalsList();
-        const map: Map<number, {name: string, host?: string}> = new Map();
+        const map: Map<string, {name: string, host?: string}> = new Map();
         for (const terminal of terminals) {
-            if(terminal.comPort in map) continue;
-            map.set(terminal.comPort, {
+            if(terminal.serverName in map) continue;
+            map.set(terminal.serverName, {
                 name: terminal.serverName,
                 host: terminal.host
             })
         }
-        return Array.from(map.entries()).map(([id, value]) => new COMServer(id, value, terminals.filter(e => e.comPort == id)));
+        return Array.from(map.entries()).map(([id, value]) => new COMServer(value, terminals.filter(e => e.serverName == id)));
     }
 }
 
