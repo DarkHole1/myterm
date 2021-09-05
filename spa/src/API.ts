@@ -1,7 +1,7 @@
 class Terminal {
     public readonly id: string
     public name: string
-    public readonly serverId: number
+    public readonly comPort: number
     public readonly serverName: string;
     public readonly readonly: boolean
     public readonly canEdit: boolean
@@ -14,7 +14,7 @@ class Terminal {
     public constructor(data: any) {
         this.id = data.id;
         this.name = data.name;
-        this.serverId = data.serverId;
+        this.comPort = data.comPort;
         this.serverName = data.serverName;
         this.readonly = data.readonly;
         this.canEdit = data.editable;
@@ -88,13 +88,13 @@ class API {
         const terminals = await this.fetchTerminalsList();
         const map: Map<number, {name: string, host?: string}> = new Map();
         for (const terminal of terminals) {
-            if(terminal.serverId in map) continue;
-            map.set(terminal.serverId, {
+            if(terminal.comPort in map) continue;
+            map.set(terminal.comPort, {
                 name: terminal.serverName,
                 host: terminal.host
             })
         }
-        return Array.from(map.entries()).map(([id, value]) => new COMServer(id, value, terminals.filter(e => e.serverId == id)));
+        return Array.from(map.entries()).map(([id, value]) => new COMServer(id, value, terminals.filter(e => e.comPort == id)));
     }
 }
 

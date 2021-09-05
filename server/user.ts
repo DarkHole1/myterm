@@ -9,7 +9,7 @@ interface AllTerminalData {
     port?: number,
     readonly: boolean,
     serverName: string,
-    serverId: number
+    comPort: number
 } 
 
 type TerminalInfo = {

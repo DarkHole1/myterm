@@ -7,14 +7,13 @@ interface AllTerminalData {
     host: string,
     port: number,
     serverName: string,
-    serverId: number
+    comPort: number
 } 
 
 type ITerminal = {
     name: string,
     host: string,
     port: number,
-    serverId: number,
     server: ICOMServer
 
     getData(): AllTerminalData;
@@ -33,11 +32,6 @@ const terminalSchema = new Schema<ITerminal>({
         type: Number,
         required: true
     },
-    serverId: {
-        type: Number,
-        required: true,
-        default: 1
-    },
     server: {
         type: Schema.Types.ObjectId,
         ref: 'COMServer',
@@ -51,7 +45,7 @@ terminalSchema.methods.getData = function(): AllTerminalData {
         host: this.server.host,
         port: this.port,
         serverName: this.server.name,
-        serverId: this.serverId
+        comPort: this.port - 20000
     }
 }
 

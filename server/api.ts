@@ -63,7 +63,7 @@ function init(config: Config) {
             name: info.terminal.name,
             readonly: info.readonly,
             editable: req.user.admin,
-            serverId: info.terminal.serverId
+            comPort: info.terminal.port - 20000
         };
         if (req.user.admin) {
             Object.assign(result, {

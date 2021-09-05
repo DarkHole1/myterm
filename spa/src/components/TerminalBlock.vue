@@ -2,7 +2,7 @@
   <div class="terminal" @click="open">
     <div class='header'>
       <Logo />
-      <span>{{ terminalData.serverId }}</span>
+      <span>{{ terminalData.comPort }}</span>
     </div>
     <h2 class="name"><i class="fas fa-lock" v-if="terminalData.readonly"></i> {{ terminalData.name }}</h2>
     <div class="actions">
