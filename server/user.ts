@@ -10,7 +10,7 @@ interface AllTerminalData {
     readonly: boolean,
     serverName: string,
     comPort: number
-} 
+}
 
 type TerminalInfo = {
     terminal: ITerminal,
@@ -19,7 +19,8 @@ type TerminalInfo = {
 
 interface IUser {
     name: string,
-    admin: boolean
+    admin: boolean,
+    role: string,
     password: string,
     terminals: TerminalInfo[]
 
@@ -44,6 +45,10 @@ const userSchema = new Schema<IUser, IUserModel>({
         type: Boolean,
         default: false
     },
+    role: {
+        type: String,
+        default: 'user'
+    },
     terminals: {
         type: [{
             terminal: {
@@ -60,7 +65,7 @@ const userSchema = new Schema<IUser, IUserModel>({
     }
 });
 
-userSchema.statics.findByCredentials = function(creds: Credentials) {
+userSchema.statics.findByCredentials = function (creds: Credentials) {
     return this
         .findOne(creds.getCredentials())
         .populate({
@@ -69,23 +74,23 @@ userSchema.statics.findByCredentials = function(creds: Credentials) {
         });
 }
 
-userSchema.methods.getTerminalById = function(id: ObjectId | string) {
+userSchema.methods.getTerminalById = function (id: ObjectId | string) {
     for (const terminal of this.terminals) {
-        if(terminal.terminal._id == id) {
+        if (terminal.terminal._id == id) {
             return terminal;
         }
     }
     return null;
 }
 
-userSchema.methods.getTerminalsData = function(): AllTerminalData[] {
+userSchema.methods.getTerminalsData = function (): AllTerminalData[] {
     const user = this as IUser;
     return user.terminals.map(terminal => {
         let res = {
             ...terminal.terminal.getData(),
             readonly: terminal.readonly
         };
-        if(!this.admin) {
+        if (!this.admin) {
             delete res.host;
             delete res.port;
         }
