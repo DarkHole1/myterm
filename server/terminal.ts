@@ -14,7 +14,11 @@ type ITerminal = {
     name: string,
     host: string,
     port: number,
-    server: ICOMServer
+    server: ICOMServer,
+    permissions: Map<string, {
+        show: boolean,
+        write: boolean
+    }>
 
     getData(): AllTerminalData;
 }
@@ -36,6 +40,19 @@ const terminalSchema = new Schema<ITerminal>({
         type: Schema.Types.ObjectId,
         ref: 'COMServer',
         required: true
+    },
+    permissons: {
+        type: Map,
+        of: {
+            show: {
+                type: Boolean,
+                required: true
+            },
+            write: {
+                type: Boolean,
+                required: true
+            }
+        }
     }
 });
 
