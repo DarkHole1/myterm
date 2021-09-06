@@ -3,6 +3,7 @@ import User, { IUser, TerminalInfo } from './user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
+import COMServer from './com-server';
 const log = debug('app:api');
 
 declare global {
@@ -72,6 +73,11 @@ function init(config: Config) {
             })
         }
         res.json(result);
+    })
+
+    router.get('/comserver.list', async (req, res) => {
+        const servers = await COMServer.find();
+        res.json(servers.map(server => server.getInfo(req.user.admin)));
     })
 
     return router;
