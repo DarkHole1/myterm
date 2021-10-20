@@ -1,9 +1,23 @@
 import { Schema, model, ObjectId, Document } from 'mongoose';
+import { ICOMServer } from './com-server';
+import './com-server';
+
+interface AllTerminalData {
+    name: string,
+    host: string,
+    port: number,
+    serverName: string,
+    serverId: number
+} 
 
 type ITerminal = {
     name: string,
     host: string,
-    port: number
+    port: number,
+    serverId: number,
+    server: ICOMServer
+
+    getData(): AllTerminalData;
 }
 
 const terminalSchema = new Schema<ITerminal>({
@@ -18,13 +32,33 @@ const terminalSchema = new Schema<ITerminal>({
     port: {
         type: Number,
         required: true
+    },
+    serverId: {
+        type: Number,
+        required: true,
+        default: 1
+    },
+    server: {
+        type: Schema.Types.ObjectId,
+        ref: 'COMServer',
+        required: true
     }
 });
+
+terminalSchema.methods.getData = function(): AllTerminalData {
+    return {
+        name: this.name,
+        host: this.server.host,
+        port: this.port,
+        serverName: this.server.name,
+        serverId: this.serverId
+    }
+}
 
 const Terminal = model<ITerminal>("Terminal", terminalSchema);
 export default Terminal;
 
-type TerminalType = ITerminal & Document<any, any>;
+type TerminalType = ITerminal & Document;
 export type {
     TerminalType as ITerminal
 };

@@ -5,6 +5,10 @@
 .restart {
   background: #da0037 !important;
 }
+
+.restart:hover {
+  background: #ff1550 !important;
+}
 </style>
 <script lang="ts">
 import { defineComponent } from 'vue'

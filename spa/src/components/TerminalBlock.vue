@@ -1,6 +1,9 @@
 <template>
   <div class="terminal" @click="open">
-    <Logo />
+    <div class='header'>
+      <Logo />
+      <span>{{ terminalData.serverId }}</span>
+    </div>
     <h2 class="name"><i class="fas fa-lock" v-if="terminalData.readonly"></i> {{ terminalData.name }}</h2>
     <div class="actions">
       <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
@@ -10,6 +13,13 @@
 </template>
 
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 5rem;
+  transition: 0.5s;
+}
+
 .terminal {
   background: #171717;
   color: #ededed;
@@ -29,7 +39,7 @@
   background: #444444;
 }
 
-.terminal:hover > .logo {
+.terminal:hover > .header {
   font-size: 3rem;
 }
 
@@ -61,7 +71,7 @@ import { defineComponent, PropType } from "vue";
 import Logo from "./Logo.vue";
 import ActionRestart from "./ActionRestart.vue";
 import ActionEdit from "./ActionEdit.vue";
-import { Terminal } from "@/API";
+import { Terminal } from "../API";
 
 export default defineComponent({
   props: {
