@@ -3,6 +3,7 @@ import { ICOMServer } from './com-server';
 import './com-server';
 
 interface AllTerminalData {
+    id: string,
     name: string,
     host: string,
     port: number,
@@ -47,6 +48,7 @@ const terminalSchema = new Schema<ITerminal>({
 
 terminalSchema.methods.getData = function(): AllTerminalData {
     return {
+        id: this.id,
         name: this.name,
         host: this.server.host,
         port: this.port,
