@@ -21,6 +21,13 @@ type ITerminal = {
     }>
 
     getData(): AllTerminalData;
+    getInfo(admin?: boolean): {
+        name: string,
+        serverName: string,
+        host?: string,
+        port?: number,
+        comPort: number
+    };
 }
 
 const terminalSchema = new Schema<ITerminal>({
@@ -64,6 +71,23 @@ terminalSchema.methods.getData = function(): AllTerminalData {
         serverName: this.server.name,
         comPort: this.port - 20000
     }
+}
+
+terminalSchema.methods.getInfo = function(isAdmin: boolean = false) {
+    let res = {
+        name: this.name,
+        host: this.server.host,
+        port: this.port,
+        serverName: this.server.name,
+        comPort: this.port - 20000
+    }
+
+    if(!isAdmin) {
+        delete res.host;
+        delete res.port;
+    }
+
+    return res;
 }
 
 const Terminal = model<ITerminal>("Terminal", terminalSchema);

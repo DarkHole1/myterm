@@ -3,7 +3,9 @@ import User, { IUser, TerminalInfo } from './user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
-import COMServer from './com-server';
+import COMServer, { ICOMServer } from './com-server';
+import Terminal from './terminal';
+import { Condition } from 'mongodb';
 const log = debug('app:api');
 
 declare global {
@@ -78,6 +80,13 @@ function init(config: Config) {
     router.get('/comserver.list', async (req, res) => {
         const servers = await COMServer.find();
         res.json(servers.map(server => server.getInfo(req.user.admin)));
+    })
+
+    router.get('/comserver.terminals', async (req, res) => {
+        const terminals = await Terminal.find({
+            server: req.query.id as Condition<ICOMServer>
+        })
+        res.json(terminals.map(term => term.getInfo(req.user.admin)).filter(term => term.visible('role')));
     })
 
     return router;
