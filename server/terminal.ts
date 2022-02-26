@@ -28,6 +28,7 @@ type ITerminal = {
         port?: number,
         comPort: number
     };
+    visible(role: string): boolean; 
 }
 
 const terminalSchema = new Schema<ITerminal>({
@@ -48,7 +49,7 @@ const terminalSchema = new Schema<ITerminal>({
         ref: 'COMServer',
         required: true
     },
-    permissons: {
+    permissions: {
         type: Map,
         of: {
             show: {
@@ -88,6 +89,13 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false) {
     }
 
     return res;
+}
+
+terminalSchema.methods.visible = function(role: string) {
+    if(role in this.permissions) {
+        return this.permissions[role].visible;
+    }
+    return false;
 }
 
 const Terminal = model<ITerminal>("Terminal", terminalSchema);
