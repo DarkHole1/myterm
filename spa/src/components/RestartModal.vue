@@ -1,6 +1,6 @@
 <template>
     <vue-final-modal v-model="show" name="restartModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
-      <div class="title">Вы действительно хотите перезагрузить {{ params.name }}?</div>
+      <div class="title">Перезапустить терминальную сессию к {{ params.name }}?</div>
       <VButtonDanger @click="handleClick(true)">Да</VButtonDanger>
       <VButton @click="handleClick(false)">Нет</VButton>
     </vue-final-modal>
