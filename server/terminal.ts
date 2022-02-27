@@ -79,6 +79,7 @@ terminalSchema.methods.getData = function(): AllTerminalData {
 
 terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
     let res = {
+        id: this.id,
         name: this.name,
         host: this.server.host,
         port: this.port,

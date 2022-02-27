@@ -1,6 +1,6 @@
 import { Schema, model, Model, ObjectId } from 'mongoose';
 import Credentials from './credentials';
-import { ITerminal } from './terminal';
+import Terminal, { ITerminal } from './terminal';
 import './terminal';
 
 interface AllTerminalData {
@@ -74,11 +74,14 @@ userSchema.statics.findByCredentials = function (creds: Credentials) {
         });
 }
 
-userSchema.methods.getTerminalById = function (id: ObjectId | string) {
-    for (const terminal of this.terminals) {
-        if (terminal.terminal._id == id) {
-            return terminal;
+userSchema.methods.getTerminalById = async function (id: ObjectId | string) {
+    let terminal = await Terminal.findById(id);
+    if(terminal) {
+        let readonly = true;
+        if(terminal.permissions.has(this.role)) {
+            readonly = !terminal.permissions.get(this.role).write;
         }
+        return { terminal, readonly }
     }
     return null;
 }
