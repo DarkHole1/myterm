@@ -76,7 +76,7 @@ class COMServer {
     }
 
     async fetchTerminals() : Promise<Terminal[]> {
-        const res = await fetch(`/api/terminal.list?id=${this.id}`);
+        const res = await fetch(`/api/comserver.terminals?id=${this.id}`);
         const data = await res.json();
         // eslint-disable-next-line
         return data.map((d: any) => new Terminal(d));
