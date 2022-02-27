@@ -83,6 +83,7 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
         host: this.server.host,
         port: this.port,
         readonly: false,
+        editable: isAdmin,
         serverName: this.server.name,
         comPort: this.port - 20000
     }
@@ -90,8 +91,8 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
     if(!isAdmin) {
         delete res.host;
         delete res.port;
-        if(role in this.permissions) {
-            res.readonly = !this.permissions[role].writable;
+        if(this.permissions.has(role)) {
+            res.readonly = !this.permissions.get(role).write;
         } else {
             res.readonly = true;
         }
@@ -101,8 +102,8 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
 }
 
 terminalSchema.methods.visible = function(role: string) {
-    if(role in this.permissions) {
-        return this.permissions[role].visible;
+    if(this.permissions.has(role)) {
+        return this.permissions.get(role).show;
     }
     return false;
 }
