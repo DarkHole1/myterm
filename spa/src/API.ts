@@ -105,7 +105,7 @@ class API {
     }
 
     static async fetchServersList(): Promise<COMServer[]> {
-        const res = await fetch('/api/terminal.list');
+        const res = await fetch('/api/comserver.list');
         const data = await res.json();
         // eslint-disable-next-line
         return data.map((d: any) => new COMServer(d));

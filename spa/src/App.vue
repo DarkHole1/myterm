@@ -7,13 +7,7 @@
         v-for="server in servers"
         :key="server.id"
         :server="server"
-      >
-        <TerminalBlock
-          :terminalData="terminal"
-          v-for="terminal in server.terminals"
-          :key="terminal.id"
-        />
-      </ServerCollapse>
+      />
     </Container>
   </div>
 </template>
@@ -30,7 +24,6 @@ body {
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
 import API, { COMServer } from "./API";
 import RestartModal from "./components/RestartModal.vue";
@@ -39,7 +32,6 @@ import ServerCollapse from "./components/ServerCollapse.vue";
 
 export default defineComponent({
   components: {
-    TerminalBlock,
     Container,
     RestartModal,
     EditModal,
@@ -49,7 +41,7 @@ export default defineComponent({
     api: API,
   },
   async mounted() {
-    this.servers = await API.fetchTerminalsListByServer();
+    this.servers = await API.fetchServersList();
   },
   data() {
     return {

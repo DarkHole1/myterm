@@ -7,7 +7,11 @@
       <span v-if="server.host">({{ server.host }})</span>
     </div>
     <div class="content" v-if="show">
-      <slot />
+      <TerminalBlock
+        :terminalData="terminal"
+        v-for="terminal in terminals"
+        :key="terminal.id"
+      />
     </div>
   </div>
 </template>
@@ -29,14 +33,20 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
+import TerminalBlock from "./TerminalBlock.vue";
 
 export default defineComponent({
-    props: ['server'],
-    data() {
-        return {
-            show: false
-        }
-    }
-})
+  components: { TerminalBlock },
+  props: ["server"],
+  async mounted() {
+    this.terminals = await this.server.fetchTerminals();
+  },
+  data() {
+    return {
+      terminals: [],
+      show: false,
+    };
+  },
+});
 </script>
