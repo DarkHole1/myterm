@@ -86,7 +86,11 @@ function init(config: Config) {
         const terminals = await Terminal.find({
             server: req.query.id as Condition<ICOMServer>
         })
-        res.json(terminals.filter(term => term.visible(req.user.role)).map(term => term.getInfo(req.user.admin)));
+        let visible = terminals;
+        if(!req.user.admin) {
+            visible = terminals.filter(term => term.visible(req.user.role));
+        }
+        res.json(visible.map(term => term.getInfo(req.user.admin)));
     })
 
     return router;
