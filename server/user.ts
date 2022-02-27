@@ -24,7 +24,7 @@ interface IUser {
     password: string,
     terminals: TerminalInfo[]
 
-    getTerminalById(id: ObjectId | string): TerminalInfo;
+    getTerminalById(id: ObjectId | string): Promise<TerminalInfo>;
     getTerminalsData(): AllTerminalData[];
 }
 

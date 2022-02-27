@@ -24,10 +24,10 @@ function init(config: Config) {
         })));
     })
 
-    router.post('/terminal.update', (req, res) => {
+    router.post('/terminal.update', async (req, res) => {
         if (req.user.admin) {
             log('Trying change terminal')
-            const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id.toString());
+            const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
             if (terminalInfo != null) {
                 const { terminal } = terminalInfo;
                 terminal.host = req.query.host.toString();
@@ -42,9 +42,9 @@ function init(config: Config) {
         res.json({ success: false });
     })
 
-    router.post('/terminal.restart', (req, res) => {
+    router.post('/terminal.restart', async (req, res) => {
         log('Restarting terminal %o', req.query);
-        const terminalInfo: TerminalInfo = req.user.getTerminalById(req.query.id.toString());
+        const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
         if (terminalInfo != null) {
             const { host, port } = terminalInfo.terminal;
             SocketManager.restart({ host, port, config });
@@ -54,9 +54,9 @@ function init(config: Config) {
         res.json({ success: false });
     })
 
-    router.get('/terminal.get', (req, res) => {
+    router.get('/terminal.get', async (req, res) => {
         log('Getting terminal %o', req.query);
-        const info: TerminalInfo = req.user.getTerminalById(req.query.id.toString());
+        const info: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
         if(info == null) {
             res.json(null);
             return;
