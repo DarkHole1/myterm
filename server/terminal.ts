@@ -61,7 +61,8 @@ const terminalSchema = new Schema<ITerminal>({
                 type: Boolean,
                 required: true
             }
-        }
+        },
+        default: {}
     }
 });
 
