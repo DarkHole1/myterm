@@ -22,7 +22,7 @@ type ITerminal = {
     }>
 
     getData(): AllTerminalData;
-    getInfo(admin?: boolean): {
+    getInfo(admin?: boolean, role?: string): {
         name: string,
         serverName: string,
         host?: string,
@@ -77,11 +77,12 @@ terminalSchema.methods.getData = function(): AllTerminalData {
     }
 }
 
-terminalSchema.methods.getInfo = function(isAdmin: boolean = false) {
+terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
     let res = {
         name: this.name,
         host: this.server.host,
         port: this.port,
+        readonly: false,
         serverName: this.server.name,
         comPort: this.port - 20000
     }
@@ -89,6 +90,11 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false) {
     if(!isAdmin) {
         delete res.host;
         delete res.port;
+        if(role in this.permissions) {
+            res.readonly = !this.permissions[role].writable;
+        } else {
+            res.readonly = true;
+        }
     }
 
     return res;

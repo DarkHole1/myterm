@@ -90,7 +90,7 @@ function init(config: Config) {
         if(!req.user.admin) {
             visible = terminals.filter(term => term.visible(req.user.role));
         }
-        res.json(visible.map(term => term.getInfo(req.user.admin)));
+        res.json(visible.map(term => term.getInfo(req.user.admin, req.user.role)));
     })
 
     return router;
