@@ -1,3 +1,5 @@
+type Permissions = { show: boolean, write: boolean }
+
 class Terminal {
     public readonly id: string
     public name: string
@@ -33,6 +35,15 @@ class Terminal {
         ]);
         const res = await fetch(`/api/terminal.update?${params.toString()}`, {
             method: 'POST'
+        })
+        const data: {success: boolean} = await res.json();
+        return data.success; 
+    }
+
+    public async changePermissions(newPermissions : Map<String, Permissions>) : Promise<boolean> {
+        const res = await fetch(`/api/terminal.update?id=${this.id}`, {
+            method: 'POST',
+            body: JSON.stringify(newPermissions)
         })
         const data: {success: boolean} = await res.json();
         return data.success; 
