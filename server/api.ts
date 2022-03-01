@@ -42,6 +42,15 @@ function init(config: Config) {
         res.json({ success: false });
     })
 
+    router.get('/terminal.permissions', async (req, res) => {
+        if(req.user.admin) {
+            let term = await Terminal.findById(req.query.id);
+            res.json(term.permissions);
+            return;
+        }
+        res.json(null);
+    })
+
     router.post('/terminal.permissions', express.json(), async (req, res) => {
         if (req.user.admin) {
             log('Trying change terminals permissons')
