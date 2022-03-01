@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import User, { IUser, TerminalInfo } from './user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
@@ -40,6 +40,21 @@ function init(config: Config) {
             }
         }
         res.json({ success: false });
+    })
+
+    router.post('/terminal.permissions', express.json(), async (req, res) => {
+        if (req.user.admin) {
+            log('Trying change terminals permissons')
+            const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
+            if (terminalInfo != null) {
+                const { terminal } = terminalInfo;
+                terminal.permissions = new Map(Object.entries(req.body))
+                terminal.save();
+                log('Changes in permissions succesfull');
+                res.json({ success: true });
+                return;
+            }
+        }
     })
 
     router.post('/terminal.restart', async (req, res) => {
