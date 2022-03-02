@@ -8,6 +8,7 @@ class Terminal {
     public readonly readonly: boolean
     public readonly canEdit: boolean
     public readonly canRestart: boolean
+    public readonly canChangePermissions: boolean
 
     public host?: string
     public port?: number
@@ -21,6 +22,7 @@ class Terminal {
         this.readonly = data.readonly;
         this.canEdit = data.editable;
         this.canRestart = true;
+        this.canChangePermissions = data.editable;
 
         this.host = data.host;
         this.port = data.port;
