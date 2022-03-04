@@ -107,7 +107,14 @@ export default defineComponent({
       });
     },
     async handlePermissions() {
-      // TODO
+      this.$vfm.show('permissionsModal', {
+        permissions: {}, // TODO
+        // eslint-disable-next-line
+        cb: (data: any) => {
+          const { host, port, name } = data;
+          this.terminalData.updateData({ host, port, name }); 
+        }
+      });
     }
   },
   components: { Logo, ActionRestart, ActionEdit, ActionPermissions },
