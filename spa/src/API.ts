@@ -51,6 +51,11 @@ class Terminal {
         return data.success;
     }
 
+    public async permissions() : Promise<Map<string, Permissions>> {
+        const res = await fetch(`/api/terminal.permissions?id=${this.id}`);
+        return await res.json();
+    }
+
     // eslint-disable-next-line
     public updateData({ name, host, port }: any): Promise<boolean> {
         this.name = name;

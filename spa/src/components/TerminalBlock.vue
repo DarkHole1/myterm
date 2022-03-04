@@ -107,8 +107,9 @@ export default defineComponent({
       });
     },
     async handlePermissions() {
+      const permissions = await this.terminalData.permissions();
       this.$vfm.show('permissionsModal', {
-        permissions: { a: "b", c: "d" }, // TODO
+        permissions,
         // eslint-disable-next-line
         cb: (data: any) => {
           alert(JSON.stringify(data));
