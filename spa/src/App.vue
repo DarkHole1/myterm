@@ -2,6 +2,7 @@
   <div>
     <RestartModal />
     <EditModal />
+    <PermissionsModal />
     <Container>
       <ServerCollapse
         v-for="server in servers"
@@ -28,6 +29,7 @@ import Container from "./components/Container.vue";
 import API, { COMServer } from "./API";
 import RestartModal from "./components/RestartModal.vue";
 import EditModal from "./components/EditModal.vue";
+import PermissionsModal from "./components/PermissionsModal.vue";
 import ServerCollapse from "./components/ServerCollapse.vue";
 
 export default defineComponent({
@@ -35,6 +37,7 @@ export default defineComponent({
     Container,
     RestartModal,
     EditModal,
+    PermissionsModal,
     ServerCollapse,
   },
   provide: {

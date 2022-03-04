@@ -42,7 +42,8 @@ export default defineComponent({
             show: false,
             params: {
               permissions: {},
-              cb: () => void 0
+              // eslint-disable-next-line
+              cb: (x: any) => void 0
             }
         }
     }, 
