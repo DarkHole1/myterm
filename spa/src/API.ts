@@ -45,7 +45,10 @@ class Terminal {
     public async changePermissions(newPermissions : Map<string, Permissions>) : Promise<boolean> {
         const res = await fetch(`/api/terminal.permissions?id=${this.id}`, {
             method: 'POST',
-            body: JSON.stringify(newPermissions)
+            body: JSON.stringify(newPermissions),
+            headers: [
+                ["Content-Type", "application/json"]
+            ]
         })
         const data: {success: boolean} = await res.json();
         return data.success;

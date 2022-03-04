@@ -57,6 +57,7 @@ function init(config: Config) {
             const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
             if (terminalInfo != null) {
                 const { terminal } = terminalInfo;
+                log("Permissions: %o", req.body);
                 terminal.permissions = new Map(Object.entries(req.body))
                 terminal.save();
                 log('Changes in permissions succesfull');
