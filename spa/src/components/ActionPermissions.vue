@@ -1,5 +1,5 @@
 <template>
-    <button class="action permissions" @click="$event.stopPropagation(), $emit('click')"><i class="fa-solid fa-user-lock"></i></button>
+    <button class="action permissions" @click="$event.stopPropagation(), $emit('click')"><i class="fas fa-user-lock"></i></button>
 </template>
 
 <style scoped>
