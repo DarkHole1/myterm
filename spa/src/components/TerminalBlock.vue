@@ -108,11 +108,11 @@ export default defineComponent({
     },
     async handlePermissions() {
       this.$vfm.show('permissionsModal', {
-        permissions: {}, // TODO
+        permissions: { a: "b", c: "d" }, // TODO
         // eslint-disable-next-line
         cb: (data: any) => {
-          const { host, port, name } = data;
-          this.terminalData.updateData({ host, port, name }); 
+          alert(JSON.stringify(data));
+          // this.terminalData.updateData({ host, port, name }); 
         }
       });
     }

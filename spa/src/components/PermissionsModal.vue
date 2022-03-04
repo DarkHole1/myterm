@@ -1,6 +1,13 @@
 <template>
     <vue-final-modal v-model="show" name="permissionsModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
-      <!-- <div class="title">Перезапустить терминальную сессию к {{ params.name }}?</div> -->
+      <div v-for="value, key in params.permissions" :key="key">
+        <a>{{ key }}</a>{{ " " }}
+        <input :value="value" @input="params.permissions[key] = $event.target.value">
+      </div>
+      <div>
+        <input v-model="newuser" />{{ " " }}
+        <button @click="params.permissions[newuser] = ''; newuser = ''">Добавить роль</button>
+      </div>
       <VButtonDanger @click="handleClick(true)">Изменить</VButtonDanger>
       <VButton @click="handleClick(false)">Закрыть</VButton>
     </vue-final-modal>
@@ -40,6 +47,7 @@ export default defineComponent({
     data() {
         return {
             show: false,
+            newuser: "",
             params: {
               permissions: {},
               // eslint-disable-next-line
