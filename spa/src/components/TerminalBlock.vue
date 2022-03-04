@@ -112,8 +112,7 @@ export default defineComponent({
         permissions,
         // eslint-disable-next-line
         cb: (data: any) => {
-          alert(JSON.stringify(data));
-          // this.terminalData.updateData({ host, port, name }); 
+          this.terminalData.changePermissions(data); 
         }
       });
     }

@@ -2,11 +2,15 @@
     <vue-final-modal v-model="show" name="permissionsModal" content-class="modal-content" classes="modal-container" @beforeOpen="handleOpen">
       <div v-for="value, key in params.permissions" :key="key">
         <a>{{ key }}</a>{{ " " }}
-        <input :value="value" @input="params.permissions[key] = $event.target.value">
+        <!-- <input :value="value" @input="params.permissions[key] = $event.target.value"> -->
+        <label>Чтение</label>
+        <input type="checkbox" :checked="value.show" @input="params.permissions[key].show = $event.target.checked" />
+        <label>Запись</label>
+        <input type="checkbox" :checked="value.write" @input="params.permissions[key].write = $event.target.checked" />
       </div>
       <div>
         <input v-model="newuser" />{{ " " }}
-        <button @click="params.permissions[newuser] = ''; newuser = ''">Добавить роль</button>
+        <button @click="params.permissions[newuser] = {show: true, write: false}; newuser = ''">Добавить роль</button>
       </div>
       <VButtonDanger @click="handleClick(true)">Изменить</VButtonDanger>
       <VButton @click="handleClick(false)">Закрыть</VButton>
