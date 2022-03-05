@@ -75,11 +75,9 @@ export default defineComponent({
     methods: {
       handleClick(answer: boolean) {
         if(answer) {
-          this.cb({
-            host: this.host,
-            port: this.port,
-            name: this.newName
-          });
+          let res: {role: any, password?: any} = {role: this.role};
+          if(this.password.length > 0) res.password = this.password; 
+          this.cb(res);
         }
         this.show = false;
       },
