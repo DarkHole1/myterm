@@ -122,6 +122,15 @@ function init(config: Config) {
         res.json(req.user.admin);
     })
 
+    router.get('/user.list', async (req, res) => {
+        if(req.user.admin) {
+            const users = User.find();
+            res.json(users);
+            return;
+        }
+        res.json([]);
+    })
+
     return router;
 }
 
