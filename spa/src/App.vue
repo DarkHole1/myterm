@@ -3,6 +3,7 @@
     <RestartModal />
     <EditModal />
     <PermissionsModal />
+    <UserModal />
     <Container>
       <UsersCollapse />
       <ServerCollapse
@@ -31,6 +32,7 @@ import API, { COMServer } from "./API";
 import RestartModal from "./components/RestartModal.vue";
 import EditModal from "./components/EditModal.vue";
 import PermissionsModal from "./components/PermissionsModal.vue";
+import UserModal from "./components/UserModal.vue";
 import ServerCollapse from "./components/ServerCollapse.vue";
 import UsersCollapse from './components/UsersCollapse.vue';
 
@@ -40,6 +42,7 @@ export default defineComponent({
     RestartModal,
     EditModal,
     PermissionsModal,
+    UserModal,
     ServerCollapse,
     UsersCollapse,
   },

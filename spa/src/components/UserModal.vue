@@ -67,7 +67,7 @@ export default defineComponent({
             show: false,
             name: '%TERMINAL_NAME%',
             role: "",
-            newName: 'password',
+            password: '',
             // eslint-disable-next-line
             cb: (data: any) => void 0
         }
@@ -75,6 +75,7 @@ export default defineComponent({
     methods: {
       handleClick(answer: boolean) {
         if(answer) {
+          // eslint-disable-next-line
           let res: {role: any, password?: any} = {role: this.role};
           if(this.password.length > 0) res.password = this.password; 
           this.cb(res);
@@ -84,7 +85,7 @@ export default defineComponent({
       // eslint-disable-next-line
       handleOpen(event: any) {
         const { name, role, cb } = event.ref.params.value;
-        this.host = name;
+        this.name = name;
         this.role = role;
         this.password = "";
         this.cb = cb;
