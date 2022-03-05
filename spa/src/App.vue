@@ -2,11 +2,14 @@
   <div>
     <RestartModal />
     <EditModal />
+    <PermissionsModal />
+    <UserModal />
     <Container>
-      <TerminalBlock
-        :terminalData="terminal"
-        v-for="terminal in terminals"
-        :key="terminal.id"
+      <UsersCollapse />
+      <ServerCollapse
+        v-for="server in servers"
+        :key="server.id"
+        :server="server"
       />
     </Container>
   </div>
@@ -24,23 +27,34 @@ body {
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TerminalBlock from "./components/TerminalBlock.vue";
 import Container from "./components/Container.vue";
-import API, { Terminal } from "./API";
+import API, { COMServer } from "./API";
 import RestartModal from "./components/RestartModal.vue";
 import EditModal from "./components/EditModal.vue";
+import PermissionsModal from "./components/PermissionsModal.vue";
+import UserModal from "./components/UserModal.vue";
+import ServerCollapse from "./components/ServerCollapse.vue";
+import UsersCollapse from './components/UsersCollapse.vue';
 
 export default defineComponent({
-  components: { TerminalBlock, Container, RestartModal, EditModal },
+  components: {
+    Container,
+    RestartModal,
+    EditModal,
+    PermissionsModal,
+    UserModal,
+    ServerCollapse,
+    UsersCollapse,
+  },
   provide: {
     api: API,
   },
   async mounted() {
-    this.terminals = await API.fetchTerminalsList();
+    this.servers = await API.fetchServersList();
   },
   data() {
     return {
-      terminals: [] as Terminal[],
+      servers: [] as COMServer[],
     };
   },
 });

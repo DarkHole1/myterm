@@ -1,6 +1,6 @@
 import { Schema, model, Model, ObjectId } from 'mongoose';
 import Credentials from './credentials';
-import { ITerminal } from './terminal';
+import Terminal, { ITerminal } from './terminal';
 import './terminal';
 
 interface AllTerminalData {
@@ -9,8 +9,8 @@ interface AllTerminalData {
     port?: number,
     readonly: boolean,
     serverName: string,
-    serverId: number
-} 
+    comPort: number
+}
 
 type TerminalInfo = {
     terminal: ITerminal,
@@ -19,11 +19,12 @@ type TerminalInfo = {
 
 interface IUser {
     name: string,
-    admin: boolean
+    admin: boolean,
+    role: string,
     password: string,
     terminals: TerminalInfo[]
 
-    getTerminalById(id: ObjectId | string): TerminalInfo;
+    getTerminalById(id: ObjectId | string): Promise<TerminalInfo>;
     getTerminalsData(): AllTerminalData[];
 }
 
@@ -44,6 +45,10 @@ const userSchema = new Schema<IUser, IUserModel>({
         type: Boolean,
         default: false
     },
+    role: {
+        type: String,
+        default: 'user'
+    },
     terminals: {
         type: [{
             terminal: {
@@ -60,7 +65,7 @@ const userSchema = new Schema<IUser, IUserModel>({
     }
 });
 
-userSchema.statics.findByCredentials = function(creds: Credentials) {
+userSchema.statics.findByCredentials = function (creds: Credentials) {
     return this
         .findOne(creds.getCredentials())
         .populate({
@@ -69,23 +74,26 @@ userSchema.statics.findByCredentials = function(creds: Credentials) {
         });
 }
 
-userSchema.methods.getTerminalById = function(id: ObjectId | string) {
-    for (const terminal of this.terminals) {
-        if(terminal.terminal._id == id) {
-            return terminal;
+userSchema.methods.getTerminalById = async function (id: ObjectId | string) {
+    let terminal = await Terminal.findById(id);
+    if(terminal) {
+        let readonly = true;
+        if(terminal.permissions.has(this.role)) {
+            readonly = !terminal.permissions.get(this.role).write;
         }
+        return { terminal, readonly }
     }
     return null;
 }
 
-userSchema.methods.getTerminalsData = function(): AllTerminalData[] {
+userSchema.methods.getTerminalsData = function (): AllTerminalData[] {
     const user = this as IUser;
     return user.terminals.map(terminal => {
         let res = {
             ...terminal.terminal.getData(),
             readonly: terminal.readonly
         };
-        if(!this.admin) {
+        if (!this.admin) {
             delete res.host;
             delete res.port;
         }

@@ -2,12 +2,13 @@
   <div class="terminal" @click="open">
     <div class='header'>
       <Logo />
-      <span>{{ terminalData.serverId }}</span>
+      <span>{{ terminalData.comPort }}</span>
     </div>
     <h2 class="name"><i class="fas fa-lock" v-if="terminalData.readonly"></i> {{ terminalData.name }}</h2>
     <div class="actions">
       <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
       <ActionEdit v-if="terminalData.canEdit" @click="handleEdit" />
+      <ActionPermissions v-if="terminalData.canChangePermissions" @click="handlePermissions" />
     </div>
   </div>
 </template>
@@ -71,6 +72,7 @@ import { defineComponent, PropType } from "vue";
 import Logo from "./Logo.vue";
 import ActionRestart from "./ActionRestart.vue";
 import ActionEdit from "./ActionEdit.vue";
+import ActionPermissions from "./ActionPermissions.vue";
 import { Terminal } from "../API";
 
 export default defineComponent({
@@ -103,8 +105,18 @@ export default defineComponent({
           this.terminalData.updateData({ host, port, name }); 
         }
       });
+    },
+    async handlePermissions() {
+      const permissions = await this.terminalData.permissions();
+      this.$vfm.show('permissionsModal', {
+        permissions,
+        // eslint-disable-next-line
+        cb: (data: any) => {
+          this.terminalData.changePermissions(data); 
+        }
+      });
     }
   },
-  components: { Logo, ActionRestart, ActionEdit },
+  components: { Logo, ActionRestart, ActionEdit, ActionPermissions },
 });
 </script>
