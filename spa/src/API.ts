@@ -83,6 +83,33 @@ class Terminal {
     }
 }
 
+class User {
+    public readonly id = '';
+    public role = '';
+    
+    // eslint-disable-next-line
+    constructor(data: any) {
+        if(typeof data.id == 'string') {
+            this.id = data.id;
+        }
+
+        if(typeof data.role == 'string') {
+            this.role = data.role;
+        }
+    }
+
+    async update(data: { role?: string, password?: string }) {
+        const res = await fetch(`/api/terminal.permissions?id=${this.id}`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: [
+                ["Content-Type", "application/json"]
+            ]
+        })
+        return (await res.json()).success;
+    }
+}
+
 class COMServer {
     public readonly terminals: Terminal[];
     public readonly name: string;
@@ -130,6 +157,16 @@ class API {
         const data = await res.json();
         // eslint-disable-next-line
         return data.map((d: any) => new COMServer(d));
+    }
+
+    static async isAdmin() : Promise<boolean> {
+        const res = await fetch('/api/user.isAdmin');
+        return await res.json();
+    }
+
+    static async fetchUsersList() : Promise<User> {
+        const res = await fetch('/api/user.list');
+        return await res.json();
     }
 }
 
