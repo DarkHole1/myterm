@@ -4,6 +4,7 @@
     <EditModal />
     <PermissionsModal />
     <Container>
+      <UsersCollapse />
       <ServerCollapse
         v-for="server in servers"
         :key="server.id"
@@ -31,6 +32,7 @@ import RestartModal from "./components/RestartModal.vue";
 import EditModal from "./components/EditModal.vue";
 import PermissionsModal from "./components/PermissionsModal.vue";
 import ServerCollapse from "./components/ServerCollapse.vue";
+import UsersCollapse from './components/UsersCollapse.vue';
 
 export default defineComponent({
   components: {
@@ -39,6 +41,7 @@ export default defineComponent({
     EditModal,
     PermissionsModal,
     ServerCollapse,
+    UsersCollapse,
   },
   provide: {
     api: API,
