@@ -131,6 +131,21 @@ function init(config: Config) {
         res.json([]);
     })
 
+    router.post('/user.update', express.json(), async (req, res) => {
+        if (req.user.admin) {
+            log('Trying change user %s', req.query.id);
+            const user = User.findById(req.query.id.toString());
+            if (user != null) {
+                log("Changes: %o", req.body);
+                Object.assign(user, req.body);
+                log('Changes in permissions succesfull');
+                res.json({ success: true });
+                return;
+            }
+        }
+        res.json({ success: false });
+    })
+
     return router;
 }
 
