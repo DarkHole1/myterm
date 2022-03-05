@@ -118,6 +118,10 @@ function init(config: Config) {
         res.json(visible.map(term => term.getInfo(req.user.admin, req.user.role)));
     })
 
+    router.get('/user.isAdmin', (req, res) => {
+        res.json(req.user.admin);
+    })
+
     return router;
 }
 
