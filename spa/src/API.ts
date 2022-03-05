@@ -98,7 +98,7 @@ class User {
         }
     }
 
-    async update(data: { role?: string, password?: string }) {
+    async update(data: { role?: string, password?: string }) : Promise<boolean> {
         const res = await fetch(`/api/terminal.permissions?id=${this.id}`, {
             method: 'POST',
             body: JSON.stringify(data),
@@ -166,7 +166,8 @@ class API {
 
     static async fetchUsersList() : Promise<User[]> {
         const res = await fetch('/api/user.list');
-        return await res.json();
+        // eslint-disable-next-line
+        return (await res.json()).map((e: any) => new User(e));
     }
 }
 

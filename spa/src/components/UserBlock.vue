@@ -73,16 +73,14 @@ export default defineComponent({
   props: ['user'],
   methods: {
     handleEdit() {
-      // this.$vfm.show('editModal', {
-      //   name: this.terminalData.name,
-      //   host: this.terminalData.host,
-      //   port: this.terminalData.port,
-      //   // eslint-disable-next-line
-      //   cb: (data: any) => {
-      //     const { host, port, name } = data;
-      //     this.terminalData.updateData({ host, port, name }); 
-      //   }
-      // });
+      this.$vfm.show('userModal', {
+        name: this.user.name,
+        role: this.user.role,
+        // eslint-disable-next-line
+        cb: (data: any) => {
+          this.user.update(data); 
+        }
+      });
     }
   },
   components: { ActionEdit, LogoUser },
