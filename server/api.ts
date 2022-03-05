@@ -65,6 +65,7 @@ function init(config: Config) {
                 return;
             }
         }
+        res.json({ success: false });
     })
 
     router.post('/terminal.restart', async (req, res) => {
