@@ -85,6 +85,7 @@ class Terminal {
 
 class User {
     public readonly id = '';
+    public readonly name = '';
     public role = '';
     
     // eslint-disable-next-line
@@ -96,10 +97,14 @@ class User {
         if(typeof data.role == 'string') {
             this.role = data.role;
         }
+
+        if(typeof data.name == 'string') {
+            this.name = data.name;
+        }
     }
 
     async update(data: { role?: string, password?: string }) : Promise<boolean> {
-        const res = await fetch(`/api/terminal.permissions?id=${this.id}`, {
+        const res = await fetch(`/api/user.update?id=${this.id}`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: [
