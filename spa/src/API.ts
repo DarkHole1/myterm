@@ -164,7 +164,7 @@ class API {
         return await res.json();
     }
 
-    static async fetchUsersList() : Promise<User> {
+    static async fetchUsersList() : Promise<User[]> {
         const res = await fetch('/api/user.list');
         return await res.json();
     }
@@ -172,5 +172,5 @@ class API {
 
 export default API;
 export type {
-    Terminal, COMServer
+    Terminal, COMServer, User
 };

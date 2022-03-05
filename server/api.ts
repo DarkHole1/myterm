@@ -124,8 +124,11 @@ function init(config: Config) {
 
     router.get('/user.list', async (req, res) => {
         if(req.user.admin) {
-            const users = User.find();
-            res.json(users);
+            log('Starting getting users')
+            const users = await User.find();
+            const mapped = users.map(({ id, role, name }) => ({ id, role, name }));
+            log("Users: %o", mapped);
+            res.json(mapped);
             return;
         }
         res.json([]);

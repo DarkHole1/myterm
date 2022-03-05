@@ -6,12 +6,11 @@
       Пользователи
     </div>
     <div class="content" v-if="show">
-      <!-- <TerminalBlock
-        :terminalData="terminal"
-        v-for="terminal in terminals"
-        :key="terminal.id"
-      /> -->
-      Something
+      <UserBlock
+        :user="user"
+        v-for="user in users"
+        :key="user.id"
+      />
     </div>
   </div>
 </template>
@@ -34,18 +33,17 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-// import TerminalBlock from "./TerminalBlock.vue";
-// import { API } from '../API';
+import UserBlock from "./UserBlock.vue";
+import API, { User } from '../API';
 
 export default defineComponent({
-  // components: { TerminalBlock },
-  // props: ["server"],
+  components: { UserBlock },
   async mounted() {
-    // this.terminals = await this.server.fetchTerminals();
+    this.users = await API.fetchUsersList();
   },
   data() {
     return {
-      // terminals: [],
+      users: [] as User[],
       show: false
     };
   },
