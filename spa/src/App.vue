@@ -5,7 +5,7 @@
     <PermissionsModal />
     <UserModal />
     <Container>
-      <UsersCollapse />
+      <UsersCollapse v-if="isAdmin" />
       <ServerCollapse
         v-for="server in servers"
         :key="server.id"
@@ -50,11 +50,13 @@ export default defineComponent({
     api: API,
   },
   async mounted() {
+    this.isAdmin = await API.isAdmin();
     this.servers = await API.fetchServersList();
   },
   data() {
     return {
       servers: [] as COMServer[],
+      isAdmin: false
     };
   },
 });
