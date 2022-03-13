@@ -5,6 +5,7 @@
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
+  import type { Terminal } from "../API";
 
   export let server;
   let show = false;
@@ -13,15 +14,10 @@
     easing: cubicOut,
   });
 
-  let terminals = [
-    {
-      name: "SW_SERVICE",
-      comPort: 1,
-      canEdit: true,
-      canRestart: true,
-      canChangePermissions: true
-    },
-  ];
+  let terminals: Terminal[] = [];
+  server.fetchTerminals().then((t) => {
+    terminals = t;
+  });
   // import { defineComponent } from "vue";
   // import TerminalBlock from "./TerminalBlock.vue";
 
