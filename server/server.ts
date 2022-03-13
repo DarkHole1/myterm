@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { Server } from "socket.io";
 import initializeSockets from './socket-handler';
 import AuthMiddleware from './auth';
@@ -23,6 +24,7 @@ mongoose.connect(config.mongodbURI, { useNewUrlParser: true, useUnifiedTopology:
 
 initializeSockets(io, config);
 
+app.use(cors());
 app.use(AuthMiddleware);
 app.use(StaticMiddleware);
 app.use('/api/', APIMiddleware(config));

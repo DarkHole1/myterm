@@ -1,16 +1,11 @@
 <script lang="ts">
 	import Container from "./components/Container.svelte";
 	import ServerCollapse from "./components/ServerCollapse.svelte";
-
-	let servers = [{
-		name: "1"
-	}, {
-		name: "2"
-	}];
+	import { servers } from './stores';
 </script>
 
 <Container>
-	{#each servers as server}
+	{#each $servers as server}
 		<ServerCollapse {server} />
 	{/each}
 </Container>
