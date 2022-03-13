@@ -17,6 +17,9 @@
     {
       name: "SW_SERVICE",
       comPort: 1,
+      canEdit: true,
+      canRestart: true,
+      canChangePermissions: true
     },
   ];
   // import { defineComponent } from "vue";
@@ -49,8 +52,6 @@
       icon={faCaretRight}
       transform={{ rotate: $rotation * 90 }}
     />
-    <i class="fas fa-plus-circle" v-if="!show" />
-    <i class="fas fa-minus-circle" v-else />
     {server.name}
     {#if server.host}
       <span>({server.host})</span>

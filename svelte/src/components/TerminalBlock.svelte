@@ -1,6 +1,13 @@
 <script lang="ts">
-  import { faLock, faTerminal } from "@fortawesome/free-solid-svg-icons";
+  import {
+    faLock,
+    faPencilAlt,
+    faTerminal,
+    faUndo,
+    faUserLock,
+  } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
+  import Action from "./Action.svelte";
 
   export let terminalData;
 
@@ -73,6 +80,16 @@
     {terminalData.name}
   </h2>
   <div class="actions">
+    <!-- TODO click -->
+    {#if terminalData.canRestart}
+      <Action icon={faUndo} danger />
+    {/if}
+    {#if terminalData.canEdit}
+      <Action icon={faPencilAlt} />
+    {/if}
+    {#if terminalData.canChangePermissions}
+      <Action icon={faUserLock} />
+    {/if}
     <!-- <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
     <ActionEdit v-if="terminalData.canEdit" @click="handleEdit" />
     <ActionPermissions v-if="terminalData.canChangePermissions" @click="handlePermissions" /> -->
@@ -120,15 +137,5 @@
   .terminal:hover > .actions {
     height: 1.2rem;
     opacity: 1;
-  }
-
-  .terminal > .actions > button {
-    padding: 0.3em;
-    border-radius: 0.3em;
-    border: none;
-    color: #ededed;
-    background: none;
-    font-size: 1.2rem;
-    margin-left: 0.2em;
   }
 </style>
