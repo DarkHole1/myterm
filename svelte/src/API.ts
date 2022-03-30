@@ -5,7 +5,7 @@ class Users {
     $store: Writable<User[]> = writable([])
 
     constructor() {
-        this.update()
+        setTimeout(() => this.update(), 0)
     }
 
     async update() {
@@ -22,7 +22,7 @@ class Servers {
     $store: Writable<Server[]> = writable([])
 
     constructor() {
-        this.update()
+        setTimeout(() => this.update(), 0)
     }
 
     async update() {
@@ -79,6 +79,9 @@ class Server {
         this.parent = parent
     }
 }
+
+export const servers = new Servers();
+export const users = new Users();
 
 // type Permissions = { show: boolean, write: boolean }
 
