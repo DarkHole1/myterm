@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Container from "./components/Container.svelte";
 	import ServerCollapse from "./components/ServerCollapse.svelte";
-	import { servers } from './API';
+	import API from './API';
+	const { servers } = API;
 </script>
 
 <Container>

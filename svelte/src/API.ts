@@ -35,6 +35,29 @@ class Servers {
     }
 }
 
+class Terminals {
+    $store: Writable<Server[]> = writable([])
+    serverId: string
+
+    constructor(serverId: string) {
+        this.serverId = serverId
+        setTimeout(() => this.update(), 0)
+    }
+
+    async update() {
+        const { data } = await API.$api.get('/comserver.terminals', {
+            params: {
+                id: this.serverId
+            }
+        })
+        this.$store.set(data.map(terminal => new Terminal(terminal, this)))
+    }
+
+    subscribe(run: Subscriber<Server[]>) {
+        return this.$store.subscribe(run)
+    }
+}
+
 const API = {
     $api: axios.create({
         baseURL: 'https://localhost:3000/api'
@@ -72,16 +95,29 @@ class User {
 
 class Server {
     parent: Servers
+    terminals: Terminals
+    id: string
 
     // TODO: Add validation
     constructor(data: any, parent: Servers) {
         Object.assign(this, data)
         this.parent = parent
+        this.terminals = new Terminals(this.id)
     }
 }
 
-export const servers = new Servers();
-export const users = new Users();
+class Terminal {
+    parent: Terminals
+    
+    // TODO: Add validation
+    constructor(data: any, parent: Terminals) {
+        Object.assign(this, data)
+        this.parent = parent
+    }
+}
+
+API.login('root', 'toor')
+export default API;
 
 // type Permissions = { show: boolean, write: boolean }
 

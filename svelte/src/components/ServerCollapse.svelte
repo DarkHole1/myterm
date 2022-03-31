@@ -5,7 +5,7 @@
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
-  import type { Terminal } from "../API";
+  // import type { Terminal } from "../API";
 
   export let server;
   let show = false;
@@ -14,10 +14,7 @@
     easing: cubicOut,
   });
 
-  let terminals: Terminal[] = [];
-  server.fetchTerminals().then((t) => {
-    terminals = t;
-  });
+  const { terminals } = server;
   // import { defineComponent } from "vue";
   // import TerminalBlock from "./TerminalBlock.vue";
 
@@ -55,7 +52,7 @@
   </div>
   {#if show}
     <div class="content" transition:slide>
-      {#each terminals as terminalData}
+      {#each $terminals as terminalData}
         <TerminalBlock {terminalData} />
       {/each}
     </div>
