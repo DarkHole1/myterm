@@ -64,6 +64,7 @@ const API = {
     }),
     users: new Users,
     servers: new Servers,
+    isAdmin: true,
 
     login(username: string, password: string) {
         API.$api = axios.create({
@@ -85,7 +86,7 @@ const API = {
 
 class User {
     parent: Users
-    
+
     // TODO: Add validation
     constructor(data: any, parent: Users) {
         Object.assign(this, data)
@@ -108,7 +109,7 @@ class Server {
 
 class Terminal {
     parent: Terminals
-    
+
     // TODO: Add validation
     constructor(data: any, parent: Terminals) {
         Object.assign(this, data)

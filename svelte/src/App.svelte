@@ -2,10 +2,14 @@
 	import Container from "./components/Container.svelte";
 	import ServerCollapse from "./components/ServerCollapse.svelte";
 	import API from './API';
+import UsersCollapse from "./components/UsersCollapse.svelte";
 	const { servers } = API;
 </script>
 
 <Container>
+	{#if API.isAdmin }
+		<UsersCollapse />
+	{/if}
 	{#each $servers as server}
 		<ServerCollapse {server} />
 	{/each}
