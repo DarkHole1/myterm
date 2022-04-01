@@ -46,22 +46,31 @@
 </script>
 
 {#if $user != null}
-    <div class="title">Редактирование { $user.name }}</div>
-    <div class="pair">
-        <label for="role" class="form-label">Роль</label>
-        <input type="text" class="form-control" id="role" v-model="role" />
+    <div class="modal-container">
+        <div class="modal-content">
+            <div class="title">Редактирование {$user.name}</div>
+            <div class="pair">
+                <label for="role" class="form-label">Роль</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="role"
+                    v-model="role"
+                />
+            </div>
+            <div class="pair">
+                <label for="password" class="form-label">Пароль</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="password"
+                    v-model="password"
+                />
+            </div>
+            <Button danger on:click={() => handleClick(true)}>Отправить</Button>
+            <Button on:click={() => handleClick(false)}>Отмена</Button>
+        </div>
     </div>
-    <div class="pair">
-        <label for="password" class="form-label">Пароль</label>
-        <input
-            type="text"
-            class="form-control"
-            id="password"
-            v-model="password"
-        />
-    </div>
-    <Button danger on:click={() => handleClick(true)}>Отправить</Button>
-    <Button on:click={() => handleClick(false)}>Отмена</Button>
 {/if}
 
 <style>
@@ -84,6 +93,10 @@
     }
 
     .modal-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
         display: flex;
         justify-content: center;
         align-items: flex-start;

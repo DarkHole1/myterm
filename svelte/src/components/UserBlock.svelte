@@ -1,18 +1,16 @@
 <script lang="ts">
   import {
-    faLock,
     faPencilAlt,
     faTerminal,
-    faUndo,
-    faUserLock,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
+  import { user as userModal } from '../modals'; 
 
   export let user;
 
-  function open() {
-    // TODO:
+  function handleEdit() {
+    userModal.set(Object.assign({}, user));
   }
   // import { defineComponent, PropType } from "vue";
   // import Logo from "./Logo.vue";
@@ -67,7 +65,7 @@
   // });
 </script>
 
-<div class="terminal" on:click={open}>
+<div class="terminal">
   <div class="header">
     <!-- <Logo /> -->
     <FontAwesomeIcon icon={faTerminal} />
@@ -77,7 +75,7 @@
   </h2>
   <div class="actions">
     <!-- TODO click -->
-    <Action icon={faPencilAlt} />
+    <Action icon={faPencilAlt} on:click={handleEdit} />
     <!-- <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
     <ActionEdit v-if="terminalData.canEdit" @click="handleEdit" />
     <ActionPermissions v-if="terminalData.canChangePermissions" @click="handlePermissions" /> -->
