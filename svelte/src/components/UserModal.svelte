@@ -1,13 +1,29 @@
 <script lang="ts">
     import Button from "./Button.svelte";
     import { user } from "../modals";
+import { onDestroy } from "svelte";
 
     function handleClick(success: boolean) {
         if (success) {
             // TODO
+            alert(`Role: ${role}, pwd: ${password}`)
         }
         user.set(null);
     }
+
+    let userInfo;
+    let role = '';
+    let password = '';
+
+    const unsubscribe = user.subscribe(user => {
+        userInfo = user;
+        if(user != null) {
+            role = user.role;
+            password = '';
+        }
+    })
+
+    onDestroy(unsubscribe)
 
     // export default defineComponent({
     //     components: { VButton, VButtonDanger },
@@ -55,7 +71,7 @@
                     type="text"
                     class="form-control"
                     id="role"
-                    v-model="role"
+                    bind:value={role}
                 />
             </div>
             <div class="pair">
@@ -64,7 +80,7 @@
                     type="text"
                     class="form-control"
                     id="password"
-                    v-model="password"
+                    bind:value={password}
                 />
             </div>
             <Button danger on:click={() => handleClick(true)}>Отправить</Button>

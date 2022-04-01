@@ -10,7 +10,7 @@
   export let user;
 
   function handleEdit() {
-    userModal.set(Object.assign({}, user));
+    userModal.set(Object.assign({password: ''}, user));
   }
   // import { defineComponent, PropType } from "vue";
   // import Logo from "./Logo.vue";
