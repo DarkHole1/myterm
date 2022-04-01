@@ -65,10 +65,10 @@
   // });
 </script>
 
-<div class="terminal">
+<div class="block">
   <div class="header">
     <!-- <Logo /> -->
-    <FontAwesomeIcon icon={faTerminal} />
+    <FontAwesomeIcon class="logo" icon={faTerminal} />
   </div>
   <h2 class="name">
     {user.name}
@@ -90,7 +90,11 @@
     transition: 0.5s;
   }
 
-  .terminal {
+  .block :global(.logo) {
+    margin-left: 0.3em;
+  }
+
+  .block {
     background: #171717;
     color: #ededed;
     width: 180px;
@@ -105,22 +109,22 @@
     margin: 1rem;
   }
 
-  .terminal:hover {
+  .block:hover {
     background: #444444;
   }
 
-  .terminal:hover > .header {
+  .block:hover > .header {
     font-size: 3rem;
   }
 
-  .terminal > .actions {
+  .block > .actions {
     margin-bottom: 1em;
     height: 0;
     opacity: 0;
     transition: 0.5s;
   }
 
-  .terminal:hover > .actions {
+  .block:hover > .actions {
     height: 1.2rem;
     opacity: 1;
   }

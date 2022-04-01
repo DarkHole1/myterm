@@ -70,7 +70,7 @@
 <div class="terminal" on:click={open}>
   <div class="header">
     <!-- <Logo /> -->
-    <FontAwesomeIcon icon={faTerminal} />
+    <FontAwesomeIcon class="logo" icon={faTerminal} />
     <span>{terminalData.comPort}</span>
   </div>
   <h2 class="name">
@@ -102,6 +102,10 @@
     justify-content: space-between;
     font-size: 5rem;
     transition: 0.5s;
+  }
+
+  .terminal :global(.logo) {
+    margin-left: 0.3em;
   }
 
   .terminal {
