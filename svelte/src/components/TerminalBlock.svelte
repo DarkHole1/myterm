@@ -91,9 +91,6 @@ import { restart } from "../modals";
     {#if terminalData.canChangePermissions}
       <Action icon={faUserLock} />
     {/if}
-    <!-- <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
-    <ActionEdit v-if="terminalData.canEdit" @click="handleEdit" />
-    <ActionPermissions v-if="terminalData.canChangePermissions" @click="handlePermissions" /> -->
   </div>
 </div>
 

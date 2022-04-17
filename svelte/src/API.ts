@@ -117,6 +117,7 @@ class Server {
 
 class Terminal {
     parent: Terminals
+    id: string
 
     // TODO: Add validation
     constructor(data: any, parent: Terminals) {
@@ -127,6 +128,13 @@ class Terminal {
     
     public get canRestart() : boolean {
         return true;
+    }
+
+    async restart() {
+        await API.$api.post('/terminal.restart', null, {
+            params: { id: this.id }
+        })
+        await this.parent.update();
     }
     
 }
