@@ -5,8 +5,11 @@ import { onDestroy } from "svelte";
 
     function handleClick(success: boolean) {
         if (success) {
-            // TODO
-            alert(`Role: ${role}, pwd: ${password}`)
+            const res: { role: string, password?: string } = { role };
+            if(password != '') {
+                res.password = password;
+            }
+            userInfo.update(res)
         }
         user.set(null);
     }

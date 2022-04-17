@@ -86,11 +86,19 @@ const API = {
 
 class User {
     parent: Users
+    id: string
 
     // TODO: Add validation
     constructor(data: any, parent: Users) {
         Object.assign(this, data)
         this.parent = parent
+    }
+
+    async update(data: { role: string, password: string }) {
+        await API.$api.post('/user.update', data, {
+            params: { id: this.id }
+        })
+        await this.parent.update()
     }
 }
 
