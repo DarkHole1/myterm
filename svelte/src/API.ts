@@ -64,23 +64,34 @@ const API = {
     }),
     users: new Users,
     servers: new Servers,
-    isAdmin: true,
+    isAdmin: false,
+    loggedIn: false,
 
-    login(username: string, password: string) {
-        API.$api = axios.create({
-            baseURL: API.$api.defaults.baseURL,
-            auth: {
-                username, password
-            }
-        })
-
-        API.users.update()
-        API.servers.update()
+    async login(username: string, password: string) {
+        try {
+            let $api = axios.create({
+                baseURL: API.$api.defaults.baseURL,
+                auth: {
+                    username, password
+                }
+            })
+            const res = await $api.get('/user.isAdmin');
+            this.isAdmin = res.data;
+            
+            API.$api = $api;
+            this.loggedIn = true;
+            API.users.update()
+            API.servers.update()
+        } catch(e) {
+            // Do nothing
+        }
     },
     logout() {
         API.$api = axios.create({
             baseURL: API.$api.defaults.baseURL
         })
+        this.loggedIn = false;
+        this.isAdmin = false;
     }
 }
 
@@ -175,7 +186,6 @@ class Terminal {
     }
 }
 
-API.login('root', 'toor')
 export default API;
 
 // type Permissions = { show: boolean, write: boolean }
