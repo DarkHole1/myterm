@@ -111,7 +111,7 @@ function init(config: Config) {
     router.get('/comserver.terminals', async (req, res) => {
         const terminals = await Terminal.find({
             server: req.query.id as Condition<ICOMServer>
-        })
+        }).populate('server')
         let visible = terminals;
         if(!req.user.admin) {
             visible = terminals.filter(term => term.visible(req.user.role));
