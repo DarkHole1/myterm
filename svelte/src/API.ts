@@ -141,6 +141,14 @@ class Terminal {
         await this.parent.update();
     }
 
+    async update(data: {name?: string, host?: string, port?: string}) {
+        await API.$api.post('/terminal.update', null, {
+            params: {
+                id: this.id,
+                ...data
+            }
+        })
+    }
 }
 
 API.login('root', 'toor')
