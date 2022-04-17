@@ -1,9 +1,10 @@
 <script lang="ts">
     export let danger: boolean = false;
+    export let success: boolean = false;
 </script>
 
 <template>
-    <button on:click class:danger><slot /></button>
+    <button on:click class:danger class:success><slot /></button>
 </template>
 
 <style>
@@ -19,6 +20,11 @@
 
     button.danger {
         background: #da0037;
+        color: white;
+    }
+
+    button.success {
+        background-color: #0c9b2b;
         color: white;
     }
 </style>

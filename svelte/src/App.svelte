@@ -7,10 +7,12 @@
 	import RestartModal from "./components/RestartModal.svelte";
 	import EditModal from "./components/EditModal.svelte";
 	import PermissionsModal from "./components/PermissionsModal.svelte";
+import LoginModal from "./components/LoginModal.svelte";
 	const { servers } = API;
 </script>
 
 <Container>
+	<LoginModal />
 	{#if API.isAdmin}
 		<UsersCollapse />
 	{/if}
