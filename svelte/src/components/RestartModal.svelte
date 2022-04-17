@@ -1,29 +1,20 @@
 <script lang="ts">
     import Button from "./Button.svelte";
-    import { user } from "../modals";
+    import { restart } from "../modals";
     import { onDestroy } from "svelte";
 
     function handleClick(success: boolean) {
+        alert(success);
         if (success) {
-            const res: { role: string; password?: string } = { role };
-            if (password != "") {
-                res.password = password;
-            }
-            userInfo.update(res);
+            // TODO
         }
-        user.set(null);
+        restart.set(null);
     }
 
-    let userInfo;
-    let role = "";
-    let password = "";
+    let terminalInfo;
 
-    const unsubscribe = user.subscribe((user) => {
-        userInfo = user;
-        if (user != null) {
-            role = user.role;
-            password = "";
-        }
+    const unsubscribe = restart.subscribe((terminal) => {
+        terminalInfo = terminal;
     });
 
     onDestroy(unsubscribe);
@@ -64,30 +55,12 @@
     // });
 </script>
 
-{#if userInfo}
+{#if terminalInfo != null}
     <div class="modal-container">
         <div class="modal-content">
-            <div class="title">Редактирование {userInfo.name}</div>
-            <div class="pair">
-                <label for="role" class="form-label">Роль</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="role"
-                    bind:value={role}
-                />
-            </div>
-            <div class="pair">
-                <label for="password" class="form-label">Пароль</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="password"
-                    bind:value={password}
-                />
-            </div>
-            <Button danger on:click={() => handleClick(true)}>Отправить</Button>
-            <Button on:click={() => handleClick(false)}>Отмена</Button>
+            <div class="title">Перезапустить {terminalInfo.name}</div>
+            <Button danger on:click={() => handleClick(true)}>Да</Button>
+            <Button on:click={() => handleClick(false)}>Нет</Button>
         </div>
     </div>
 {/if}
@@ -119,16 +92,5 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
-    }
-
-    .pair {
-        margin-bottom: 0.5rem;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .pair > input {
-        font-size: 1.2rem;
-        font-family: "Ubuntu Mono", monospace;
     }
 </style>
