@@ -30,10 +30,11 @@ function init(config: Config) {
             const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
             if (terminalInfo != null) {
                 const { terminal } = terminalInfo;
-                terminal.host = req.query.host.toString();
                 terminal.port = parseInt(req.query.port.toString());
                 terminal.name = req.query.name.toString();
                 terminal.save();
+                terminal.server.host = req.query.host.toString();
+                terminal.server.save();
                 log('Changes succesfull');
                 res.json({ success: true });
                 return;
