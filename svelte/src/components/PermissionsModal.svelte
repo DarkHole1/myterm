@@ -1,23 +1,22 @@
 <script lang="ts">
     import Button from "./Button.svelte";
-    import { edit, permissions } from "../modals";
+    import { permissions as modalPermissions } from "../modals";
     import { onDestroy } from "svelte";
     import { select_value, validate_each_argument } from "svelte/internal";
 
     function handleClick(success: boolean) {
         if (success) {
             // TODO
-            const res = {};
-            // terminalInfo.update(res);
+            terminalInfo.setPermissions(permissions);
         }
-        edit.set(null);
+        modalPermissions.set(null);
     }
 
     let terminalInfo;
-    let permissions : {[key: string]: {show: boolean, write: boolean}} = {};
-    let newuser = '';
+    let permissions: { [key: string]: { show: boolean; write: boolean } } = {};
+    let newuser = "";
 
-    const unsubscribe = edit.subscribe((terminal) => {
+    const unsubscribe = modalPermissions.subscribe((terminal) => {
         terminalInfo = terminal;
         if (terminal != null) {
             permissions = {};
@@ -71,26 +70,22 @@
             <div class="title">Права для {terminalInfo.name}</div>
             {#each Object.entries(permissions) as [key, value]}
                 <div>
-                    <span>{ key }</span>{" "}
+                    <span>{key}</span>{" "}
                     <label>Чтение</label>
-                    <input
-                        type="checkbox"
-                        bind:checked={value.show}
-                    />
+                    <input type="checkbox" bind:checked={value.show} />
                     <label>Запись</label>
-                    <input
-                        type="checkbox"
-                        bind:checked={value.write}
-                    />
-                </div>
-                <div>
-                    <input bind:value={newuser} />{" "}
-                    <button on:click={() => {
-                        permissions[newuser] = {show: true, write: false};
-                        newuser = '';
-                    }}>Добавить роль</button>
+                    <input type="checkbox" bind:checked={value.write} />
                 </div>
             {/each}
+            <div>
+                <input bind:value={newuser} />{" "}
+                <button
+                    on:click={() => {
+                        permissions[newuser] = { show: true, write: false };
+                        newuser = "";
+                    }}>Добавить роль</button
+                >
+            </div>
             <Button danger on:click={() => handleClick(true)}>Отправить</Button>
             <Button on:click={() => handleClick(false)}>Отмена</Button>
         </div>
@@ -124,5 +119,9 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
+    }
+
+    label {
+        display: unset;
     }
 </style>

@@ -7,7 +7,7 @@
     faUserLock,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
-import { edit, restart } from "../modals";
+import { edit, permissions, restart } from "../modals";
   import Action from "./Action.svelte";
 
   export let terminalData;
@@ -89,7 +89,7 @@ import { edit, restart } from "../modals";
       <Action icon={faPencilAlt} on:click={() => $edit = terminalData} />
     {/if}
     {#if terminalData.canChangePermissions}
-      <Action icon={faUserLock} />
+      <Action icon={faUserLock} on:click={() => $permissions = terminalData}/>
     {/if}
   </div>
 </div>

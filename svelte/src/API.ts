@@ -165,6 +165,14 @@ class Terminal {
         })
         return res.data;
     }
+
+    async setPermissions(permissions: object) {
+        await API.$api.post('/terminal.permissions', permissions, {
+            params: {
+                id: this.id
+            }
+        });
+    }
 }
 
 API.login('root', 'toor')
