@@ -134,6 +134,12 @@ class Terminal {
         return this.editable;
     }
 
+    
+    public get canChangePermissions() : boolean {
+        return this.editable;
+    }
+    
+
     async restart() {
         await API.$api.post('/terminal.restart', null, {
             params: { id: this.id }
