@@ -71,7 +71,7 @@
             <div class="title">Права для {terminalInfo.name}</div>
             {#each Object.entries(permissions) as [key, value]}
                 <div>
-                    <a>{{ key }}</a>{" "}
+                    <span>{{ key }}</span>{" "}
                     <label>Чтение</label>
                     <input
                         type="checkbox"
