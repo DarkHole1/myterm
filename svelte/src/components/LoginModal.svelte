@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-import API from "../API";
+import { fly } from "svelte/transition";
+    import API from "../API";
     import Button from "./Button.svelte";
 
     const dispatch = createEventDispatcher();
@@ -13,7 +14,7 @@ import API from "../API";
     }
 </script>
 
-<div class="modal-container">
+<div class="modal-container" transition:fly={{y:-200}} >
     <div class="modal-content">
         <div class="title">Вход MyTerm</div>
         <div class="pair">

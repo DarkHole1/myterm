@@ -66,6 +66,7 @@ const API = {
     servers: new Servers,
     isAdmin: false,
     loggedIn: false,
+    loading: true,
 
     async login(username: string, password: string) {
         try {
@@ -96,16 +97,19 @@ const API = {
         })
         this.loggedIn = false;
         this.isAdmin = false;
+        delete localStorage['username'];
+        delete localStorage['password'];
     }
 }
 
-function restoreLogin() {
+async function restoreLogin() {
     if('username' in localStorage && 'password' in localStorage) {
-        API.login(localStorage['username'], localStorage['password']);
+        await API.login(localStorage['username'], localStorage['password']);
     }
+    API.loading = false;
 }
 
-// restoreLogin();
+restoreLogin();
 
 class User {
     parent: Users

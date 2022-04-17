@@ -8,6 +8,8 @@
 	import EditModal from "./components/EditModal.svelte";
 	import PermissionsModal from "./components/PermissionsModal.svelte";
 	import LoginModal from "./components/LoginModal.svelte";
+	import Button from "./components/Button.svelte";
+import Spinner from "./components/Spinner.svelte";
 	const { servers } = API;
 
 	function handleLogin() {
@@ -16,9 +18,15 @@
 </script>
 
 <Container>
-	{#if !API.loggedIn}
+	{#if API.loading}
+		<Spinner />
+	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
+		<Button danger on:click={() => {
+			API.logout();
+			location.reload();
+		}}>Выйти</Button>
 		{#if API.isAdmin}
 			<UsersCollapse />
 		{/if}
