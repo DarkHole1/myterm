@@ -134,11 +134,11 @@ class Terminal {
         return this.editable;
     }
 
-    
-    public get canChangePermissions() : boolean {
+
+    public get canChangePermissions(): boolean {
         return this.editable;
     }
-    
+
 
     async restart() {
         await API.$api.post('/terminal.restart', null, {
@@ -147,7 +147,7 @@ class Terminal {
         await this.parent.update();
     }
 
-    async update(data: {name?: string, host?: string, port?: string}) {
+    async update(data: { name?: string, host?: string, port?: string }) {
         await API.$api.post('/terminal.update', null, {
             params: {
                 id: this.id,
@@ -155,6 +155,15 @@ class Terminal {
             }
         })
         await this.parent.update();
+    }
+
+    async getPermissions(): Promise<object> {
+        let res = await API.$api.get('/terminal.permissions', {
+            params: {
+                id: this.id
+            }
+        })
+        return res.data;
     }
 }
 
