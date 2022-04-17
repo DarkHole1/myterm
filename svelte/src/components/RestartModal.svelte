@@ -4,9 +4,8 @@
     import { onDestroy } from "svelte";
 
     function handleClick(success: boolean) {
-        alert(success);
         if (success) {
-            // TODO
+            terminalInfo.restart();
         }
         restart.set(null);
     }
