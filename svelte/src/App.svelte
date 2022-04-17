@@ -5,6 +5,7 @@
 	import UsersCollapse from "./components/UsersCollapse.svelte";
 	import UserModal from "./components/UserModal.svelte";
 	import RestartModal from "./components/RestartModal.svelte";
+import EditModal from "./components/EditModal.svelte";
 	const { servers } = API;
 </script>
 
@@ -17,6 +18,7 @@
 	{/each}
 	<UserModal />
 	<RestartModal />
+	<EditModal />
 </Container>
 
 <style>
