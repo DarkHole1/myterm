@@ -123,6 +123,12 @@ class Terminal {
         Object.assign(this, data)
         this.parent = parent
     }
+
+    
+    public get canRestart() : boolean {
+        return true;
+    }
+    
 }
 
 API.login('root', 'toor')
