@@ -9,11 +9,15 @@
 	import PermissionsModal from "./components/PermissionsModal.svelte";
 	import LoginModal from "./components/LoginModal.svelte";
 	const { servers } = API;
+
+	function handleLogin() {
+		API.loggedIn = API.loggedIn;
+	}
 </script>
 
 <Container>
 	{#if !API.loggedIn}
-		<LoginModal />
+		<LoginModal on:login={handleLogin} />
 	{:else}
 		{#if API.isAdmin}
 			<UsersCollapse />

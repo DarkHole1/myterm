@@ -5,7 +5,7 @@ class Users {
     $store: Writable<User[]> = writable([])
 
     constructor() {
-        setTimeout(() => this.update(), 0)
+        // setTimeout(() => this.update(), 0)
     }
 
     async update() {
@@ -22,7 +22,7 @@ class Servers {
     $store: Writable<Server[]> = writable([])
 
     constructor() {
-        setTimeout(() => this.update(), 0)
+        // setTimeout(() => this.update(), 0)
     }
 
     async update() {
@@ -79,7 +79,11 @@ const API = {
             this.isAdmin = res.data;
             
             API.$api = $api;
-            this.loggedIn = true;
+            API.loggedIn = true;
+
+            localStorage['username'] = username;
+            localStorage['password'] = password;
+            
             API.users.update()
             API.servers.update()
         } catch(e) {
@@ -94,6 +98,14 @@ const API = {
         this.isAdmin = false;
     }
 }
+
+function restoreLogin() {
+    if('username' in localStorage && 'password' in localStorage) {
+        API.login(localStorage['username'], localStorage['password']);
+    }
+}
+
+// restoreLogin();
 
 class User {
     parent: Users

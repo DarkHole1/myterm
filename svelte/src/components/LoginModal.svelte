@@ -1,15 +1,15 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte";
 import API from "../API";
-
-    import { user } from "../modals";
-
     import Button from "./Button.svelte";
 
+    const dispatch = createEventDispatcher();
     let user = "";
     let password = "";
 
-    function handleClick() {
-        API.login(user, password);
+    async function handleClick() {
+        await API.login(user, password);
+        dispatch("login", { user, password });
     }
 </script>
 
