@@ -118,6 +118,7 @@ class Server {
 class Terminal {
     parent: Terminals
     id: string
+    editable: boolean
 
     // TODO: Add validation
     constructor(data: any, parent: Terminals) {
@@ -125,9 +126,12 @@ class Terminal {
         this.parent = parent
     }
 
-    
-    public get canRestart() : boolean {
+    public get canRestart(): boolean {
         return true;
+    }
+
+    public get canEdit(): boolean {
+        return this.editable;
     }
 
     async restart() {
@@ -136,7 +140,7 @@ class Terminal {
         })
         await this.parent.update();
     }
-    
+
 }
 
 API.login('root', 'toor')
