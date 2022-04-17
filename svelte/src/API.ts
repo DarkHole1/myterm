@@ -148,6 +148,7 @@ class Terminal {
                 ...data
             }
         })
+        await this.parent.update();
     }
 }
 

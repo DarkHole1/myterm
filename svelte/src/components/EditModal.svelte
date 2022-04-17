@@ -5,8 +5,9 @@
 
     function handleClick(success: boolean) {
         if (success) {
-            // TODO
-            const res = "";
+            const res = {
+                host, port, name
+            };
             terminalInfo.update(res);
         }
         edit.set(null);
