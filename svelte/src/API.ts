@@ -58,9 +58,11 @@ class Terminals {
     }
 }
 
+const dev = location.hostname == 'localhost' && location.port != "3000";
+
 const API = {
     $api: axios.create({
-        baseURL: '/api'
+        baseURL: (dev ? 'https://localhost:3000' : '') + '/api'
     }),
     users: new Users,
     servers: new Servers,

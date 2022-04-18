@@ -4,6 +4,7 @@ node_modules
 .config.json
 ssl
 mongo
+/svelte/public/build
 
 # local env files
 .env.local
