@@ -25,8 +25,8 @@ mongoose.connect(config.mongodbURI, { useNewUrlParser: true, useUnifiedTopology:
 initializeSockets(io, config);
 
 app.use(cors());
-app.use(AuthMiddleware);
 app.use(StaticMiddleware);
+app.use(AuthMiddleware);
 app.use('/api/', APIMiddleware(config));
 
 server.listen(3000, () => {

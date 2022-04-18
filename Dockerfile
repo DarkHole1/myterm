@@ -1,8 +1,8 @@
 FROM node AS build
 WORKDIR /app
-COPY spa/package.json spa/yarn.lock ./
+COPY svelte/package.json svelte/yarn.lock ./
 RUN yarn install
-COPY spa .
+COPY svelte .
 RUN yarn build
 
 FROM node
@@ -11,5 +11,5 @@ COPY server/package.json server/yarn.lock ./
 RUN yarn install --production
 COPY .config.json ./
 COPY server .
-COPY --from=build /app/dist/ ./dist
+COPY --from=build /app/public/ ./dist
 CMD ["yarn", "start"]

@@ -60,7 +60,7 @@ class Terminals {
 
 const API = {
     $api: axios.create({
-        baseURL: 'https://localhost:3000/api'
+        baseURL: '/api'
     }),
     users: new Users,
     servers: new Servers,
