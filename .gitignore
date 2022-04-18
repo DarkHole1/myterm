@@ -3,6 +3,7 @@ node_modules
 /spa/dist
 .config.json
 ssl
+mongo
 
 # local env files
 .env.local

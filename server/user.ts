@@ -75,7 +75,7 @@ userSchema.statics.findByCredentials = function (creds: Credentials) {
 }
 
 userSchema.methods.getTerminalById = async function (id: ObjectId | string) {
-    let terminal = await Terminal.findById(id);
+    let terminal = await Terminal.findById(id).populate('server');
     if(terminal) {
         let readonly = true;
         if(terminal.permissions.has(this.role)) {

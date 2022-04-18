@@ -9,7 +9,7 @@ interface AllTerminalData {
     port: number,
     serverName: string,
     comPort: number
-} 
+}
 
 type ITerminal = {
     name: string,
@@ -29,14 +29,14 @@ type ITerminal = {
         port?: number,
         comPort: number
     };
-    visible(role: string): boolean; 
+    visible(role: string): boolean;
 }
 
 const terminalSchema = new Schema<ITerminal>({
     name: {
         type: String,
         required: true
-    }, 
+    },
     host: {
         type: String,
         required: true
@@ -66,7 +66,7 @@ const terminalSchema = new Schema<ITerminal>({
     }
 });
 
-terminalSchema.methods.getData = function(): AllTerminalData {
+terminalSchema.methods.getData = function (): AllTerminalData {
     return {
         id: this.id,
         name: this.name,
@@ -77,7 +77,7 @@ terminalSchema.methods.getData = function(): AllTerminalData {
     }
 }
 
-terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
+terminalSchema.methods.getInfo = function (isAdmin: boolean = false, role = '') {
     let res = {
         id: this.id,
         name: this.name,
@@ -89,10 +89,10 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
         comPort: this.port - 20000
     }
 
-    if(!isAdmin) {
+    if (!isAdmin) {
         delete res.host;
         delete res.port;
-        if(this.permissions.has(role)) {
+        if (this.permissions.has(role)) {
             res.readonly = !this.permissions.get(role).write;
         } else {
             res.readonly = true;
@@ -102,8 +102,8 @@ terminalSchema.methods.getInfo = function(isAdmin: boolean = false, role = '') {
     return res;
 }
 
-terminalSchema.methods.visible = function(role: string) {
-    if(this.permissions.has(role)) {
+terminalSchema.methods.visible = function (role: string) {
+    if (this.permissions.has(role)) {
         return this.permissions.get(role).show;
     }
     return false;
