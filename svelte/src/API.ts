@@ -200,6 +200,10 @@ class Terminal {
             }
         });
     }
+
+    link() {
+        return `/terminal.html#${this.id}`;
+    }
 }
 
 export default API;
