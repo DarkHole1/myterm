@@ -13,59 +13,8 @@ import { edit, permissions, restart } from "../modals";
   export let terminalData;
 
   function open() {
-    // TODO:
+    window.open(terminalData.link(), '_blank');
   }
-  // import { defineComponent, PropType } from "vue";
-  // import Logo from "./Logo.vue";
-  // import ActionRestart from "./ActionRestart.vue";
-  // import ActionEdit from "./ActionEdit.vue";
-  // import ActionPermissions from "./ActionPermissions.vue";
-  // import { Terminal } from "../API";
-
-  // export default defineComponent({
-  //   props: {
-  //     terminalData: {
-  //       type: Object as PropType<Terminal>,
-  //       required: true
-  //     }
-  //   },
-  //   methods: {
-  //     open() {
-  //       window.open(this.terminalData.link(), '_blank');
-  //     },
-  //     handleRestart() {
-  //       this.$vfm.show('restartModal', {
-  //         name: this.terminalData.name,
-  //         cb: () => {
-  //           this.terminalData.restart()
-  //         }
-  //       })
-  //     },
-  //     handleEdit() {
-  //       this.$vfm.show('editModal', {
-  //         name: this.terminalData.name,
-  //         host: this.terminalData.host,
-  //         port: this.terminalData.port,
-  //         // eslint-disable-next-line
-  //         cb: (data: any) => {
-  //           const { host, port, name } = data;
-  //           this.terminalData.updateData({ host, port, name });
-  //         }
-  //       });
-  //     },
-  //     async handlePermissions() {
-  //       const permissions = await this.terminalData.permissions();
-  //       this.$vfm.show('permissionsModal', {
-  //         permissions,
-  //         // eslint-disable-next-line
-  //         cb: (data: any) => {
-  //           this.terminalData.changePermissions(data);
-  //         }
-  //       });
-  //     }
-  //   },
-  //   components: { Logo, ActionRestart, ActionEdit, ActionPermissions },
-  // });
 </script>
 
 <div class="terminal" on:click={open}>
@@ -81,7 +30,6 @@ import { edit, permissions, restart } from "../modals";
     {terminalData.name}
   </h2>
   <div class="actions">
-    <!-- TODO click -->
     {#if terminalData.canRestart}
       <Action icon={faUndo} danger on:click={() => $restart = terminalData} />
     {/if}
