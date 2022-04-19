@@ -44,7 +44,7 @@ function init(config: Config) {
     })
 
     router.get('/terminal.permissions', async (req, res) => {
-        if(req.user.admin) {
+        if (req.user.admin) {
             let term = await Terminal.findById(req.query.id);
             res.json(term.permissions);
             return;
@@ -84,7 +84,7 @@ function init(config: Config) {
     router.get('/terminal.get', async (req, res) => {
         log('Getting terminal %o', req.query);
         const info: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
-        if(info == null) {
+        if (info == null) {
             res.json(null);
             return;
         }
@@ -114,7 +114,7 @@ function init(config: Config) {
             server: req.query.id as Condition<ICOMServer>
         }).populate('server')
         let visible = terminals;
-        if(!req.user.admin) {
+        if (!req.user.admin) {
             visible = terminals.filter(term => term.visible(req.user.role));
         }
         res.json(visible.map(term => term.getInfo(req.user.admin, req.user.role)));
@@ -125,7 +125,7 @@ function init(config: Config) {
     })
 
     router.get('/user.list', async (req, res) => {
-        if(req.user.admin) {
+        if (req.user.admin) {
             log('Starting getting users')
             const users = await User.find();
             const mapped = users.map(({ id, role, name }) => ({ id, role, name }));
@@ -150,6 +150,32 @@ function init(config: Config) {
             }
         }
         res.json({ success: false });
+    })
+
+    router.post('/user.login', express.json(), async (req, res) => {
+        const user = await User.findOne({
+            name: req.body.name,
+            password: req.body.password
+        })
+        if (user != null) {
+            // For debug purposes
+            res.cookie('name', req.body.name, {
+                sameSite: 'none',
+                secure: true
+            });
+            res.cookie('password', req.body.password, {
+                sameSite: 'none',
+                secure: true
+            });
+            res.json({ success: true })
+            return;
+        }
+        res.json({ success: false });
+    })
+
+    router.post('/user.logout', async (req, res) => {
+        res.clearCookie('name');
+        res.clearCookie('password');
     })
 
     return router;

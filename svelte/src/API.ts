@@ -58,9 +58,12 @@ class Terminals {
     }
 }
 
+const dev = location.hostname == 'localhost' && location.port != "3000";
+
 const API = {
     $api: axios.create({
-        baseURL: '/api'
+        baseURL: (dev ? 'https://localhost:3000' : '') + '/api',
+        withCredentials: true
     }),
     users: new Users,
     servers: new Servers,
@@ -69,36 +72,20 @@ const API = {
     loading: true,
 
     async login(username: string, password: string) {
-        try {
-            let $api = axios.create({
-                baseURL: API.$api.defaults.baseURL,
-                auth: {
-                    username, password
-                }
-            })
-            const res = await $api.get('/user.isAdmin');
-            this.isAdmin = res.data;
-            
-            API.$api = $api;
+        const res = await API.$api.post('/user.login', {
+            name: username, password
+        });
+        if(res.data.success) {
+            API.isAdmin = (await API.$api.get('/user.isAdmin')).data;
             API.loggedIn = true;
-
-            localStorage['username'] = username;
-            localStorage['password'] = password;
-            
             API.users.update()
             API.servers.update()
-        } catch(e) {
-            // Do nothing
         }
+        return res.data.success;
     },
     logout() {
-        API.$api = axios.create({
-            baseURL: API.$api.defaults.baseURL
-        })
         this.loggedIn = false;
         this.isAdmin = false;
-        delete localStorage['username'];
-        delete localStorage['password'];
     }
 }
 
