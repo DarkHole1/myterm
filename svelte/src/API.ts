@@ -72,33 +72,20 @@ const API = {
     loading: true,
 
     async login(username: string, password: string) {
-        try {
-            const res = await API.$api.post('/user.login', {
-                name: username, password
-            });
-            console.log(res.data);
-            this.isAdmin = (await API.$api.get('/user.isAdmin')).data;
-            
-            // API.$api = $api;
-            // API.loggedIn = true;
-
-            // localStorage['username'] = username;
-            // localStorage['password'] = password;
-            
-            // API.users.update()
-            // API.servers.update()
-        } catch(e) {
-            // Do nothing
+        const res = await API.$api.post('/user.login', {
+            name: username, password
+        });
+        if(res.data.success) {
+            API.isAdmin = (await API.$api.get('/user.isAdmin')).data;
+            API.loggedIn = true;
+            API.users.update()
+            API.servers.update()
         }
+        return res.data.success;
     },
     logout() {
-        API.$api = axios.create({
-            baseURL: API.$api.defaults.baseURL
-        })
         this.loggedIn = false;
         this.isAdmin = false;
-        delete localStorage['username'];
-        delete localStorage['password'];
     }
 }
 

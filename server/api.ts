@@ -158,8 +158,15 @@ function init(config: Config) {
             password: req.body.password
         })
         if (user != null) {
-            res.cookie('name', req.body.name);
-            res.cookie('password', req.body.password);
+            // For debug purposes
+            res.cookie('name', req.body.name, {
+                sameSite: 'none',
+                secure: true
+            });
+            res.cookie('password', req.body.password, {
+                sameSite: 'none',
+                secure: true
+            });
             res.json({ success: true })
             return;
         }
