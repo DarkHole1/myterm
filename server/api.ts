@@ -121,6 +121,11 @@ function init(config: Config) {
     })
 
     router.get('/user.isAdmin', (req, res) => {
+        if(!req.user) {
+            res.status(401);
+            res.end();
+            return;
+        }
         res.json(req.user.admin);
     })
 
