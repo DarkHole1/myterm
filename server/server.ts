@@ -7,6 +7,7 @@ import StaticMiddleware from './static';
 import APIMiddleware from './api';
 import Config from './config';
 import init from './init-server';
+import cookie from 'cookie-parser';
 
 const config = new Config('.config.json');
 
@@ -26,6 +27,7 @@ initializeSockets(io, config);
 
 app.use(cors());
 app.use(StaticMiddleware);
+app.use(cookie());
 app.use(AuthMiddleware);
 app.use('/api/', APIMiddleware(config));
 

@@ -153,7 +153,7 @@ function init(config: Config) {
     })
 
     router.post('/user.login', express.json(), async (req, res) => {
-        const user = User.findOne({
+        const user = await User.findOne({
             name: req.body.name,
             password: req.body.password
         })

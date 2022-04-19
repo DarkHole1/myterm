@@ -62,7 +62,8 @@ const dev = location.hostname == 'localhost' && location.port != "3000";
 
 const API = {
     $api: axios.create({
-        baseURL: (dev ? 'https://localhost:3000' : '') + '/api'
+        baseURL: (dev ? 'https://localhost:3000' : '') + '/api',
+        withCredentials: true
     }),
     users: new Users,
     servers: new Servers,
@@ -72,23 +73,20 @@ const API = {
 
     async login(username: string, password: string) {
         try {
-            let $api = axios.create({
-                baseURL: API.$api.defaults.baseURL,
-                auth: {
-                    username, password
-                }
-            })
-            const res = await $api.get('/user.isAdmin');
-            this.isAdmin = res.data;
+            const res = await API.$api.post('/user.login', {
+                name: username, password
+            });
+            console.log(res.data);
+            this.isAdmin = (await API.$api.get('/user.isAdmin')).data;
             
-            API.$api = $api;
-            API.loggedIn = true;
+            // API.$api = $api;
+            // API.loggedIn = true;
 
-            localStorage['username'] = username;
-            localStorage['password'] = password;
+            // localStorage['username'] = username;
+            // localStorage['password'] = password;
             
-            API.users.update()
-            API.servers.update()
+            // API.users.update()
+            // API.servers.update()
         } catch(e) {
             // Do nothing
         }
