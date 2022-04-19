@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Subscriber, Writable, writable } from "svelte/store";
+import { readable, Subscriber, Writable, writable } from "svelte/store";
 
 class Users {
     $store: Writable<User[]> = writable([])
@@ -69,34 +69,45 @@ const API = {
     servers: new Servers,
     isAdmin: false,
     loggedIn: false,
-    loading: true,
+    $setLoading: (s: boolean) => { },
+    loading: readable(true, set => {
+        API.$setLoading = set;
+        return () => { };
+    }),
 
     async login(username: string, password: string) {
         const res = await API.$api.post('/user.login', {
             name: username, password
         });
-        if(res.data.success) {
+        if (res.data.success) {
             API.isAdmin = (await API.$api.get('/user.isAdmin')).data;
-            API.loggedIn = true;
             API.users.update()
             API.servers.update()
+            API.loggedIn = true;
         }
         return res.data.success;
     },
-    logout() {
-        this.loggedIn = false;
-        this.isAdmin = false;
+    async logout() {
+        await API.$api.post('/user.logout');
+        API.isAdmin = false;
+        API.loggedIn = false;
     }
 }
 
-async function restoreLogin() {
-    if('username' in localStorage && 'password' in localStorage) {
-        await API.login(localStorage['username'], localStorage['password']);
+async function checkLogin() {
+    try {
+        API.isAdmin = (await API.$api.get('/user.isAdmin')).data
+        API.users.update()
+        API.servers.update()
+        API.loggedIn = true;
+    } catch (e) {
+        API.isAdmin = false;
+        API.loggedIn = false;
     }
-    API.loading = false;
+    API.$setLoading(false);
 }
 
-restoreLogin();
+checkLogin();
 
 class User {
     parent: Users

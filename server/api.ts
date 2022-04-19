@@ -121,6 +121,11 @@ function init(config: Config) {
     })
 
     router.get('/user.isAdmin', (req, res) => {
+        if(!req.user) {
+            res.status(401);
+            res.end();
+            return;
+        }
         res.json(req.user.admin);
     })
 
@@ -161,11 +166,13 @@ function init(config: Config) {
             // For debug purposes
             res.cookie('name', req.body.name, {
                 sameSite: 'none',
-                secure: true
+                secure: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
             });
             res.cookie('password', req.body.password, {
                 sameSite: 'none',
-                secure: true
+                secure: true,
+                maxAge: 7 * 24 * 60 * 60 * 1000
             });
             res.json({ success: true })
             return;
@@ -174,8 +181,13 @@ function init(config: Config) {
     })
 
     router.post('/user.logout', async (req, res) => {
-        res.clearCookie('name');
-        res.clearCookie('password');
+        res.clearCookie('name', {
+            sameSite: 'none', secure: true
+        });
+        res.clearCookie('password', {
+            sameSite: 'none', secure: true
+        });
+        res.end();
     })
 
     return router;
