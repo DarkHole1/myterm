@@ -13,7 +13,7 @@ export default function (io: any, config: Config): void {
         log('Client connected');
         log('Terminal %o', socket.handshake.query.terminal);
 
-        const cookies: any = Object.fromEntries(socket.handshake.headers.cookie.split('; ').map((e: any) => e.split('=')));
+        const cookies: any = Object.fromEntries(socket.handshake.headers.cookie.split('; ').map((e: any) => e.split('=').map((e: string) => decodeURIComponent(e))));
         log('Cookies: %o', cookies);
         const user = await User.findByCredentials(
             // Credentials.fromBasicAuth(socket.handshake.headers.authorization)
