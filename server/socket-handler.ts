@@ -22,7 +22,7 @@ export default function (io: any, config: Config): void {
 
         log('Connecting to remote');
         const terminalId = socket.handshake.query.terminal;
-        const { terminal: { host, port }, readonly } = await user.getTerminalById(terminalId);
+        const { terminal: { port, server: { host } }, readonly } = await user.getTerminalById(terminalId);
 
         let [client, history] = SocketManager.get({ host, port, readonly, config });
         client.attach(socket);
