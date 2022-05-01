@@ -74,7 +74,7 @@
   }
 
   .terminal {
-    background: #171717;
+    background: #1d1d1d;
     color: #ededed;
     width: 180px;
     height: 180px;
@@ -89,7 +89,7 @@
   }
 
   .terminal:hover {
-    background: #444444;
+    background: #2d2d2d;
   }
 
   .terminal:hover > .header {

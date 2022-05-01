@@ -46,6 +46,6 @@ import Spinner from "./components/Spinner.svelte";
 
 	:global(body) {
 		font-family: "Ubuntu Mono", monospace;
-		background: #313131;
+		background: #161616;
 	}
 </style>
