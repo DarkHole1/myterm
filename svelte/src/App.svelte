@@ -44,8 +44,17 @@ import Spinner from "./components/Spinner.svelte";
 	@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
 	/* @import url("https://use.fontawesome.com/releases/v5.15.3/css/all.css"); */
 
+	:root {
+		--background-color: #161616;
+		--block-color: #1d1d1d;
+		--block-highlight-color: #2d2d2d;
+		--danger-color: #f8535a;
+		--main-color: #0568fa;
+		--font-color: #ededed;
+	}
+
 	:global(body) {
 		font-family: "Ubuntu Mono", monospace;
-		background: #161616;
+		background: var(--background-color);
 	}
 </style>

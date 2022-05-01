@@ -45,8 +45,8 @@
   }
 
   .block {
-    background: #1d1d1d;
-    color: #ededed;
+    background: var(--block-color);
+    color: var(--font-color);
     width: 180px;
     height: 180px;
     padding: 20px;
@@ -60,7 +60,7 @@
   }
 
   .block:hover {
-    background: #2d2d2d;
+    background: var(--block-highlight-color);
   }
 
   .block:hover > .header {

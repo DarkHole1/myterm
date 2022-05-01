@@ -11,24 +11,28 @@
 
 <style>
     button {
-        background: #346751;
+        background: var(--main-color);
         padding: 0.3em;
         border-radius: 0.3em;
         border: none;
-        color: #ededed;
+        color: var(--font-color);
         font-size: 1.2rem;
         margin-left: 0.2em;
     }
-
-    button:hover {
-        background: #3f7e63;
+    
+    button:active {
+        background-color: var(--main-color);
     }
+
+    /* button:hover {
+        background: #3f7e63;
+    } */
 
     button.danger {
-        background: #da0037;
+        background: var(--danger-color);
     }
 
-    button.danger:hover {
+    /* button.danger:hover {
         background: #ff1550;
-    }
+    } */
 </style>
