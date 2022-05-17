@@ -27,13 +27,6 @@
 	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
-		<!-- <Button
-			danger
-			on:click={async () => {
-				await API.logout();
-				location.reload();
-			}}>Выйти</Button
-		> -->
 		{#if API.isAdmin}
 			<UsersCollapse />
 		{/if}

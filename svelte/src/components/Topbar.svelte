@@ -1,12 +1,18 @@
 <script lang="ts">
     import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
     import { FontAwesomeIcon } from "fontawesome-svelte";
+    import API from "../API";
+
+    async function logout() {
+        await API.logout();
+        location.reload();
+    }
 </script>
 
 <div class="topbar">
     <div class="title">MyTerm</div>
     <div class="fill" />
-    <div class="logout">
+    <div class="logout" on:click={logout}>
         <FontAwesomeIcon icon={faArrowRightFromBracket} />
     </div>
 </div>
