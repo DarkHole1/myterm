@@ -18,20 +18,22 @@
 	}
 </script>
 
+{#if API.loggedIn}
+	<Topbar />
+{/if}
 <Container>
 	{#if $loading}
 		<Spinner />
 	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
-		<Topbar />
-		<Button
+		<!-- <Button
 			danger
 			on:click={async () => {
 				await API.logout();
 				location.reload();
 			}}>Выйти</Button
-		>
+		> -->
 		{#if API.isAdmin}
 			<UsersCollapse />
 		{/if}
@@ -61,5 +63,6 @@
 	:global(body) {
 		font-family: "Ubuntu Mono", monospace;
 		background: var(--background-color);
+		padding: 0;
 	}
 </style>
