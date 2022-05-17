@@ -1,7 +1,14 @@
+<script lang="ts">
+    import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+    import { FontAwesomeIcon } from "fontawesome-svelte";
+</script>
+
 <div class="topbar">
     <div class="title">MyTerm</div>
-    <div class="fill"></div>
-    <div class="logout"></div>
+    <div class="fill" />
+    <div class="logout">
+        <FontAwesomeIcon icon={faArrowRightFromBracket} />
+    </div>
 </div>
 
 <style>
