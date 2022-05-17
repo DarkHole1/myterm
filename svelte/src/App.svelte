@@ -9,7 +9,8 @@
 	import PermissionsModal from "./components/PermissionsModal.svelte";
 	import LoginModal from "./components/LoginModal.svelte";
 	import Button from "./components/Button.svelte";
-import Spinner from "./components/Spinner.svelte";
+	import Spinner from "./components/Spinner.svelte";
+	import Topbar from "./components/Topbar.svelte";
 	const { servers, loading } = API;
 
 	function handleLogin() {
@@ -23,10 +24,14 @@ import Spinner from "./components/Spinner.svelte";
 	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
-		<Button danger on:click={async () => {
-			await API.logout();
-			location.reload();
-		}}>Выйти</Button>
+		<Topbar />
+		<Button
+			danger
+			on:click={async () => {
+				await API.logout();
+				location.reload();
+			}}>Выйти</Button
+		>
 		{#if API.isAdmin}
 			<UsersCollapse />
 		{/if}
