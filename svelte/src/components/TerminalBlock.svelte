@@ -3,6 +3,7 @@
     faLock,
     faPencilAlt,
     faTerminal,
+    faTrashCan,
     faUndo,
     faUserLock,
   } from "@fortawesome/free-solid-svg-icons";
@@ -30,16 +31,6 @@
     {terminalData.name}
   </h2>
   <div class="actions">
-    {#if terminalData.canRestart}
-      <Action
-        icon={faUndo}
-        danger
-        on:click={(e) => {
-          $restart = terminalData;
-          e.stopPropagation();
-        }}
-      />
-    {/if}
     {#if terminalData.canEdit}
       <Action
         icon={faPencilAlt}
@@ -54,6 +45,19 @@
         icon={faUserLock}
         on:click={(e) => {
           $permissions = terminalData;
+          e.stopPropagation();
+        }}
+      />
+    {/if}
+    {#if terminalData.canEdit}
+      <Action danger icon={faTrashCan} />
+    {/if}
+    {#if terminalData.canRestart}
+      <Action
+        icon={faUndo}
+        danger
+        on:click={(e) => {
+          $restart = terminalData;
           e.stopPropagation();
         }}
       />
