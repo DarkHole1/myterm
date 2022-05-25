@@ -119,6 +119,16 @@ function init(config: Config) {
         res.json({ success: false })
     })
 
+    router.delete('/terminal', async (req, res) => {
+        log('Deleting terminal')
+        if (req.user.admin) {
+            await Terminal.findByIdAndDelete(req.query.id)
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
+    })
+
     router.get('/comserver.list', async (req, res) => {
         const servers = await COMServer.find();
         res.json(servers.map(server => server.getInfo(req.user.admin)));
