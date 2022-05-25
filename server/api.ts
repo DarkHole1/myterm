@@ -207,11 +207,26 @@ function init(config: Config) {
 
     router.post('/user.add', async (req, res) => {
         log('Creating user')
-        if(req.user.admin) {
+        if (req.user.admin) {
             const user = new User();
             user.name = "Новый пользователь";
             user.password = '';
             await user.save();
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
+    })
+
+    router.delete('/user', async (req, res) => {
+        log('Deleting user')
+        if (req.user.admin) {
+            const user = await User.findById(req.query.id)
+            if (user.admin) {
+                res.json({ success: false })
+                return
+            }
+            await user.delete()
             res.json({ success: true })
             return
         }
