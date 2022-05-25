@@ -27,6 +27,7 @@
 	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
+		<div class="gap"></div>
 		{#if API.isAdmin}
 			<UsersCollapse />
 		{/if}
@@ -57,5 +58,8 @@
 		font-family: "Ubuntu Mono", monospace;
 		background: var(--background-color);
 		padding: 0;
+	}
+	.gap {
+		margin-top: 1rem;
 	}
 </style>
