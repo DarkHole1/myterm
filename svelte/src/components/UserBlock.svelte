@@ -2,6 +2,7 @@
   import {
     faPencilAlt,
     faTerminal,
+    faTrashCan,
     faUser,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
@@ -17,18 +18,14 @@
 
 <div class="block">
   <div class="header">
-    <!-- <Logo /> -->
     <FontAwesomeIcon class="logo" icon={faUser} />
   </div>
   <h2 class="name">
     {user.name}
   </h2>
   <div class="actions">
-    <!-- TODO click -->
     <Action icon={faPencilAlt} on:click={handleEdit} />
-    <!-- <ActionRestart v-if="terminalData.canRestart" @click="handleRestart" />
-    <ActionEdit v-if="terminalData.canEdit" @click="handleEdit" />
-    <ActionPermissions v-if="terminalData.canChangePermissions" @click="handlePermissions" /> -->
+    <Action danger icon={faTrashCan} />
   </div>
 </div>
 
