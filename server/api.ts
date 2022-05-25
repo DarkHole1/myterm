@@ -112,6 +112,7 @@ function init(config: Config) {
             terminal.server = req.query.server as any;
             terminal.host = '127.0.0.1'
             terminal.port = 20001
+            await terminal.save()
             res.json({ success: true })
             return
         }
@@ -202,6 +203,19 @@ function init(config: Config) {
             sameSite: 'none', secure: true
         });
         res.end();
+    })
+
+    router.post('/user.add', async (req, res) => {
+        log('Creating user')
+        if(req.user.admin) {
+            const user = new User();
+            user.name = "Новый пользователь";
+            user.password = '';
+            await user.save();
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
     })
 
     return router;
