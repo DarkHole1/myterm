@@ -15,22 +15,6 @@
   });
 
   const { terminals } = server;
-  // import { defineComponent } from "vue";
-  // import TerminalBlock from "./TerminalBlock.vue";
-
-  // export default defineComponent({
-  //   components: { TerminalBlock },
-  //   props: ["server"],
-  //   async mounted() {
-  //     this.terminals = await this.server.fetchTerminals();
-  //   },
-  //   data() {
-  //     return {
-  //       terminals: [],
-  //       show: false,
-  //     };
-  //   },
-  // });
 </script>
 
 <div class="root">
