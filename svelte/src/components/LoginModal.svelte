@@ -15,7 +15,7 @@ import { fly } from "svelte/transition";
 </script>
 
 <div class="modal-container" transition:fly={{y:-200}} >
-    <div class="modal-content">
+    <form class="modal-content" on:submit|preventDefault={handleClick}>
         <div class="title">Вход MyTerm</div>
         <div class="pair">
             <label for="role" class="form-label">Логин</label>
@@ -35,8 +35,8 @@ import { fly } from "svelte/transition";
                 bind:value={password}
             />
         </div>
-        <Button success on:click={() => handleClick()}>Войти</Button>
-    </div>
+        <Button success>Войти</Button>
+    </form>
 </div>
 
 <style>
