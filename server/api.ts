@@ -104,6 +104,20 @@ function init(config: Config) {
         res.json(result);
     })
 
+    router.post('/terminal.add', async (req, res) => {
+        log('Creating new terminal')
+        if (req.user.admin) {
+            const terminal = new Terminal();
+            terminal.name = "Новый терминал";
+            terminal.server = req.query.server as any;
+            terminal.host = '127.0.0.1'
+            terminal.port = 20001
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
+    })
+
     router.get('/comserver.list', async (req, res) => {
         const servers = await COMServer.find();
         res.json(servers.map(server => server.getInfo(req.user.admin)));
@@ -121,7 +135,7 @@ function init(config: Config) {
     })
 
     router.get('/user.isAdmin', (req, res) => {
-        if(!req.user) {
+        if (!req.user) {
             res.status(401);
             res.end();
             return;
