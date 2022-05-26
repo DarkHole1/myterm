@@ -6,6 +6,7 @@
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import API from "../API";
+import { user } from "../modals";
 
   let show = false;
   const rotation = tweened(0, {
@@ -14,6 +15,10 @@
   });
 
   const { users } = API;
+
+  async function newUser() {
+    await users.create()
+  }
 </script>
 
 <div class="root">
@@ -30,7 +35,7 @@
     />
     <span class="text">Пользователи</span>
     <div class="gap"></div>
-    <span class="new-user">
+    <span class="new-user" on:click|stopPropagation={newUser}>
       <span>Новый пользователь</span>
       <FontAwesomeIcon icon={faPlus} transform="shrink-2 down-1" />
     </span>
