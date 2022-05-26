@@ -58,6 +58,15 @@ class Terminals {
         this.$store.set(data.map(terminal => new Terminal(terminal, this)))
     }
 
+    async create() {
+        const res = await API.$api.post('/terminal.add', null, {
+            params: {
+                id: this.serverId
+            }
+        })
+        await this.update()
+    }
+
     subscribe(run: Subscriber<Server[]>) {
         return this.$store.subscribe(run)
     }
