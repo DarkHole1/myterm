@@ -15,6 +15,10 @@
   });
 
   const { terminals } = server;
+
+  async function newTerminal() {
+    await terminals.create()
+  }
 </script>
 
 <div class="root">
@@ -36,7 +40,7 @@
       {/if}
     </span>
     <div class="gap"></div>
-    <span class="new-terminal">
+    <span class="new-terminal" on:click|stopPropagation={newTerminal}>
       <span>Новый терминал</span>
       <FontAwesomeIcon icon={faPlus} transform="shrink-2 down-1" />
     </span>
