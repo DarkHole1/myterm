@@ -16,6 +16,11 @@
   function open() {
     window.open(terminalData.link(), "_blank");
   }
+
+  async function deleteTerminal(e) {
+    e.stopPropagation()
+    await terminalData.delete()
+  }
 </script>
 
 <div class="terminal" on:click={open}>
@@ -50,7 +55,7 @@
       />
     {/if}
     {#if terminalData.canEdit}
-      <Action danger icon={faTrashCan} />
+      <Action danger icon={faTrashCan} on:click={deleteTerminal} />
     {/if}
     {#if terminalData.canRestart}
       <Action
