@@ -220,7 +220,7 @@ function init(config: Config) {
         if (req.user.admin) {
             const user = new User();
             user.name = "Новый пользователь";
-            user.password = '';
+            user.password = 'P@ssw0rd';
             await user.save();
             res.json({ success: true })
             return
