@@ -1,6 +1,6 @@
 <script lang="ts">
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import { faCaretRight, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+  import { faCaretRight, faCaretDown, faPlug, faPlus } from "@fortawesome/free-solid-svg-icons";
   import TerminalBlock from "./TerminalBlock.svelte";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
@@ -15,22 +15,10 @@
   });
 
   const { terminals } = server;
-  // import { defineComponent } from "vue";
-  // import TerminalBlock from "./TerminalBlock.vue";
 
-  // export default defineComponent({
-  //   components: { TerminalBlock },
-  //   props: ["server"],
-  //   async mounted() {
-  //     this.terminals = await this.server.fetchTerminals();
-  //   },
-  //   data() {
-  //     return {
-  //       terminals: [],
-  //       show: false,
-  //     };
-  //   },
-  // });
+  async function newTerminal() {
+    await terminals.create()
+  }
 </script>
 
 <div class="root">
@@ -45,10 +33,17 @@
       icon={faCaretRight}
       transform={{ rotate: $rotation * 90 }}
     />
-    {server.name}
-    {#if server.host}
-      <span>({server.host})</span>
-    {/if}
+    <span class="text">
+      {server.name}
+      {#if server.host}
+        <span>({server.host})</span>
+      {/if}
+    </span>
+    <div class="gap"></div>
+    <span class="new-terminal" on:click|stopPropagation={newTerminal}>
+      <span>Новый терминал</span>
+      <FontAwesomeIcon icon={faPlus} transform="shrink-2 down-1" />
+    </span>
   </div>
   {#if show}
     <div class="content" transition:slide>
@@ -64,6 +59,7 @@
     flex-grow: 1;
   }
   .header {
+    display: flex;
     color: #ededed;
     font-size: 2rem;
     font-family: "Ubuntu Mono", monospace;
@@ -73,5 +69,17 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
+  }
+  .gap {
+    flex-grow: 1;
+  }
+  .text {
+    margin-left: 0.5em;
+  }
+  .new-terminal {
+    color: var(--main-color);
+    font-size: 1.6rem;
+    line-height: 2rem;
+    vertical-align: middle;
   }
 </style>

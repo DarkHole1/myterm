@@ -3,6 +3,7 @@
     faLock,
     faPencilAlt,
     faTerminal,
+    faTrashCan,
     faUndo,
     faUserLock,
   } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +15,11 @@
 
   function open() {
     window.open(terminalData.link(), "_blank");
+  }
+
+  async function deleteTerminal(e) {
+    e.stopPropagation()
+    await terminalData.delete()
   }
 </script>
 
@@ -30,16 +36,6 @@
     {terminalData.name}
   </h2>
   <div class="actions">
-    {#if terminalData.canRestart}
-      <Action
-        icon={faUndo}
-        danger
-        on:click={(e) => {
-          $restart = terminalData;
-          e.stopPropagation();
-        }}
-      />
-    {/if}
     {#if terminalData.canEdit}
       <Action
         icon={faPencilAlt}
@@ -54,6 +50,19 @@
         icon={faUserLock}
         on:click={(e) => {
           $permissions = terminalData;
+          e.stopPropagation();
+        }}
+      />
+    {/if}
+    {#if terminalData.canEdit}
+      <Action danger icon={faTrashCan} on:click={deleteTerminal} />
+    {/if}
+    {#if terminalData.canRestart}
+      <Action
+        icon={faUndo}
+        danger
+        on:click={(e) => {
+          $restart = terminalData;
           e.stopPropagation();
         }}
       />
@@ -74,8 +83,8 @@
   }
 
   .terminal {
-    background: #171717;
-    color: #ededed;
+    background: var(--block-color);
+    color: var(--font-color);
     width: 180px;
     height: 180px;
     padding: 20px;
@@ -89,7 +98,7 @@
   }
 
   .terminal:hover {
-    background: #444444;
+    background: var(--block-highlight-color);
   }
 
   .terminal:hover > .header {

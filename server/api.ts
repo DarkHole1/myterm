@@ -104,6 +104,31 @@ function init(config: Config) {
         res.json(result);
     })
 
+    router.post('/terminal.add', async (req, res) => {
+        log('Creating new terminal')
+        if (req.user.admin) {
+            const terminal = new Terminal();
+            terminal.name = "Новый терминал";
+            terminal.server = req.query.server as any;
+            terminal.host = '127.0.0.1'
+            terminal.port = 20001
+            await terminal.save()
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
+    })
+
+    router.delete('/terminal', async (req, res) => {
+        log('Deleting terminal')
+        if (req.user.admin) {
+            await Terminal.findByIdAndDelete(req.query.id)
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
+    })
+
     router.get('/comserver.list', async (req, res) => {
         const servers = await COMServer.find();
         res.json(servers.map(server => server.getInfo(req.user.admin)));
@@ -121,7 +146,7 @@ function init(config: Config) {
     })
 
     router.get('/user.isAdmin', (req, res) => {
-        if(!req.user) {
+        if (!req.user) {
             res.status(401);
             res.end();
             return;
@@ -188,6 +213,34 @@ function init(config: Config) {
             sameSite: 'none', secure: true
         });
         res.end();
+    })
+
+    router.post('/user.add', async (req, res) => {
+        log('Creating user')
+        if (req.user.admin) {
+            const user = new User();
+            user.name = "Новый пользователь";
+            user.password = 'P@ssw0rd';
+            await user.save();
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
+    })
+
+    router.delete('/user', async (req, res) => {
+        log('Deleting user')
+        if (req.user.admin) {
+            const user = await User.findById(req.query.id)
+            if (user.admin) {
+                res.json({ success: false })
+                return
+            }
+            await user.delete()
+            res.json({ success: true })
+            return
+        }
+        res.json({ success: false })
     })
 
     return router;

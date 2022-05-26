@@ -9,7 +9,8 @@
 	import PermissionsModal from "./components/PermissionsModal.svelte";
 	import LoginModal from "./components/LoginModal.svelte";
 	import Button from "./components/Button.svelte";
-import Spinner from "./components/Spinner.svelte";
+	import Spinner from "./components/Spinner.svelte";
+	import Topbar from "./components/Topbar.svelte";
 	const { servers, loading } = API;
 
 	function handleLogin() {
@@ -17,16 +18,16 @@ import Spinner from "./components/Spinner.svelte";
 	}
 </script>
 
+{#if API.loggedIn}
+	<Topbar />
+{/if}
 <Container>
 	{#if $loading}
 		<Spinner />
 	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
-		<Button danger on:click={async () => {
-			await API.logout();
-			location.reload();
-		}}>Выйти</Button>
+		<div class="gap"></div>
 		{#if API.isAdmin}
 			<UsersCollapse />
 		{/if}
@@ -44,8 +45,21 @@ import Spinner from "./components/Spinner.svelte";
 	@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
 	/* @import url("https://use.fontawesome.com/releases/v5.15.3/css/all.css"); */
 
+	:root {
+		--background-color: #161616;
+		--block-color: #1d1d1d;
+		--block-highlight-color: #2d2d2d;
+		--danger-color: #f8535a;
+		--main-color: #0568fa;
+		--font-color: #ededed;
+	}
+
 	:global(body) {
 		font-family: "Ubuntu Mono", monospace;
-		background: #313131;
+		background: var(--background-color);
+		padding: 0;
+	}
+	.gap {
+		margin-top: 1rem;
 	}
 </style>
