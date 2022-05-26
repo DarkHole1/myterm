@@ -13,6 +13,11 @@ class Users {
         this.$store.set(data.map(user => new User(user, this)))
     }
 
+    async create() {
+        const res = await API.$api.post('/user.add')
+        await this.update()
+    }
+
     subscribe(run: Subscriber<User[]>) {
         return this.$store.subscribe(run)
     }
