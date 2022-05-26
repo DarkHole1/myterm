@@ -205,6 +205,15 @@ class Terminal {
         await this.parent.update();
     }
 
+    async delete() {
+        await API.$api.delete('/terminal', {
+            params: {
+                id: this.id
+            }
+        })
+        await this.parent.update()
+    }
+
     async getPermissions(): Promise<object> {
         let res = await API.$api.get('/terminal.permissions', {
             params: {
