@@ -139,6 +139,15 @@ class User {
         })
         await this.parent.update()
     }
+
+    async delete() {
+        await API.$api.delete('/user', {
+            params: {
+                id: this.id
+            }
+        })
+        await this.parent.update()
+    }
 }
 
 class Server {
