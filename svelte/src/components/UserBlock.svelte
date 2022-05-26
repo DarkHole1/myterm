@@ -14,6 +14,10 @@
   function handleEdit() {
     userModal.set(user);
   }
+
+  async function deleteUser() {
+    await user.delete()
+  }
 </script>
 
 <div class="block">
@@ -25,7 +29,7 @@
   </h2>
   <div class="actions">
     <Action icon={faPencilAlt} on:click={handleEdit} />
-    <Action danger icon={faTrashCan} />
+    <Action danger icon={faTrashCan} on:click={deleteUser} />
   </div>
 </div>
 
