@@ -61,7 +61,7 @@ class Terminals {
     async create() {
         const res = await API.$api.post('/terminal.add', null, {
             params: {
-                id: this.serverId
+                server: this.serverId
             }
         })
         await this.update()
