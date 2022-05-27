@@ -73,7 +73,7 @@ class Terminals {
 }
 
 class Roles {
-    $store: Writable<Server[]> = writable([])
+    $store: Writable<string[]> = writable([])
 
     constructor() {
         setTimeout(() => this.update(), 0)
@@ -91,7 +91,7 @@ class Roles {
         await this.update()
     }
 
-    subscribe(run: Subscriber<Server[]>) {
+    subscribe(run: Subscriber<string[]>) {
         return this.$store.subscribe(run)
     }
 }

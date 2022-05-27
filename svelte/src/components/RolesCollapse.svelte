@@ -14,8 +14,7 @@ import RoleBlock from "./RoleBlock.svelte";
     easing: cubicOut,
   });
 
-  // const { users } = API;
-  const roles = ["a", "b", "c"]
+  const { roles } = API;
 </script>
 
 <div class="root">
@@ -35,7 +34,7 @@ import RoleBlock from "./RoleBlock.svelte";
   </div>
   {#if show}
     <div class="content" transition:slide>
-      {#each roles as role}
+      {#each $roles as role}
         <RoleBlock {role} />
       {/each}
     </div>
