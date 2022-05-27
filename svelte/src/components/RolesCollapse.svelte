@@ -6,6 +6,7 @@
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import API from "../API";
+import RoleBlock from "./RoleBlock.svelte";
 
   let show = false;
   const rotation = tweened(0, {
@@ -35,7 +36,7 @@
   {#if show}
     <div class="content" transition:slide>
       {#each roles as role}
-        <div>{role}</div>
+        <RoleBlock {role} />
       {/each}
     </div>
   {/if}
@@ -62,11 +63,5 @@
   }
   .text {
     margin-left: 0.5em;
-  }
-  .new-user {
-    color: var(--main-color);
-    font-size: 1.6rem;
-    line-height: 2rem;
-    vertical-align: middle;
   }
 </style>
