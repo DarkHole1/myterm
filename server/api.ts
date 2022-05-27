@@ -251,11 +251,11 @@ function init(config: Config) {
     })
 
     router.post('/role.raname', async (req, res) => {
-        if(req.user.admin) {
-            const {from, to} = req.query
+        if (req.user.admin) {
+            const { from, to } = req.query
             const terminals = await Terminal.find()
-            for(let terminal of terminals) {
-                if(terminal.permissions.has(from as string)) {
+            for (let terminal of terminals) {
+                if (terminal.permissions.has(from as string)) {
                     let val = terminal.permissions.get(from as string)
                     terminal.permissions.delete(from as string)
                     terminal.permissions.set(to as string, val)
