@@ -84,6 +84,13 @@ class Roles {
         this.$store.set(data)
     }
 
+    async rename(from: string, to: string) {
+        const res = await API.$api.post('/role.rename', null, {
+            params: { from, to }
+        })
+        await this.update()
+    }
+
     subscribe(run: Subscriber<Server[]>) {
         return this.$store.subscribe(run)
     }
