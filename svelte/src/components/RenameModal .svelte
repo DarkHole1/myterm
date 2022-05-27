@@ -4,9 +4,9 @@
     import { onDestroy } from "svelte";
     import API from "../API";
 
-    function handleClick(success: boolean) {
+    async function handleClick(success: boolean) {
         if (success) {
-            API.roles.rename(oldRole, newRole);
+            await API.roles.rename(oldRole, newRole);
         }
         role.set(null);
     }

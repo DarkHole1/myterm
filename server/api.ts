@@ -250,7 +250,7 @@ function init(config: Config) {
         res.json(Array.from(roles.values()))
     })
 
-    router.post('/role.raname', async (req, res) => {
+    router.post('/role.rename', async (req, res) => {
         if (req.user.admin) {
             const { from, to } = req.query
             const terminals = await Terminal.find()
