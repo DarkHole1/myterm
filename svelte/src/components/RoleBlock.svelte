@@ -9,12 +9,12 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
-  // import { user as userModal } from "../modals";
+  import { role as roleModal } from "../modals";
 
   export let role : string;
 
   function handleEdit() {
-    // userModal.set(user);
+    roleModal.set(role);
   }
 </script>
 
