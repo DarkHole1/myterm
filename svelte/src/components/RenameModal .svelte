@@ -2,32 +2,30 @@
     import Button from "./Button.svelte";
     import { role } from "../modals";
     import { onDestroy } from "svelte";
+    import API from "../API";
 
     function handleClick(success: boolean) {
         if (success) {
-            // const res = {
-            //     host, port, name
-            // };
-            // terminalInfo.update(res);
+            API.roles.rename(oldRole, newRole);
         }
-        // edit.set(null);
+        role.set(null);
     }
 
     let oldRole = "";
     let newRole = "";
 
-    const unsubscribe = role.subscribe(role => {
-        oldRole = role
-        newRole = ""
+    const unsubscribe = role.subscribe((role) => {
+        oldRole = role;
+        newRole = "";
     });
 
     onDestroy(unsubscribe);
 </script>
 
-{#if role}
+{#if oldRole}
     <div class="modal-container">
         <div class="modal-content">
-            <div class="title">Редактирование роли {role}</div>
+            <div class="title">Редактирование роли {oldRole}</div>
             <div class="pair">
                 <label for="newRole" class="form-label">Новое название</label>
                 <input
