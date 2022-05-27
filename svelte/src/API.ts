@@ -72,6 +72,23 @@ class Terminals {
     }
 }
 
+class Roles {
+    $store: Writable<Server[]> = writable([])
+
+    constructor() {
+        setTimeout(() => this.update(), 0)
+    }
+
+    async update() {
+        const { data } = await API.$api.get('/role.list')
+        this.$store.set(data)
+    }
+
+    subscribe(run: Subscriber<Server[]>) {
+        return this.$store.subscribe(run)
+    }
+}
+
 const dev = location.hostname == 'localhost' && location.port != "3000";
 
 const API = {
@@ -81,6 +98,7 @@ const API = {
     }),
     users: new Users,
     servers: new Servers,
+    roles: new Roles,
     isAdmin: false,
     loggedIn: false,
     $setLoading: (s: boolean) => { },
