@@ -11,6 +11,7 @@
 	import Button from "./components/Button.svelte";
 	import Spinner from "./components/Spinner.svelte";
 	import Topbar from "./components/Topbar.svelte";
+import RolesCollapse from "./components/RolesCollapse.svelte";
 	const { servers, loading } = API;
 
 	function handleLogin() {
@@ -29,6 +30,7 @@
 	{:else}
 		<div class="gap"></div>
 		{#if API.isAdmin}
+			<RolesCollapse />
 			<UsersCollapse />
 		{/if}
 		{#each $servers as server}
