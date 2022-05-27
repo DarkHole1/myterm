@@ -243,6 +243,12 @@ function init(config: Config) {
         res.json({ success: false })
     })
 
+    router.get('/role.list', async (req, res) => {
+        const terminals = await Terminal.find()
+        const roles = terminals.map(t => Object.keys(t.permissions)).reduce((a, b) => b.reduce((s, c) => s.add(c), a), new Set())
+        res.json(roles)
+    })
+
     return router;
 }
 
