@@ -12,6 +12,7 @@
 	import Spinner from "./components/Spinner.svelte";
 	import Topbar from "./components/Topbar.svelte";
 import RolesCollapse from "./components/RolesCollapse.svelte";
+import RenameModal from "./components/RenameModal .svelte";
 	const { servers, loading } = API;
 
 	function handleLogin() {
@@ -36,6 +37,7 @@ import RolesCollapse from "./components/RolesCollapse.svelte";
 		{#each $servers as server}
 			<ServerCollapse {server} />
 		{/each}
+		<RenameModal />
 		<UserModal />
 		<RestartModal />
 		<EditModal />
