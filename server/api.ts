@@ -243,6 +243,30 @@ function init(config: Config) {
         res.json({ success: false })
     })
 
+    router.get('/role.list', async (req, res) => {
+        const terminals = await Terminal.find()
+        const roles = terminals.map(t => Array.from(t.permissions.keys())).reduce((s, a) => a.reduce((s, b) => s.add(b), s), new Set())
+        log('Roles: %o', roles)
+        res.json(Array.from(roles.values()))
+    })
+
+    router.post('/role.rename', async (req, res) => {
+        if (req.user.admin) {
+            const { from, to } = req.query
+            const terminals = await Terminal.find()
+            for (let terminal of terminals) {
+                if (terminal.permissions.has(from as string)) {
+                    let val = terminal.permissions.get(from as string)
+                    terminal.permissions.delete(from as string)
+                    terminal.permissions.set(to as string, val)
+                }
+                await terminal.save()
+            }
+            return res.json({ success: true })
+        }
+        res.json({ success: false })
+    })
+
     return router;
 }
 

@@ -72,6 +72,30 @@ class Terminals {
     }
 }
 
+class Roles {
+    $store: Writable<string[]> = writable([])
+
+    constructor() {
+        setTimeout(() => this.update(), 0)
+    }
+
+    async update() {
+        const { data } = await API.$api.get('/role.list')
+        this.$store.set(data)
+    }
+
+    async rename(from: string, to: string) {
+        const res = await API.$api.post('/role.rename', null, {
+            params: { from, to }
+        })
+        await this.update()
+    }
+
+    subscribe(run: Subscriber<string[]>) {
+        return this.$store.subscribe(run)
+    }
+}
+
 const dev = location.hostname == 'localhost' && location.port != "3000";
 
 const API = {
@@ -81,6 +105,7 @@ const API = {
     }),
     users: new Users,
     servers: new Servers,
+    roles: new Roles,
     isAdmin: false,
     loggedIn: false,
     $setLoading: (s: boolean) => { },
