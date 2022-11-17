@@ -76,14 +76,20 @@ userSchema.statics.findByCredentials = function (creds: Credentials) {
 
 userSchema.methods.getTerminalById = async function (id: ObjectId | string) {
     let terminal = await Terminal.findById(id).populate('server');
-    if(terminal) {
-        let readonly = true;
-        if(terminal.permissions.has(this.role)) {
-            readonly = !terminal.permissions.get(this.role).write;
-        }
-        return { terminal, readonly }
+    
+    if(!terminal) {
+        return null
     }
-    return null;
+
+    if(this.admin) {
+        return { terminal, readonly: false} 
+    }
+
+    let readonly = true;
+    if(terminal.permissions.has(this.role)) {
+        readonly = !terminal.permissions.get(this.role).write;
+    }
+    return { terminal, readonly }
 }
 
 userSchema.methods.getTerminalsData = function (): AllTerminalData[] {
