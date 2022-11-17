@@ -23,6 +23,9 @@ export default function (io: any, config: Config): void {
         log('Connecting to remote');
         const terminalId = socket.handshake.query.terminal;
         const { terminal: { port, server: { host } }, readonly } = await user.getTerminalById(terminalId);
+        log('Rights: %o', {
+            port, host, readonly
+        })
 
         let [client, history] = SocketManager.get({ host, port, readonly, config });
         client.attach(socket);
