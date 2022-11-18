@@ -1,10 +1,10 @@
 import express, { Router } from 'express';
-import User, { IUser, TerminalInfo } from './user';
+import User, { IUser, TerminalInfo } from './models/user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
-import COMServer, { ICOMServer } from './com-server';
-import Terminal from './terminal';
+import COMServer, { ICOMServer } from './models/com-server';
+import Terminal from './models/terminal';
 import { Condition } from 'mongodb';
 const log = debug('app:api');
 

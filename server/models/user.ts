@@ -1,7 +1,7 @@
 import { Schema, model, Model, ObjectId } from 'mongoose';
-import Credentials from './credentials';
+import Credentials from '../credentials';
 import Terminal, { ITerminal } from './terminal';
-import './terminal';
+import '../terminal';
 
 interface AllTerminalData {
     name: string,

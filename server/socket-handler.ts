@@ -1,6 +1,6 @@
 import RemoteTCP from './remotetcp';
 import SocketManager from './socket-manager';
-import User, { TerminalInfo } from './user';
+import User, { TerminalInfo } from './models/user';
 import Credentials from './credentials';
 import Config from './config';
 import debug from 'debug';

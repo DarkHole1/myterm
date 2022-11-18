@@ -1,6 +1,6 @@
 import { debug } from 'debug';
 import Credentials from './credentials';
-import User from "./user";
+import User from "./models/user";
 const log = debug('app:auth');
 
 export default async function(req: any, res: any, next: any) {
