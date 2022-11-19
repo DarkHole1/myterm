@@ -1,17 +1,19 @@
 import express, { Router } from 'express';
-import User, { IUser, TerminalInfo } from './models/user';
+import { User, UserModel } from './models/user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
-import COMServer, { ICOMServer } from './models/com-server';
-import Terminal from './models/terminal';
+import { COMServer, COMServerModel } from './models/com-server';
+import { Terminal, TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
+import { isDocument } from '@typegoose/typegoose';
+
 const log = debug('app:api');
 
 declare global {
     namespace Express {
         interface Request {
-            user: IUser
+            user: User
         }
     }
 }
@@ -25,27 +27,39 @@ function init(config: Config) {
     })
 
     router.post('/terminal.update', async (req, res) => {
-        if (req.user.admin) {
-            log('Trying change terminal')
-            const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
-            if (terminalInfo != null) {
-                const { terminal } = terminalInfo;
-                terminal.port = parseInt(req.query.port.toString());
-                terminal.name = req.query.name.toString();
-                terminal.save();
-                terminal.server.host = req.query.host.toString();
-                terminal.server.save();
-                log('Changes succesfull');
-                res.json({ success: true });
-                return;
-            }
+        if (!req.user.admin) {
+            res.json({ success: false });
+            return
         }
-        res.json({ success: false });
+
+        log('Trying change terminal')
+        const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
+        
+        if(terminalInfo == null) {
+            res.json({ success: false });
+            return
+        }
+
+        const { terminal } = terminalInfo;
+        
+        if (!isDocument(terminal.server)) {
+            res.json({ success: false });
+            return
+        }
+        
+        terminal.port = parseInt(req.query.port.toString());
+        terminal.name = req.query.name.toString();
+        terminal.save();
+        terminal.server.host = req.query.host.toString();
+        terminal.server.save();
+
+        log('Changes succesfull');
+        res.json({ success: true });
     })
 
     router.get('/terminal.permissions', async (req, res) => {
         if (req.user.admin) {
-            let term = await Terminal.findById(req.query.id);
+            let term = await TerminalModel.findById(req.query.id);
             res.json(term.permissions);
             return;
         }
@@ -55,7 +69,7 @@ function init(config: Config) {
     router.post('/terminal.permissions', express.json(), async (req, res) => {
         if (req.user.admin) {
             log('Trying change terminals permissons')
-            const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
+            const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
             if (terminalInfo != null) {
                 const { terminal } = terminalInfo;
                 log("Permissions: %o", req.body);
@@ -71,7 +85,7 @@ function init(config: Config) {
 
     router.post('/terminal.restart', async (req, res) => {
         log('Restarting terminal %o', req.query);
-        const terminalInfo: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
+        const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
         if (terminalInfo != null) {
             const { host, port } = terminalInfo.terminal;
             SocketManager.restart({ host, port, config });
@@ -83,7 +97,7 @@ function init(config: Config) {
 
     router.get('/terminal.get', async (req, res) => {
         log('Getting terminal %o', req.query);
-        const info: TerminalInfo = await req.user.getTerminalById(req.query.id.toString());
+        const info = await req.user.getTerminalById(req.query.id.toString());
         if (info == null) {
             res.json(null);
             return;
@@ -107,7 +121,7 @@ function init(config: Config) {
     router.post('/terminal.add', async (req, res) => {
         log('Creating new terminal')
         if (req.user.admin) {
-            const terminal = new Terminal();
+            const terminal = new TerminalModel();
             terminal.name = "Новый терминал";
             terminal.server = req.query.server as any;
             terminal.host = '127.0.0.1'
@@ -122,7 +136,7 @@ function init(config: Config) {
     router.delete('/terminal', async (req, res) => {
         log('Deleting terminal')
         if (req.user.admin) {
-            await Terminal.findByIdAndDelete(req.query.id)
+            await TerminalModel.findByIdAndDelete(req.query.id)
             res.json({ success: true })
             return
         }
@@ -130,13 +144,13 @@ function init(config: Config) {
     })
 
     router.get('/comserver.list', async (req, res) => {
-        const servers = await COMServer.find();
+        const servers = await COMServerModel.find();
         res.json(servers.map(server => server.getInfo(req.user.admin)));
     })
 
     router.get('/comserver.terminals', async (req, res) => {
-        const terminals = await Terminal.find({
-            server: req.query.id as Condition<ICOMServer>
+        const terminals = await TerminalModel.find({
+            server: req.query.id as Condition<COMServer>
         }).populate('server')
         let visible = terminals;
         if (!req.user.admin) {
@@ -157,7 +171,7 @@ function init(config: Config) {
     router.get('/user.list', async (req, res) => {
         if (req.user.admin) {
             log('Starting getting users')
-            const users = await User.find();
+            const users = await UserModel.find();
             const mapped = users.map(({ id, role, name }) => ({ id, role, name }));
             log("Users: %o", mapped);
             res.json(mapped);
@@ -169,7 +183,7 @@ function init(config: Config) {
     router.post('/user.update', express.json(), async (req, res) => {
         if (req.user.admin) {
             log('Trying change user %s', req.query.id);
-            const user = await User.findById(req.query.id.toString());
+            const user = await UserModel.findById(req.query.id.toString());
             if (user != null) {
                 log("Changes: %o", req.body);
                 Object.assign(user, req.body);
@@ -183,7 +197,7 @@ function init(config: Config) {
     })
 
     router.post('/user.login', express.json(), async (req, res) => {
-        const user = await User.findOne({
+        const user = await UserModel.findOne({
             name: req.body.name,
             password: req.body.password
         })
@@ -218,7 +232,7 @@ function init(config: Config) {
     router.post('/user.add', async (req, res) => {
         log('Creating user')
         if (req.user.admin) {
-            const user = new User();
+            const user = new UserModel();
             user.name = "Новый пользователь";
             user.password = 'P@ssw0rd';
             await user.save();
@@ -231,7 +245,7 @@ function init(config: Config) {
     router.delete('/user', async (req, res) => {
         log('Deleting user')
         if (req.user.admin) {
-            const user = await User.findById(req.query.id)
+            const user = await UserModel.findById(req.query.id)
             if (user.admin) {
                 res.json({ success: false })
                 return
@@ -244,7 +258,7 @@ function init(config: Config) {
     })
 
     router.get('/role.list', async (req, res) => {
-        const terminals = await Terminal.find()
+        const terminals = await TerminalModel.find()
         const roles = terminals.map(t => Array.from(t.permissions.keys())).reduce((s, a) => a.reduce((s, b) => s.add(b), s), new Set())
         log('Roles: %o', roles)
         res.json(Array.from(roles.values()))
@@ -253,7 +267,7 @@ function init(config: Config) {
     router.post('/role.rename', async (req, res) => {
         if (req.user.admin) {
             const { from, to } = req.query
-            const terminals = await Terminal.find()
+            const terminals = await TerminalModel.find()
             for (let terminal of terminals) {
                 if (terminal.permissions.has(from as string)) {
                     let val = terminal.permissions.get(from as string)

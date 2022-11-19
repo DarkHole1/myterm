@@ -1,6 +1,107 @@
 import { Schema, model, ObjectId, Document } from 'mongoose';
-import { ICOMServer } from './com-server';
+import { COMServer } from './com-server';
 import './com-server';
+import { DocumentType, getModelForClass, isDocument, prop, Ref } from '@typegoose/typegoose';
+
+export class Terminal {
+    @prop()
+    public name: string
+
+    @prop()
+    public host: string
+
+    @prop()
+    public port: number
+
+    @prop({ ref: () => COMServer })
+    public server: Ref<COMServer>
+
+    @prop()
+    public comPort: number
+
+    @prop({ type: () => Permission, _id: false })
+    public permissions: Map<string, Permission>
+
+    public getData(this: DocumentType<Terminal>): AllTerminalData {
+        const partial = {
+            id: this.id,
+            name: this.name,
+            port: this.port,
+            comPort: this.port - 20000,
+        }
+        
+        if (isDocument(this.server)) {
+            return {
+                host: this.server.host,
+                serverName: this.server.name,
+                ...partial
+            }
+        }
+
+        // This is unreal case probably
+        // At least it should 🤔
+        return {
+            host: '', serverName: '',
+            ...partial
+        }
+    }
+
+    public getInfo(this: DocumentType<Terminal>, isAdmin: boolean = false, role = '') {
+        interface IResult {
+            id: any,
+            name: string,
+            host?: string,
+            port?: number,
+            readonly: boolean,
+            editable: boolean,
+            comPort: number,
+            serverName: string
+        }
+
+        const hostAndServerName = isDocument(this.server) ? {
+            host: this.server.host,
+            serverName: this.server.name
+        } : {
+            host: '', serverName: ''
+        }
+        let res : IResult = {
+            id: this.id,
+            name: this.name,
+            port: this.port,
+            readonly: false,
+            editable: isAdmin,
+            comPort: this.port - 20000,
+            ...hostAndServerName
+        }
+
+        if (!isAdmin) {
+            delete res.host;
+            delete res.port;
+            if (this.permissions.has(role)) {
+                res.readonly = !this.permissions.get(role).write;
+            } else {
+                res.readonly = true;
+            }
+        }
+
+        return res;
+    }
+
+    public visible(this: DocumentType<Terminal>, role: string) {
+        if (this.permissions.has(role)) {
+            return this.permissions.get(role).show;
+        }
+        return false;
+    }
+}
+
+class Permission {
+    @prop()
+    public show: boolean
+
+    @prop()
+    public write: boolean
+}
 
 interface AllTerminalData {
     id: string,
@@ -11,108 +112,4 @@ interface AllTerminalData {
     comPort: number
 }
 
-type ITerminal = {
-    name: string,
-    host: string,
-    port: number,
-    server: ICOMServer,
-    permissions: Map<string, {
-        show: boolean,
-        write: boolean
-    }>
-
-    getData(): AllTerminalData;
-    getInfo(admin?: boolean, role?: string): {
-        name: string,
-        serverName: string,
-        host?: string,
-        port?: number,
-        comPort: number
-    };
-    visible(role: string): boolean;
-}
-
-const terminalSchema = new Schema<ITerminal>({
-    name: {
-        type: String,
-        required: true
-    },
-    host: {
-        type: String,
-        required: true
-    },
-    port: {
-        type: Number,
-        required: true
-    },
-    server: {
-        type: Schema.Types.ObjectId,
-        ref: 'COMServer',
-        required: true
-    },
-    permissions: {
-        type: Map,
-        of: {
-            show: {
-                type: Boolean,
-                required: true
-            },
-            write: {
-                type: Boolean,
-                required: true
-            }
-        },
-        default: {}
-    }
-});
-
-terminalSchema.methods.getData = function (): AllTerminalData {
-    return {
-        id: this.id,
-        name: this.name,
-        host: this.server.host,
-        port: this.port,
-        serverName: this.server.name,
-        comPort: this.port - 20000
-    }
-}
-
-terminalSchema.methods.getInfo = function (isAdmin: boolean = false, role = '') {
-    let res = {
-        id: this.id,
-        name: this.name,
-        host: this.server.host,
-        port: this.port,
-        readonly: false,
-        editable: isAdmin,
-        serverName: this.server.name,
-        comPort: this.port - 20000
-    }
-
-    if (!isAdmin) {
-        delete res.host;
-        delete res.port;
-        if (this.permissions.has(role)) {
-            res.readonly = !this.permissions.get(role).write;
-        } else {
-            res.readonly = true;
-        }
-    }
-
-    return res;
-}
-
-terminalSchema.methods.visible = function (role: string) {
-    if (this.permissions.has(role)) {
-        return this.permissions.get(role).show;
-    }
-    return false;
-}
-
-const Terminal = model<ITerminal>("Terminal", terminalSchema);
-export default Terminal;
-
-type TerminalType = ITerminal & Document;
-export type {
-    TerminalType as ITerminal
-};
+export const TerminalModel = getModelForClass(Terminal)

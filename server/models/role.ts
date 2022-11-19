@@ -1,10 +1,14 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, prop, defaultClasses, DocumentType } from "@typegoose/typegoose";
 
 class Role {
     @prop()
     public name: string
 }
 
-const RoleModel = getModelForClass(Role)
+type RoleDocument = DocumentType<Role>
 
-export default RoleModel
+export type {
+    RoleDocument as Role
+}
+
+export const RoleModel = getModelForClass(Role)

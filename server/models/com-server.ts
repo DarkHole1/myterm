@@ -1,44 +1,31 @@
+import { DocumentType, getModelForClass, prop } from "@typegoose/typegoose";
 import { model, Schema, Document } from "mongoose";
 
-interface ICOMServer {
-    name: string,
-    host: string,
+interface TerminalInfo {
+    id: any
+    name: string
+    host?: string
+}
 
-    getInfo(isAdmin?: boolean): {
-        id: string,
-        name: string,
-        host?: string
+export class COMServer {
+    @prop()
+    public name: string
+
+    @prop()
+    public host: string
+
+    public getInfo(this: DocumentType<COMServer>, isAdmin?: boolean): TerminalInfo {
+        let res: TerminalInfo = {
+            id: this.id,
+            name: this.name
+        }
+
+        if (isAdmin) {
+            res.host = this.host
+        }
+
+        return res;
     }
 }
 
-const serverSchema = new Schema<ICOMServer>({
-    name: {
-        type: String,
-        required: true
-    },
-    host: {
-        type: String,
-        required: true
-    }
-});
-
-serverSchema.methods.getInfo = function(isAdmin: boolean = false) {
-    let res = {
-        id: this.id,
-        name: this.name
-    }
-
-    if(isAdmin) {
-        Object.assign(res, {
-            host: this.host
-        });
-    }
-    return res;
-}
-
-const COMServer = model<ICOMServer>('COMServer', serverSchema);
-export default COMServer;
-type ICOMServerType = ICOMServer & Document; 
-export type {
-    ICOMServerType as ICOMServer
-}
+export const COMServerModel = getModelForClass(COMServer)
