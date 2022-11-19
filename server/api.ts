@@ -244,22 +244,22 @@ function init(config: Config) {
             name: req.body.name,
             password: req.body.password
         })
-        if (user != null) {
-            // For debug purposes
-            res.cookie('name', req.body.name, {
-                sameSite: 'none',
-                secure: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-            res.cookie('password', req.body.password, {
-                sameSite: 'none',
-                secure: true,
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
-            res.json({ success: true })
-            return;
+        if(!user) {
+            res.json({ success: false })
+            return
         }
-        res.json({ success: false });
+
+        res.cookie('name', req.body.name, {
+            sameSite: 'none',
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+        res.cookie('password', req.body.password, {
+            sameSite: 'none',
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+        res.json({ success: true })
     })
 
     router.post('/user.logout', async (req, res) => {
