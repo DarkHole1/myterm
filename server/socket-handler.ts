@@ -1,4 +1,3 @@
-import RemoteTCP from './remotetcp';
 import SocketManager from './socket-manager';
 import { UserModel } from './models/user';
 import Credentials from './credentials';
@@ -33,7 +32,7 @@ export default function (io: any, config: Config): void {
             socket.close()
             return
         }
-        
+
         const { terminal, readonly } = terminalInfo
         const { port, server } = isDocument(terminal) ? terminal : { port: 0, server: { host: '' } }
         const host = isDocument(server) ? server.host : ''

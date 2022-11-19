@@ -78,7 +78,7 @@ class SocketManager {
                 let { history } = this._sockets[id];
                 history = Buffer.concat([history, data]);
                 if(history.length > config.sessionBytesCount) {
-                    history = history.slice(config.dropBytes);
+                    history = history.subarray(config.dropBytes);
                 }
                 this._sockets[id].history = history;
             });
