@@ -8,6 +8,7 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "lib": ["es2019"],
-    "strict": true
+    "strict": true,
+    "emitDecoratorMetadata": true
   }
 }
