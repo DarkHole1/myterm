@@ -1,7 +1,6 @@
-import { Schema, model, Model, ObjectId } from 'mongoose';
+import { ObjectId } from 'mongoose';
 import Credentials from '../credentials';
 import { Terminal, TerminalModel } from './terminal';
-import './terminal';
 import { DocumentType, getModelForClass, isDocument, isDocumentArray, prop, Ref, ReturnModelType } from '@typegoose/typegoose';
 
 class User {
