@@ -21,9 +21,20 @@ export default function (io: any, config: Config): void {
             Credentials.fromCookies(cookies)
         );
 
+        if(!user) {
+            socket.close()
+            return
+        }
+
         log('Connecting to remote');
-        const terminalId = socket.handshake.query.terminal;
-        const { terminal, readonly } = await user.getTerminalById(terminalId);
+        const terminalId = socket.handshake.query.terminal
+        const terminalInfo = await user.getTerminalById(terminalId)
+        if(!terminalInfo) {
+            socket.close()
+            return
+        }
+        
+        const { terminal, readonly } = terminalInfo
         const { port, server } = isDocument(terminal) ? terminal : { port: 0, server: { host: '' } }
         const host = isDocument(server) ? server.host : ''
         log('Rights: %o', {

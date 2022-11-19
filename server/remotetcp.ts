@@ -3,27 +3,22 @@ import debug from 'debug';
 
 const log = debug('app:remote:tcp');
 
-type Params = { 
-    socket?: net.Socket,
-    host?: string, 
-    port?: number, 
-    readonly: boolean
-}
+type Params = { socket: net.Socket, readonly: boolean } | { host: string, port: number, readonly: boolean }
 
 class RemoteTCP {
     private _socket: net.Socket;
     private _readonly: boolean;
 
-    constructor({ host, socket, port, readonly }: Params) {
-        if(socket) {
-            this._socket = socket;
+    constructor(params: Params) {
+        if ('socket' in params) {
+            this._socket = params.socket;
         } else {
             this._socket = new net.Socket();
-            this._socket.connect(port, host, () => {
-                log('Connected to %s:%d', host, port);
+            this._socket.connect(params.port, params.host, () => {
+                log('Connected to %s:%d', params.host, params.port);
             });
         }
-        this._readonly = readonly;
+        this._readonly = params.readonly;
     }
 
     attach(socket: any): void {
@@ -32,7 +27,7 @@ class RemoteTCP {
             socket.emit('data', data);
         })
 
-        if(!this._readonly) {
+        if (!this._readonly) {
             socket.on('data', (data: any) => {
                 log('Data received from client, sending to socket');
                 this._socket.write(data);

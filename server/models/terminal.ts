@@ -4,23 +4,23 @@ import './com-server';
 import { DocumentType, getModelForClass, isDocument, prop, Ref } from '@typegoose/typegoose';
 
 export class Terminal {
-    @prop()
-    public name: string
+    @prop({ required: true })
+    public name!: string
 
-    @prop()
-    public host: string
+    @prop({ required: true })
+    public host!: string
 
-    @prop()
-    public port: number
+    @prop({ required: true })
+    public port!: number
 
-    @prop({ ref: () => COMServer })
-    public server: Ref<COMServer>
+    @prop({ ref: () => COMServer, required: true })
+    public server!: Ref<COMServer>
 
-    @prop()
-    public comPort: number
+    @prop({ required: true })
+    public comPort!: number
 
-    @prop({ type: () => Permission, _id: false })
-    public permissions: Map<string, Permission>
+    @prop({ type: () => Permission, _id: false, required: true })
+    public permissions!: Map<string, Permission>
 
     public getData(this: DocumentType<Terminal>): AllTerminalData {
         const partial = {
@@ -78,7 +78,7 @@ export class Terminal {
             delete res.host;
             delete res.port;
             if (this.permissions.has(role)) {
-                res.readonly = !this.permissions.get(role).write;
+                res.readonly = !this.permissions.get(role)?.write;
             } else {
                 res.readonly = true;
             }
@@ -89,18 +89,18 @@ export class Terminal {
 
     public visible(this: DocumentType<Terminal>, role: string) {
         if (this.permissions.has(role)) {
-            return this.permissions.get(role).show;
+            return this.permissions.get(role)?.show;
         }
         return false;
     }
 }
 
 class Permission {
-    @prop()
-    public show: boolean
+    @prop({ required: true })
+    public show!: boolean
 
-    @prop()
-    public write: boolean
+    @prop({ required: true })
+    public write!: boolean
 }
 
 interface AllTerminalData {

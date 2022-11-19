@@ -1,8 +1,8 @@
 import { getModelForClass, prop, defaultClasses, DocumentType } from "@typegoose/typegoose";
 
 class Role {
-    @prop()
-    public name: string
+    @prop({ required: true })
+    public name!: string
 }
 
 type RoleDocument = DocumentType<Role>

@@ -32,21 +32,26 @@ function init(config: Config) {
             return
         }
 
+        if (!req.query.id || !req.query.port || !req.query.name || !req.query.host) {
+            res.json({ success: false });
+            return
+        }
+
         log('Trying change terminal')
         const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
-        
-        if(terminalInfo == null) {
+
+        if (terminalInfo == null) {
             res.json({ success: false });
             return
         }
 
         const { terminal } = terminalInfo;
-        
+
         if (!isDocument(terminal.server)) {
             res.json({ success: false });
             return
         }
-        
+
         terminal.port = parseInt(req.query.port.toString());
         terminal.name = req.query.name.toString();
         terminal.save();
@@ -58,57 +63,85 @@ function init(config: Config) {
     })
 
     router.get('/terminal.permissions', async (req, res) => {
-        if (req.user.admin) {
-            let term = await TerminalModel.findById(req.query.id);
-            res.json(term.permissions);
-            return;
+        if (!req.user.admin) {
+            res.json(null)
+            return
         }
-        res.json(null);
+
+        const term = await TerminalModel.findById(req.query.id)
+        if (!term) {
+            res.json(null)
+            return
+        }
+
+        res.json(term.permissions);
     })
 
     router.post('/terminal.permissions', express.json(), async (req, res) => {
-        if (req.user.admin) {
-            log('Trying change terminals permissons')
-            const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
-            if (terminalInfo != null) {
-                const { terminal } = terminalInfo;
-                log("Permissions: %o", req.body);
-                terminal.permissions = new Map(Object.entries(req.body))
-                terminal.save();
-                log('Changes in permissions succesfull');
-                res.json({ success: true });
-                return;
-            }
+        if (!req.user.admin) {
+            res.json({ success: false })
+            return
         }
-        res.json({ success: false });
+
+        if (!req.query.id) {
+            res.json({ success: false })
+            return
+        }
+
+        log('Trying change terminals permissons')
+        const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
+        if (!terminalInfo) {
+            res.json({ success: false })
+            return
+        }
+
+        const { terminal } = terminalInfo
+        log("Permissions: %o", req.body)
+        terminal.permissions = new Map(Object.entries(req.body))
+        terminal.save();
+        log('Changes in permissions succesfull')
+        res.json({ success: true });
     })
 
     router.post('/terminal.restart', async (req, res) => {
+        if (!req.query.id) {
+            res.json({ success: false })
+            return
+        }
+
         log('Restarting terminal %o', req.query);
         const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
-        if (terminalInfo != null) {
-            const { host, port } = terminalInfo.terminal;
-            SocketManager.restart({ host, port, config });
-            res.json({ success: true });
-            return;
+        if (!terminalInfo) {
+            res.json({ success: false })
+            return
         }
-        res.json({ success: false });
+
+        const { host, port } = terminalInfo.terminal
+        SocketManager.restart({ host, port, config })
+        res.json({ success: true })
     })
 
     router.get('/terminal.get', async (req, res) => {
+        if (!req.query.id) {
+            res.json(null)
+            return
+        }
+
         log('Getting terminal %o', req.query);
         const info = await req.user.getTerminalById(req.query.id.toString());
-        if (info == null) {
-            res.json(null);
-            return;
+        if (!info) {
+            res.json(null)
+            return
         }
+
         let result = {
             id: info.terminal._id,
             name: info.terminal.name,
             readonly: info.readonly,
             editable: req.user.admin,
             comPort: info.terminal.port - 20000
-        };
+        }
+
         if (req.user.admin) {
             Object.assign(result, {
                 host: info.terminal.host,
@@ -181,19 +214,29 @@ function init(config: Config) {
     })
 
     router.post('/user.update', express.json(), async (req, res) => {
-        if (req.user.admin) {
-            log('Trying change user %s', req.query.id);
-            const user = await UserModel.findById(req.query.id.toString());
-            if (user != null) {
-                log("Changes: %o", req.body);
-                Object.assign(user, req.body);
-                user.save();
-                log('Changes in user succesfull');
-                res.json({ success: true });
-                return;
-            }
+        if (!req.query.id) {
+            res.json({ success: false })
+            return
         }
-        res.json({ success: false });
+
+        if (!req.user.admin) {
+            res.json({ success: false })
+            return
+        }
+
+        log('Trying change user %s', req.query.id)
+        const user = await UserModel.findById(req.query.id.toString())
+
+        if (!user) {
+            res.json({ success: false })
+            return
+        }
+
+        log("Changes: %o", req.body);
+        Object.assign(user, req.body);
+        user.save();
+        log('Changes in user succesfull');
+        res.json({ success: true });
     })
 
     router.post('/user.login', express.json(), async (req, res) => {
@@ -243,18 +286,26 @@ function init(config: Config) {
     })
 
     router.delete('/user', async (req, res) => {
-        log('Deleting user')
-        if (req.user.admin) {
-            const user = await UserModel.findById(req.query.id)
-            if (user.admin) {
-                res.json({ success: false })
-                return
-            }
-            await user.delete()
-            res.json({ success: true })
+        if (!req.user.admin) {
+            res.json({ success: false })
             return
         }
-        res.json({ success: false })
+
+        log('Deleting user')
+        const user = await UserModel.findById(req.query.id)
+        
+        if(!user) {
+            res.json({ success: false })
+            return
+        }
+        
+        if (user.admin) {
+            res.json({ success: false })
+            return
+        }
+        
+        await user.delete()
+        res.json({ success: true })
     })
 
     router.get('/role.list', async (req, res) => {
@@ -265,20 +316,25 @@ function init(config: Config) {
     })
 
     router.post('/role.rename', async (req, res) => {
-        if (req.user.admin) {
-            const { from, to } = req.query
-            const terminals = await TerminalModel.find()
-            for (let terminal of terminals) {
-                if (terminal.permissions.has(from as string)) {
-                    let val = terminal.permissions.get(from as string)
-                    terminal.permissions.delete(from as string)
-                    terminal.permissions.set(to as string, val)
-                }
-                await terminal.save()
-            }
-            return res.json({ success: true })
+        if(!req.user.admin || !req.query.to || !req.query.from) {
+            res.json({ success: false })
+            return
         }
-        res.json({ success: false })
+
+        const { from, to } = req.query
+        const terminals = await TerminalModel.find()
+        for (let terminal of terminals) {
+            const val = terminal.permissions.get(from.toString())
+            if(!val) {
+                continue
+            }
+
+            terminal.permissions.delete(from.toString())
+            terminal.permissions.set(to.toString(), val)
+            await terminal.save()
+        }
+        
+        res.json({ success: true })
     })
 
     return router;

@@ -1,5 +1,4 @@
 import { DocumentType, getModelForClass, prop } from "@typegoose/typegoose";
-import { model, Schema, Document } from "mongoose";
 
 interface TerminalInfo {
     id: any
@@ -8,11 +7,11 @@ interface TerminalInfo {
 }
 
 export class COMServer {
-    @prop()
-    public name: string
+    @prop({ required: true })
+    public name!: string
 
-    @prop()
-    public host: string
+    @prop({ required: true })
+    public host!: string
 
     public getInfo(this: DocumentType<COMServer>, isAdmin?: boolean): TerminalInfo {
         let res: TerminalInfo = {
