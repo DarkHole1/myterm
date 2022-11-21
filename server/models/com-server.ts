@@ -27,4 +27,5 @@ export class COMServer {
     }
 }
 
+export type COMServerDocument = DocumentType<COMServer>
 export const COMServerModel = getModelForClass(COMServer)

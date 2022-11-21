@@ -1,6 +1,5 @@
-import { Schema, model, ObjectId, Document } from 'mongoose';
-import { COMServer } from './com-server';
 import './com-server';
+import { COMServer, COMServerModel } from './com-server';
 import { DocumentType, getModelForClass, isDocument, prop, Ref } from '@typegoose/typegoose';
 
 export class Terminal {
@@ -112,4 +111,5 @@ interface AllTerminalData {
     comPort: number
 }
 
+export type TerminalDocument = DocumentType<Terminal>
 export const TerminalModel = getModelForClass(Terminal)

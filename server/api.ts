@@ -1,9 +1,9 @@
 import express, { Router } from 'express';
-import { User, UserModel } from './models/user';
+import { UserDocument, UserModel } from './models/user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
-import { COMServer, COMServerModel } from './models/com-server';
+import { COMServerDocument, COMServerModel } from './models/com-server';
 import { Terminal, TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
 import { isDocument } from '@typegoose/typegoose';
@@ -13,7 +13,7 @@ const log = debug('app:api');
 declare global {
     namespace Express {
         interface Request {
-            user: User
+            user: UserDocument
         }
     }
 }
@@ -183,8 +183,8 @@ function init(config: Config) {
 
     router.get('/comserver.terminals', async (req, res) => {
         const terminals = await TerminalModel.find({
-            server: req.query.id as Condition<COMServer>
-        }).populate('server')
+            server: req.query.id as Condition<COMServerDocument>
+        }).populate('server').exec()
         let visible = terminals;
         if (!req.user.admin) {
             visible = terminals.filter(term => term.visible(req.user.role));
@@ -240,6 +240,7 @@ function init(config: Config) {
     })
 
     router.post('/user.login', express.json(), async (req, res) => {
+        // console.log("%o", UserModel.schema)
         const user = await UserModel.findOne({
             name: req.body.name,
             password: req.body.password

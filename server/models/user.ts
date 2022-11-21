@@ -20,12 +20,16 @@ class User {
     public terminals!: TerminalInfo[]
 
     public static findByCredentials(this: ReturnModelType<typeof User>, creds: Credentials) {
+        console.log('Trying to find with creds')
         return this
             .findOne(creds.getCredentials())
             .populate({
                 path: 'terminals.terminal',
-                populate: 'server'
+                populate: 'server',
+                // BUG: This should work w/o this but I don't know how to made it correctly
+                strictPopulate: false
             })
+            .exec()
     }
 
     public async getTerminalById(this: DocumentType<User>, id: ObjectId | string) {
@@ -88,9 +92,5 @@ class TerminalInfo {
     public readonly!: boolean
 }
 
-type UserDocument = DocumentType<User>
-export {
-    UserDocument as User
-}
-
+export type UserDocument = DocumentType<User>
 export const UserModel = getModelForClass(User)
