@@ -7,7 +7,7 @@ const roleMap = new Map<string, RoleDocument>();
 
 (async () => {
     console.log(process.argv[1])
-    mongoose.connect(process.argv[1])
+    await mongoose.connect(process.argv[1])
 
     // Fix users
     const users = await UserModel.find()
