@@ -20,7 +20,6 @@ class User {
     public terminals!: TerminalInfo[]
 
     public static findByCredentials(this: ReturnModelType<typeof User>, creds: Credentials) {
-        console.log('Trying to find with creds')
         return this
             .findOne(creds.getCredentials())
             .populate({
