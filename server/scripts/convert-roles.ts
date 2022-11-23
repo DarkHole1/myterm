@@ -1,6 +1,6 @@
-import { Role, RoleDocument, RoleModel } from "../../models/role"
-import { TerminalModel } from "../../models/terminal"
-import { UserModel } from "../../models/user"
+import { Role, RoleDocument, RoleModel } from "../models/role"
+import { TerminalModel } from "../models/terminal"
+import { UserModel } from "../models/user"
 import mongoose from 'mongoose';
 
 const roleMap = new Map<string, RoleDocument>();
