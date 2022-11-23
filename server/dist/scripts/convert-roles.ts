@@ -1,10 +1,13 @@
 import { Role, RoleDocument, RoleModel } from "../../models/role"
 import { TerminalModel } from "../../models/terminal"
 import { UserModel } from "../../models/user"
+import mongoose from 'mongoose';
 
 const roleMap = new Map<string, RoleDocument>();
 
 (async () => {
+    console.log(process.argv[1])
+    mongoose.connect(process.argv[1])
 
     // Fix users
     const users = await UserModel.find()
