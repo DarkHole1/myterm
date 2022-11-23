@@ -25,9 +25,7 @@ class User {
             .findOne(creds.getCredentials())
             .populate({
                 path: 'terminals.terminal',
-                populate: 'server',
-                // BUG: This should work w/o this but I don't know how to made it correctly
-                strictPopulate: false
+                populate: 'server'
             })
             .exec()
     }
