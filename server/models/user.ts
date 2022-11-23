@@ -2,6 +2,7 @@ import { ObjectId } from 'mongoose';
 import Credentials from '../credentials';
 import { Terminal, TerminalModel } from './terminal';
 import { DocumentType, getModelForClass, isDocument, isDocumentArray, prop, Ref, ReturnModelType } from '@typegoose/typegoose';
+import { Role } from './role';
 
 class User {
     @prop({ required: true })
@@ -10,8 +11,8 @@ class User {
     @prop({ default: false })
     public admin!: boolean
 
-    @prop({ required: true })
-    public role!: string
+    @prop({ ref: () => Role, required: true })
+    public role!: string | Ref<Role>
 
     @prop({ required: true })
     public password!: string

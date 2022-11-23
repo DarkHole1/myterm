@@ -1,4 +1,4 @@
-import { getModelForClass, prop, defaultClasses, DocumentType } from "@typegoose/typegoose";
+import { getModelForClass, prop, DocumentType } from "@typegoose/typegoose";
 
 export class Role {
     @prop({ required: true })

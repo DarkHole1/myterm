@@ -184,12 +184,19 @@ function init(config: Config) {
     router.get('/comserver.terminals', async (req, res) => {
         const terminals = await TerminalModel.find({
             server: req.query.id as Condition<COMServerDocument>
-        }).populate('server').exec()
+        }).populate('server')
+        
+        const role = req.user.role
+        if(!role) {
+            return res.json([])
+        }
+
         let visible = terminals;
         if (!req.user.admin) {
-            visible = terminals.filter(term => term.visible(req.user.role));
+            visible = terminals.filter(term => term.visible(role));
         }
-        res.json(visible.map(term => term.getInfo(req.user.admin, req.user.role)));
+
+        res.json(visible.map(term => term.getInfo(req.user.admin, role)));
     })
 
     router.get('/user.isAdmin', (req, res) => {

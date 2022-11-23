@@ -1,6 +1,8 @@
 import './com-server';
 import { COMServer, COMServerModel } from './com-server';
 import { DocumentType, getModelForClass, isDocument, prop, Ref } from '@typegoose/typegoose';
+import { Types } from 'mongoose';
+import { Role, RoleDocument } from './role';
 
 export class Terminal {
     @prop({ required: true })
@@ -19,7 +21,7 @@ export class Terminal {
     public comPort!: number
 
     @prop({ type: () => Permission, _id: false, required: true })
-    public permissions!: Map<string, Permission>
+    public permissions!: Map<string | Types.ObjectId, Permission>
 
     public getData(this: DocumentType<Terminal>): AllTerminalData {
         const partial = {
@@ -45,7 +47,7 @@ export class Terminal {
         }
     }
 
-    public getInfo(this: DocumentType<Terminal>, isAdmin: boolean = false, role = '') {
+    public getInfo(this: DocumentType<Terminal>, isAdmin: boolean = false, role : string | Types.ObjectId | Role) {
         interface IResult {
             id: any,
             name: string,
@@ -76,8 +78,10 @@ export class Terminal {
         if (!isAdmin) {
             delete res.host;
             delete res.port;
-            if (this.permissions.has(role)) {
-                res.readonly = !this.permissions.get(role)?.write;
+            // For typecheck
+            const role2 = (role instanceof Role) ? (role as RoleDocument)._id : role
+            if (this.permissions.has(role2)) {
+                res.readonly = !this.permissions.get(role2)?.write;
             } else {
                 res.readonly = true;
             }
@@ -86,9 +90,11 @@ export class Terminal {
         return res;
     }
 
-    public visible(this: DocumentType<Terminal>, role: string) {
-        if (this.permissions.has(role)) {
-            return this.permissions.get(role)?.show;
+    public visible(this: DocumentType<Terminal>, role: string | Types.ObjectId | Role) {
+        // For typecheck 😿
+        const role2 = (role instanceof Role) ? (role as RoleDocument)._id : role
+        if (this.permissions.has(role2)) {
+            return this.permissions.get(role2)?.show;
         }
         return false;
     }
