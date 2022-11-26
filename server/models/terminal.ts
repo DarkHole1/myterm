@@ -17,11 +17,11 @@ export class Terminal {
     @prop({ ref: () => COMServer, required: true })
     public server!: Ref<COMServer>
 
-    @prop({ required: true })
-    public comPort!: number
+    @prop()
+    public comPort?: number
 
     @prop({ type: () => Permission, _id: false, required: true })
-    public permissions!: Map<string | Types.ObjectId, Permission>
+    public permissions!: Map<string, Permission>
 
     public getData(this: DocumentType<Terminal>): AllTerminalData {
         const partial = {

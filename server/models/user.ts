@@ -2,7 +2,7 @@ import { ObjectId } from 'mongoose';
 import Credentials from '../credentials';
 import { Terminal, TerminalModel } from './terminal';
 import { DocumentType, getModelForClass, isDocument, isDocumentArray, prop, Ref, ReturnModelType } from '@typegoose/typegoose';
-import { Role } from './role';
+import { Role, RoleDocument } from './role';
 
 class User {
     @prop({ required: true })
@@ -12,7 +12,7 @@ class User {
     public admin!: boolean
 
     @prop({ ref: () => Role, required: true })
-    public role!: string | Ref<Role>
+    public role: Ref<Role> | string
 
     @prop({ required: true })
     public password!: string
@@ -42,8 +42,10 @@ class User {
         }
 
         let readonly = true;
-        if (terminal.permissions.has(this.role)) {
-            readonly = !terminal.permissions.get(this.role)?.write;
+        // For typecheck
+        const role2 = (this.role instanceof Role) ? (this.role as RoleDocument)._id : this.role
+        if (terminal.permissions.has(role2)) {
+            readonly = !terminal.permissions.get(role2)?.write;
         }
         return { terminal, readonly }
     }
