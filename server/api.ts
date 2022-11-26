@@ -7,6 +7,7 @@ import { COMServerDocument, COMServerModel } from './models/com-server';
 import { Terminal, TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
 import { isDocument } from '@typegoose/typegoose';
+import { RoleDocument, RoleModel } from './models/role';
 
 const log = debug('app:api');
 
@@ -316,11 +317,10 @@ function init(config: Config) {
         res.json({ success: true })
     })
 
-    router.get('/role.list', async (req, res) => {
-        const terminals = await TerminalModel.find()
-        const roles = terminals.map(t => Array.from(t.permissions.keys())).reduce((s, a) => a.reduce((s, b) => s.add(b), s), new Set())
+    router.get('/role.list', async (_, res) => {
+        const roles = await RoleModel.find()
         log('Roles: %o', roles)
-        res.json(Array.from(roles.values()))
+        res.json(roles.map<RoleDocument>(e => e.name))
     })
 
     router.post('/role.rename', async (req, res) => {
