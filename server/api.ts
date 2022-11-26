@@ -4,10 +4,10 @@ import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
 import { COMServerDocument, COMServerModel } from './models/com-server';
-import { Terminal, TerminalModel } from './models/terminal';
+import { TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
-import { isDocument, isDocumentArray } from '@typegoose/typegoose';
-import { RoleDocument, RoleModel } from './models/role';
+import { isDocument } from '@typegoose/typegoose';
+import { RoleModel } from './models/role';
 
 const log = debug('app:api');
 
