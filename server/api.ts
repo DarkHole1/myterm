@@ -6,7 +6,7 @@ import Config from './config';
 import { COMServerDocument, COMServerModel } from './models/com-server';
 import { Terminal, TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
-import { isDocument } from '@typegoose/typegoose';
+import { isDocument, isDocumentArray } from '@typegoose/typegoose';
 import { RoleDocument, RoleModel } from './models/role';
 
 const log = debug('app:api');
@@ -210,15 +210,22 @@ function init(config: Config) {
     })
 
     router.get('/user.list', async (req, res) => {
-        if (req.user.admin) {
-            log('Starting getting users')
-            const users = await UserModel.find();
-            const mapped = users.map(({ id, role, name }) => ({ id, role, name }));
-            log("Users: %o", mapped);
-            res.json(mapped);
-            return;
+        if (!req.user.admin) {
+            return res.json([]);
         }
-        res.json([]);
+
+        log('Starting getting users')
+        const users = await UserModel.find().populate('role')
+        const mapped = users.map(({ id, role, name }) => {
+            if(isDocument(role)) {
+                // Bug in typecheck?
+                return { id, role: (role as any).name, name }
+            }
+            return { id, role, name }
+        });
+        log("Users: %o", mapped);
+        res.json(mapped);
+        return;
     })
 
     router.post('/user.update', express.json(), async (req, res) => {
