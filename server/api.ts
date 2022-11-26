@@ -186,9 +186,9 @@ function init(config: Config) {
         const terminals = await TerminalModel.find({
             server: req.query.id as Condition<COMServerDocument>
         }).populate('server')
-        
+
         const role = req.user.role
-        if(!role) {
+        if (!role) {
             return res.json([])
         }
 
@@ -253,7 +253,7 @@ function init(config: Config) {
             name: req.body.name,
             password: req.body.password
         })
-        if(!user) {
+        if (!user) {
             res.json({ success: false })
             return
         }
@@ -302,17 +302,17 @@ function init(config: Config) {
 
         log('Deleting user')
         const user = await UserModel.findById(req.query.id)
-        
-        if(!user) {
+
+        if (!user) {
             res.json({ success: false })
             return
         }
-        
+
         if (user.admin) {
             res.json({ success: false })
             return
         }
-        
+
         await user.delete()
         res.json({ success: true })
     })
@@ -320,28 +320,24 @@ function init(config: Config) {
     router.get('/role.list', async (_, res) => {
         const roles = await RoleModel.find()
         log('Roles: %o', roles)
-        res.json(roles.map<RoleDocument>(e => e.name))
+        res.json(roles.map(e => e.name))
     })
 
     router.post('/role.rename', async (req, res) => {
-        if(!req.user.admin || !req.query.to || !req.query.from) {
+        if (!req.user.admin || !req.query.to || !req.query.from) {
             res.json({ success: false })
             return
         }
 
         const { from, to } = req.query
-        const terminals = await TerminalModel.find()
-        for (let terminal of terminals) {
-            const val = terminal.permissions.get(from.toString())
-            if(!val) {
-                continue
-            }
-
-            terminal.permissions.delete(from.toString())
-            terminal.permissions.set(to.toString(), val)
-            await terminal.save()
+        const role = await RoleModel.findOne({ name: from })
+        if (!role) {
+            return res.json({ success: false })
         }
-        
+
+        role.name = to.toString()
+        await role.save()
+
         res.json({ success: true })
     })
 
