@@ -93,7 +93,7 @@ function init(config: Config) {
         }
 
         log('Trying change terminals permissons')
-        const terminalInfo = await req.user.getTerminalById(req.query.id.toString());
+        const terminalInfo = await req.user.getTerminalById(req.query.id.toString())
         if (!terminalInfo) {
             res.json({ success: false })
             return
@@ -101,7 +101,11 @@ function init(config: Config) {
 
         const { terminal } = terminalInfo
         log("Permissions: %o", req.body)
-        terminal.permissions = new Map(Object.entries(req.body))
+        // BUG: we should do something appropriate if role not found
+        // Also probably roles should be operated on frontend by id
+        const permissions = Object.entries(req.body).map(async ([k, v]): Promise<[string, unknown]> => [(await RoleModel.findOne({ name: k }))?._id, v])
+        // HACK: we should check types here
+        terminal.permissions = new Map(await Promise.all(permissions)) as any
         terminal.save();
         log('Changes in permissions succesfull')
         res.json({ success: true });
