@@ -7,7 +7,7 @@ import { COMServerDocument, COMServerModel } from './models/com-server';
 import { TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
 import { isDocument } from '@typegoose/typegoose';
-import { RoleModel } from './models/role';
+import { Role, RoleModel } from './models/role';
 
 const log = debug('app:api');
 
@@ -75,16 +75,19 @@ function init(config: Config) {
             return
         }
 
-        res.json(term.permissions);
+        // HACK: there should be appropriate types, not any, but permissions is private...
+        const permissionsList = await Promise.all(Array.from(term.permissions.entries()).map(async ([k, v]): Promise<[string, any]> => {
+            const role = await RoleModel.findById(k)
+            return [role?.name || '', v]
+        }))
+
+        const permissions = Object.fromEntries(permissionsList)
+
+        res.json(permissions)
     })
 
     router.post('/terminal.permissions', express.json(), async (req, res) => {
-        if (!req.user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        if (!req.query.id) {
+        if (!req.user.admin || !req.query.id) {
             res.json({ success: false })
             return
         }
