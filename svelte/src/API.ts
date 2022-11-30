@@ -165,10 +165,13 @@ class Server {
     }
 }
 
-class Terminal {
+export class Terminal {
     parent: Terminals
     id!: string
     editable!: boolean
+    host?: string
+    port?: number
+    name!: string
 
     // TODO: Add validation
     constructor(data: any, parent: Terminals) {
