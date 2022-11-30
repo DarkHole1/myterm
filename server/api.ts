@@ -334,7 +334,7 @@ function init(config: Config) {
     router.get('/role.list', async (_, res) => {
         const roles = await RoleModel.find()
         log('Roles: %o', roles)
-        res.json(roles.map(e => e.name))
+        res.json(roles.map(({ _id, name }) => ({ id: _id, name })))
     })
 
     router.post('/role.rename', async (req, res) => {
