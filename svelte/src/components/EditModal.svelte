@@ -21,8 +21,8 @@
     const unsubscribe = edit.subscribe(terminal => {
         terminalInfo = terminal;
         if (terminal != null) {
-            host = terminal.host;
-            port = terminal.port;
+            host = terminal.host ?? '';
+            port = terminal.port ?? 0;
             name = terminal.name;
         }
     });

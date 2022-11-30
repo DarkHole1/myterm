@@ -21,7 +21,8 @@
         if (terminal != null) {
             permissions = {};
             terminal.getPermissions().then((perm) => {
-                permissions = perm;
+                // HACK
+                permissions = perm as any;
             });
         }
     });

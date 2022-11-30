@@ -125,9 +125,10 @@ async function checkLogin() {
 
 checkLogin();
 
-class User {
+export class User {
     parent: Users
     id!: string
+    role!: string 
 
     // TODO: Add validation
     constructor(data: any, parent: Users) {

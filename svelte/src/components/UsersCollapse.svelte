@@ -1,12 +1,14 @@
 <script lang="ts">
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import { faCaretRight, faCaretDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+  import {
+    faCaretRight,
+    faPlus,
+  } from "@fortawesome/free-solid-svg-icons";
   import UserBlock from "./UserBlock.svelte";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import API from "../API";
-import { user } from "../modals";
 
   let show = false;
   const rotation = tweened(0, {
@@ -17,7 +19,7 @@ import { user } from "../modals";
   const { users } = API;
 
   async function newUser() {
-    await users.create()
+    await users.create();
   }
 </script>
 
@@ -34,7 +36,7 @@ import { user } from "../modals";
       transform={{ rotate: $rotation * 90 }}
     />
     <span class="text">Пользователи</span>
-    <div class="gap"></div>
+    <div class="gap" />
     <span class="new-user" on:click|stopPropagation={newUser}>
       <span>Новый пользователь</span>
       <FontAwesomeIcon icon={faPlus} transform="shrink-2 down-1" />
