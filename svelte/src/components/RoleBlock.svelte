@@ -10,8 +10,9 @@
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
   import { role as roleModal } from "../modals";
+  import type { Role } from "../api/roles";
 
-  export let role : string;
+  export let role: Role;
 
   function handleEdit() {
     roleModal.set(role);
@@ -23,7 +24,7 @@
     <FontAwesomeIcon class="logo" icon={faShield} />
   </div>
   <h2 class="name">
-    {role}
+    {role.name}
   </h2>
   <div class="actions">
     <Action icon={faPencilAlt} on:click={handleEdit} />
