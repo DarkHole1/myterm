@@ -2,7 +2,6 @@
     import Button from "./Button.svelte";
     import { permissions as modalPermissions } from "../modals";
     import { onDestroy } from "svelte";
-    import { select_value, validate_each_argument } from "svelte/internal";
 
     function handleClick(success: boolean) {
         if (success) {
