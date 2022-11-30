@@ -3,20 +3,21 @@
     import { role } from "../modals";
     import { onDestroy } from "svelte";
     import API from "../API";
+    import type { Role } from "../api/roles";
 
     async function handleClick(success: boolean) {
-        if (success) {
-            await API.roles.rename(oldRole, newRole);
+        if (success && oldRole != null) {
+            await API.roles.rename(oldRole, newName);
         }
         role.set(null);
     }
 
-    let oldRole = "";
-    let newRole = "";
+    let oldRole: Role | null = null;
+    let newName = "";
 
     const unsubscribe = role.subscribe((role) => {
         oldRole = role;
-        newRole = "";
+        newName = "";
     });
 
     onDestroy(unsubscribe);
@@ -32,7 +33,7 @@
                     type="text"
                     class="form-control"
                     id="newRole"
-                    bind:value={newRole}
+                    bind:value={newName}
                 />
             </div>
             <Button danger on:click={() => handleClick(true)}>Отправить</Button>

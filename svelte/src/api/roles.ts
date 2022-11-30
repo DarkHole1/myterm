@@ -40,9 +40,9 @@ export class Roles implements Readable<Role[]> {
         this.$store.set(Role.fromArray(data))
     }
 
-    async rename(from: string, to: string) {
+    async rename(from: Role, to: string) {
         await API.$api.post('/role.rename', null, {
-            params: { from, to }
+            params: { from: from.name, to }
         })
 
         await this.update()
