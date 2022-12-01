@@ -36,9 +36,9 @@
             {#each Object.entries(permissions) as [key, value]}
                 <div>
                     <span>{key}</span>{" "}
-                    <label>Чтение</label>
-                    <input type="checkbox" bind:checked={value.show} />
-                    <label>Запись</label>
+                    <label for={key + '_read'}>Чтение</label>
+                    <input type="checkbox" bind:checked={value.show} id={key + "_read"} />
+                    <label for={key + '_write'}>Запись</label>
                     <input type="checkbox" bind:checked={value.write} />
                 </div>
             {/each}
