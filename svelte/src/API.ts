@@ -91,7 +91,7 @@ const API = {
         return () => { };
     }),
 
-    async login(username: string, password: string) {
+    async login(username: string, password: string): Promise<boolean> {
         const res = await API.$api.post('/user.login', {
             name: username, password
         });

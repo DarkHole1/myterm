@@ -8,11 +8,10 @@
 	import EditModal from "./components/EditModal.svelte";
 	import PermissionsModal from "./components/PermissionsModal.svelte";
 	import LoginModal from "./components/LoginModal.svelte";
-	import Button from "./components/Button.svelte";
 	import Spinner from "./components/Spinner.svelte";
 	import Topbar from "./components/Topbar.svelte";
-import RolesCollapse from "./components/RolesCollapse.svelte";
-import RenameModal from "./components/RenameModal .svelte";
+	import RolesCollapse from "./components/RolesCollapse.svelte";
+	import RenameModal from "./components/RenameModal .svelte";
 	const { servers, loading } = API;
 
 	function handleLogin() {
@@ -29,7 +28,7 @@ import RenameModal from "./components/RenameModal .svelte";
 	{:else if !API.loggedIn}
 		<LoginModal on:login={handleLogin} />
 	{:else}
-		<div class="gap"></div>
+		<div class="gap" />
 		{#if API.isAdmin}
 			<RolesCollapse />
 			<UsersCollapse />
