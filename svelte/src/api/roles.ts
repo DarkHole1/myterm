@@ -36,6 +36,10 @@ export class Role {
     public get name(): string {
         return this.data.name
     }
+
+    public get id(): string {
+        return this.data.id
+    }
 }
 
 export class Roles implements Readable<Role[]> {

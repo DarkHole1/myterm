@@ -2,16 +2,17 @@
     import Button from "./Button.svelte";
     import { permissions as modalPermissions } from "../modals";
     import { onDestroy } from "svelte";
+    import type { Terminal } from "../API";
 
     function handleClick(success: boolean) {
-        if (success) {
+        if (success && terminalInfo != null) {
             terminalInfo.setPermissions(permissions);
         }
         modalPermissions.set(null);
     }
     
     // TODO: not any
-    let terminalInfo;
+    let terminalInfo : Terminal | null;
     let permissions: { [key: string]: { show: boolean; write: boolean } } = {};
     let newuser = "";
 

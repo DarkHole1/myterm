@@ -230,7 +230,9 @@ export class Terminal {
     }
 
     async setPermissions(permissions: object) {
-        await API.$api.post('/terminal.permissions', permissions, {
+        // TODO: make shorter
+        const mappedPermissions = Object.fromEntries(await Promise.all(Object.entries(permissions).map(async ([k, v]): Promise<[any, any]> => ([(await API.roles.findOrCreate(k)).id, v]))))
+        await API.$api.post('/terminal.permissions', mappedPermissions, {
             params: {
                 id: this.id
             }
