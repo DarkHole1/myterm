@@ -110,20 +110,20 @@ function init(config: Config) {
         const permissionsPairs = Object.entries(req.body)
         const roleIds = permissionsPairs.map(([roleId, _]) => roleId)
         const rolesFromIds = await Promise.all(roleIds.map(roleId => RoleModel.findById(roleId)))
-        if(rolesFromIds.some(role => !role)) {
+        if (rolesFromIds.some(role => !role)) {
             return res.json({ success: false })
         }
 
         try {
             const parsedPermissions = permissionsPairs.map(
                 ([roleId, permissions]): [string, z.infer<typeof Permissions>] =>
-                [roleId, Permissions.parse(permissions)]
+                    [roleId, Permissions.parse(permissions)]
             )
             terminal.permissions = new Map(parsedPermissions)
             await terminal.save();
             log('Changes in permissions succesfull')
             return res.json({ success: true });
-        } catch(err) {
+        } catch (err) {
             return res.json({ succcess: false })
         }
     })
@@ -241,7 +241,7 @@ function init(config: Config) {
         log('Starting getting users')
         const users = await UserModel.find().populate('role')
         const mapped = users.map(({ id, role, name }) => {
-            if(isDocument(role)) {
+            if (isDocument(role)) {
                 // Bug in typecheck?
                 return { id, role: (role as any).name, name }
             }
@@ -370,6 +370,22 @@ function init(config: Config) {
         await role.save()
 
         res.json({ success: true })
+    })
+
+    router.post('/role.create', async (req, res) => {
+        const Body = z.object({ name: z.string() })
+        if (!req.user.admin) {
+            return res.json({ success: false })
+        }
+
+        try {
+            const parsedBody = Body.parse(req.body)
+            const role = new RoleModel({ name: parsedBody.name })
+            await role.save()
+            return res.json({ success: true, data: { id: role._id, name: role.name } })
+        } catch (e) {
+            return res.json({ success: false })
+        }
     })
 
     return router;
