@@ -253,15 +253,24 @@ function init(config: Config) {
     })
 
     router.post('/user.update', express.json(), async (req, res) => {
-        if (!req.query.id) {
+        if (!req.query.id || !req.user.admin) {
             res.json({ success: false })
             return
         }
 
-        if (!req.user.admin) {
-            res.json({ success: false })
-            return
+        const Body = z.object({
+            role: z.string().regex(/[0-9a-f]{24}/i),
+            password: z.string()
+        }).partial()
+        type Body = z.infer<typeof Body>
+        
+        log("Trying to parse changes %o", req.body)
+        const bodyParsedResult = Body.safeParse(req.body)
+        if(!bodyParsedResult.success) {
+            return res.json({ success: false })
         }
+
+        const bodyParsed = bodyParsedResult.data
 
         log('Trying change user %s', req.query.id)
         const user = await UserModel.findById(req.query.id.toString())
@@ -272,8 +281,13 @@ function init(config: Config) {
         }
 
         log("Changes: %o", req.body);
-        Object.assign(user, req.body);
-        user.save();
+        if(bodyParsed.password) {
+            user.password = bodyParsed.password
+        }
+        if(bodyParsed.role) {
+            user.role = bodyParsed.role
+        }
+        await user.save();
         log('Changes in user succesfull');
         res.json({ success: true });
     })
