@@ -372,18 +372,21 @@ function init(config: Config) {
         res.json({ success: true })
     })
 
-    router.post('/role.create', async (req, res) => {
+    router.post('/role.create', express.json(), async (req, res) => {
         const Body = z.object({ name: z.string() })
         if (!req.user.admin) {
             return res.json({ success: false })
         }
 
+        log("Creating role...")
         try {
             const parsedBody = Body.parse(req.body)
             const role = new RoleModel({ name: parsedBody.name })
             await role.save()
+            log("Role created successfully")
             return res.json({ success: true, data: { id: role._id, name: role.name } })
         } catch (e) {
+            log("Error occured: %e", e)
             return res.json({ success: false })
         }
     })

@@ -82,6 +82,7 @@ export class Roles implements Readable<Role[]> {
     async update() {
         const { data } = await API.$api.get<unknown>('/role.list')
         const roles = Role.fromArray(data)
+        this.roles = roles
         this.$store.set(roles)
     }
 
