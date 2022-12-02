@@ -16,7 +16,8 @@
     "socket.io": "^4.1.1",
     "ts-node": "^10.0.0",
     "xterm": "^5.0.0",
-    "xterm-addon-fit": "^0.6.0"
+    "xterm-addon-fit": "^0.6.0",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "typescript": "^4.3.4"

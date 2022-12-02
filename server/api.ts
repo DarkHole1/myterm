@@ -8,6 +8,8 @@ import { TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
 import { isDocument } from '@typegoose/typegoose';
 import { Role, RoleModel } from './models/role';
+import { z } from 'zod';
+import { type } from 'os';
 
 const log = debug('app:api');
 
@@ -101,14 +103,29 @@ function init(config: Config) {
 
         const { terminal } = terminalInfo
         log("Permissions: %o", req.body)
-        // BUG: we should do something appropriate if role not found
-        // Also probably roles should be operated on frontend by id
-        const permissions = Object.entries(req.body).map(async ([k, v]): Promise<[string, unknown]> => [(await RoleModel.findOne({ name: k }))?._id, v])
-        // HACK: we should check types here
-        terminal.permissions = new Map(await Promise.all(permissions)) as any
-        terminal.save();
-        log('Changes in permissions succesfull')
-        res.json({ success: true });
+        const Permissions = z.object({
+            show: z.boolean(),
+            write: z.boolean()
+        })
+        const permissionsPairs = Object.entries(req.body)
+        const roleIds = permissionsPairs.map(([roleId, _]) => roleId)
+        const rolesFromIds = await Promise.all(roleIds.map(roleId => RoleModel.findById(roleId)))
+        if(rolesFromIds.some(role => !role)) {
+            return res.json({ success: false })
+        }
+
+        try {
+            const parsedPermissions = permissionsPairs.map(
+                ([roleId, permissions]): [string, z.infer<typeof Permissions>] =>
+                [roleId, Permissions.parse(permissions)]
+            )
+            terminal.permissions = new Map(parsedPermissions)
+            await terminal.save();
+            log('Changes in permissions succesfull')
+            return res.json({ success: true });
+        } catch(err) {
+            return res.json({ succcess: false })
+        }
     })
 
     router.post('/terminal.restart', async (req, res) => {
