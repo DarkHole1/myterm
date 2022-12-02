@@ -1,20 +1,32 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-import { fly } from "svelte/transition";
+    import { fly } from "svelte/transition";
+    import { FontAwesomeIcon } from "fontawesome-svelte";
     import API from "../API";
     import Button from "./Button.svelte";
+    import { faSync } from "@fortawesome/free-solid-svg-icons";
 
     const dispatch = createEventDispatcher();
     let user = "";
     let password = "";
+    let message: string | null = null;
+    enum Status { Waiting, Logging }
+    let status = Status.Waiting
 
     async function handleClick() {
-        await API.login(user, password);
-        dispatch("login", { user, password });
+        status = Status.Logging
+        message = null
+        const success = await API.login(user, password);
+        status = Status.Waiting
+        if(success) {
+            dispatch("login", { user, password });
+        } else {
+            message = 'Не получилось войти. Попробуйте ещё раз'
+        }
     }
 </script>
 
-<div class="modal-container" transition:fly={{y:-200}} >
+<div class="modal-container" transition:fly={{ y: -200 }}>
     <form class="modal-content" on:submit|preventDefault={handleClick}>
         <div class="title">Вход MyTerm</div>
         <div class="pair">
@@ -24,6 +36,7 @@ import { fly } from "svelte/transition";
                 class="form-control"
                 id="role"
                 bind:value={user}
+                disabled={status == Status.Logging}
             />
         </div>
         <div class="pair">
@@ -33,9 +46,18 @@ import { fly } from "svelte/transition";
                 class="form-control"
                 id="password"
                 bind:value={password}
+                disabled={status == Status.Logging}
             />
         </div>
-        <Button success>Войти</Button>
+        {#if message}
+            <div>{message}</div>
+        {/if}
+        <Button success>
+            Войти
+            {#if status == Status.Logging}
+                <FontAwesomeIcon icon={faSync} spin />
+            {/if}
+        </Button>
     </form>
 </div>
 
