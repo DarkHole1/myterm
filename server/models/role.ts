@@ -1,7 +1,7 @@
 import { getModelForClass, prop, DocumentType } from "@typegoose/typegoose";
 
 export class Role {
-    @prop({ required: true })
+    @prop({ required: true, unique: true })
     public name!: string
 }
 
