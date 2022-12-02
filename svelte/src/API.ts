@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { readable, Subscriber, Writable, writable } from "svelte/store";
+import { Roles } from './api/roles';
 
 class Users {
     $store: Writable<User[]> = writable([])
@@ -10,7 +11,7 @@ class Users {
 
     async update() {
         const { data } = await API.$api.get('/user.list')
-        this.$store.set(data.map(user => new User(user, this)))
+        this.$store.set(data.map((user: any) => new User(user, this)))
     }
 
     async create() {
@@ -32,7 +33,7 @@ class Servers {
 
     async update() {
         const { data } = await API.$api.get('/comserver.list')
-        this.$store.set(data.map(server => new Server(server, this)))
+        this.$store.set(data.map((server: any) => new Server(server, this)))
     }
 
     subscribe(run: Subscriber<Server[]>) {
@@ -55,7 +56,7 @@ class Terminals {
                 id: this.serverId
             }
         })
-        this.$store.set(data.map(terminal => new Terminal(terminal, this)))
+        this.$store.set(data.map((terminal: any) => new Terminal(terminal, this)))
     }
 
     async create() {
@@ -68,30 +69,6 @@ class Terminals {
     }
 
     subscribe(run: Subscriber<Server[]>) {
-        return this.$store.subscribe(run)
-    }
-}
-
-class Roles {
-    $store: Writable<string[]> = writable([])
-
-    constructor() {
-        setTimeout(() => this.update(), 0)
-    }
-
-    async update() {
-        const { data } = await API.$api.get('/role.list')
-        this.$store.set(data)
-    }
-
-    async rename(from: string, to: string) {
-        const res = await API.$api.post('/role.rename', null, {
-            params: { from, to }
-        })
-        await this.update()
-    }
-
-    subscribe(run: Subscriber<string[]>) {
         return this.$store.subscribe(run)
     }
 }
@@ -148,9 +125,10 @@ async function checkLogin() {
 
 checkLogin();
 
-class User {
+export class User {
     parent: Users
-    id: string
+    id!: string
+    role!: string 
 
     // TODO: Add validation
     constructor(data: any, parent: Users) {
@@ -178,7 +156,7 @@ class User {
 class Server {
     parent: Servers
     terminals: Terminals
-    id: string
+    id!: string
 
     // TODO: Add validation
     constructor(data: any, parent: Servers) {
@@ -188,10 +166,13 @@ class Server {
     }
 }
 
-class Terminal {
+export class Terminal {
     parent: Terminals
-    id: string
-    editable: boolean
+    id!: string
+    editable!: boolean
+    host?: string
+    port?: number
+    name!: string
 
     // TODO: Add validation
     constructor(data: any, parent: Terminals) {
@@ -249,7 +230,9 @@ class Terminal {
     }
 
     async setPermissions(permissions: object) {
-        await API.$api.post('/terminal.permissions', permissions, {
+        // TODO: make shorter
+        const mappedPermissions = Object.fromEntries(await Promise.all(Object.entries(permissions).map(async ([k, v]): Promise<[any, any]> => ([(await API.roles.findOrCreate(k)).id, v]))))
+        await API.$api.post('/terminal.permissions', mappedPermissions, {
             params: {
                 id: this.id
             }

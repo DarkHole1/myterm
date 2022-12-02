@@ -21,48 +21,13 @@
     const unsubscribe = edit.subscribe(terminal => {
         terminalInfo = terminal;
         if (terminal != null) {
-            host = terminal.host;
-            port = terminal.port;
+            host = terminal.host ?? '';
+            port = terminal.port ?? 0;
             name = terminal.name;
         }
     });
 
     onDestroy(unsubscribe);
-
-    // export default defineComponent({
-    //     components: { VButton, VButtonDanger },
-    //     data() {
-    //         return {
-    //             show: false,
-    //             name: "%TERMINAL_NAME%",
-    //             role: "",
-    //             password: "",
-    //             // eslint-disable-next-line
-    //             cb: (data: any) => void 0,
-    //         };
-    //     },
-    //     methods: {
-    //         handleClick(answer: boolean) {
-    //             if (answer) {
-    //                 // eslint-disable-next-line
-    //                 let res: { role: any; password?: any } = {
-    //                     role: this.role,
-    //                 };
-    //                 if (this.password.length > 0) res.password = this.password;
-    //                 this.cb(res);
-    //             }
-    //             this.show = false;
-    //         },
-    //         // eslint-disable-next-line
-    //         handleOpen(event: any) {
-    //             const { name, role, cb } = event.ref.params.value;
-    //             this.name = name;
-    //             this.role = role;
-    //             this.password = "";
-    //             this.cb = cb;
-    //         },
-    //     },
-    // });
 </script>
 
 {#if terminalInfo}

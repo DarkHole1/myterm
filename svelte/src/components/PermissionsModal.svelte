@@ -2,17 +2,17 @@
     import Button from "./Button.svelte";
     import { permissions as modalPermissions } from "../modals";
     import { onDestroy } from "svelte";
-    import { select_value, validate_each_argument } from "svelte/internal";
+    import type { Terminal } from "../API";
 
     function handleClick(success: boolean) {
-        if (success) {
-            // TODO
+        if (success && terminalInfo != null) {
             terminalInfo.setPermissions(permissions);
         }
         modalPermissions.set(null);
     }
-
-    let terminalInfo;
+    
+    // TODO: not any
+    let terminalInfo : Terminal | null;
     let permissions: { [key: string]: { show: boolean; write: boolean } } = {};
     let newuser = "";
 
@@ -21,47 +21,13 @@
         if (terminal != null) {
             permissions = {};
             terminal.getPermissions().then((perm) => {
-                permissions = perm;
+                // HACK
+                permissions = perm as any;
             });
         }
     });
 
     onDestroy(unsubscribe);
-
-    // export default defineComponent({
-    //     components: { VButton, VButtonDanger },
-    //     data() {
-    //         return {
-    //             show: false,
-    //             name: "%TERMINAL_NAME%",
-    //             role: "",
-    //             password: "",
-    //             // eslint-disable-next-line
-    //             cb: (data: any) => void 0,
-    //         };
-    //     },
-    //     methods: {
-    //         handleClick(answer: boolean) {
-    //             if (answer) {
-    //                 // eslint-disable-next-line
-    //                 let res: { role: any; password?: any } = {
-    //                     role: this.role,
-    //                 };
-    //                 if (this.password.length > 0) res.password = this.password;
-    //                 this.cb(res);
-    //             }
-    //             this.show = false;
-    //         },
-    //         // eslint-disable-next-line
-    //         handleOpen(event: any) {
-    //             const { name, role, cb } = event.ref.params.value;
-    //             this.name = name;
-    //             this.role = role;
-    //             this.password = "";
-    //             this.cb = cb;
-    //         },
-    //     },
-    // });
 </script>
 
 {#if terminalInfo}
@@ -71,9 +37,9 @@
             {#each Object.entries(permissions) as [key, value]}
                 <div>
                     <span>{key}</span>{" "}
-                    <label>Чтение</label>
-                    <input type="checkbox" bind:checked={value.show} />
-                    <label>Запись</label>
+                    <label for={key + '_read'}>Чтение</label>
+                    <input type="checkbox" bind:checked={value.show} id={key + "_read"} />
+                    <label for={key + '_write'}>Запись</label>
                     <input type="checkbox" bind:checked={value.write} />
                 </div>
             {/each}

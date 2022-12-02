@@ -18,7 +18,7 @@ const io = new Server(server);
 const log = require('debug')('app:server');
 log('Starting server...');
 import mongoose from 'mongoose';
-mongoose.connect(config.mongodbURI, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+mongoose.connect(config.mongodbURI, (err) => {
     log('DB connected, error: %o', err);
     log('DB uri "%s"', config.mongodbURI);
 })
