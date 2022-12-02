@@ -26,7 +26,7 @@
 {#if oldRole}
     <div class="modal-container">
         <div class="modal-content">
-            <div class="title">Редактирование роли {oldRole}</div>
+            <div class="title">Редактирование роли {oldRole.name}</div>
             <div class="pair">
                 <label for="newRole" class="form-label">Новое название</label>
                 <input
