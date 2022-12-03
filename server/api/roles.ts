@@ -3,6 +3,9 @@ import express, { Router } from "express";
 import { z } from "zod";
 import Config from "../config";
 import { RoleModel } from "../models/role";
+import { TerminalModel } from "../models/terminal";
+import { UserModel } from "../models/user";
+import Reason from "./reasons";
 
 const log = debug('app:api:roles')
 
@@ -54,14 +57,24 @@ export default function rolesEndpoint(_: Config): Router {
 
     router.delete('/role', async (req, res) => {
         if(!req.user.admin || typeof req.query.id != 'string') {
-            return res.json({ success: false })
+            return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
 
-        const role = await RoleModel.findByIdAndDelete(req.query.id)
+        const role = await RoleModel.findById(req.query.id)
         if(!role) {
-            return res.json({ success: false })
+            return res.json({ success: false, reason: Reason.RoleNotFound })
         }
 
+        const user = await UserModel.findOne({ role: role._id })
+        if(user) {
+            return res.json({ success: false, reason: Reason.UserWithRole })
+        }
+
+        const terminals = await TerminalModel.find()
+        for(const terminal of terminals) {
+            terminal.permissions.delete(role._id)
+            await terminal.save()
+        }
         return res.json({ success: true })
     })
 
