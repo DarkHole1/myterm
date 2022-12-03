@@ -3,10 +3,12 @@
     import { user } from "../modals";
     import { onDestroy } from "svelte";
     import type { User } from "../api/users";
+    import API from "../API";
 
-    function handleClick(success: boolean) {
+    async function handleClick(success: boolean) {
         if (success && userInfo != null) {
-            const res: { role: string; password?: string } = { role };
+            const role = await API.roles.findOrCreate(roleName)
+            const res: { role: string; password?: string } = { role: role.id };
             if (password != "") {
                 res.password = password;
             }
@@ -16,13 +18,13 @@
     }
 
     let userInfo: User | null = null;
-    let role = "";
+    let roleName = "";
     let password = "";
 
     const unsubscribe = user.subscribe((user) => {
         userInfo = user;
         if (user != null) {
-            role = user.role;
+            roleName = user.role;
             password = "";
         }
     });
@@ -40,7 +42,7 @@
                     type="text"
                     class="form-control"
                     id="role"
-                    bind:value={role}
+                    bind:value={roleName}
                 />
             </div>
             <div class="pair">
