@@ -52,5 +52,18 @@ export default function rolesEndpoint(_: Config): Router {
         }
     })
 
+    router.delete('/role', async (req, res) => {
+        if(!req.user.admin || typeof req.query.id != 'string') {
+            return res.json({ success: false })
+        }
+
+        const role = await RoleModel.findByIdAndDelete(req.query.id)
+        if(!role) {
+            return res.json({ success: false })
+        }
+
+        return res.json({ success: true })
+    })
+
     return router
 }
