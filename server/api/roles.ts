@@ -70,6 +70,7 @@ export default function rolesEndpoint(_: Config): Router {
             return res.json({ success: false, reason: Reason.UserWithRole })
         }
 
+        await role.delete()
         const terminals = await TerminalModel.find()
         for(const terminal of terminals) {
             terminal.permissions.delete(role._id)
