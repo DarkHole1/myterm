@@ -1,28 +1,7 @@
 import axios from 'axios';
 import { readable, Subscriber, Writable, writable } from "svelte/store";
 import { Roles } from './api/roles';
-
-class Users {
-    $store: Writable<User[]> = writable([])
-
-    constructor() {
-        // setTimeout(() => this.update(), 0)
-    }
-
-    async update() {
-        const { data } = await API.$api.get('/user.list')
-        this.$store.set(data.map((user: any) => new User(user, this)))
-    }
-
-    async create() {
-        const res = await API.$api.post('/user.add')
-        await this.update()
-    }
-
-    subscribe(run: Subscriber<User[]>) {
-        return this.$store.subscribe(run)
-    }
-}
+import { Users } from './api/users';
 
 class Servers {
     $store: Writable<Server[]> = writable([])
@@ -124,34 +103,6 @@ async function checkLogin() {
 }
 
 checkLogin();
-
-export class User {
-    parent: Users
-    id!: string
-    role!: string 
-
-    // TODO: Add validation
-    constructor(data: any, parent: Users) {
-        Object.assign(this, data)
-        this.parent = parent
-    }
-
-    async update(data: { role: string, password: string }) {
-        await API.$api.post('/user.update', data, {
-            params: { id: this.id }
-        })
-        await this.parent.update()
-    }
-
-    async delete() {
-        await API.$api.delete('/user', {
-            params: {
-                id: this.id
-            }
-        })
-        await this.parent.update()
-    }
-}
 
 class Server {
     parent: Servers

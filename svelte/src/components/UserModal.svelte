@@ -2,10 +2,13 @@
     import Button from "./Button.svelte";
     import { user } from "../modals";
     import { onDestroy } from "svelte";
+    import type { User } from "../api/users";
+    import API from "../API";
 
-    function handleClick(success: boolean) {
-        if (success) {
-            const res: { role: string; password?: string } = { role };
+    async function handleClick(success: boolean) {
+        if (success && userInfo != null) {
+            const role = await API.roles.findOrCreate(roleName)
+            const res: { role: string; password?: string } = { role: role.id };
             if (password != "") {
                 res.password = password;
             }
@@ -14,54 +17,19 @@
         user.set(null);
     }
 
-    let userInfo;
-    let role = "";
+    let userInfo: User | null = null;
+    let roleName = "";
     let password = "";
 
     const unsubscribe = user.subscribe((user) => {
         userInfo = user;
         if (user != null) {
-            role = user.role;
+            roleName = user.role;
             password = "";
         }
     });
 
     onDestroy(unsubscribe);
-
-    // export default defineComponent({
-    //     components: { VButton, VButtonDanger },
-    //     data() {
-    //         return {
-    //             show: false,
-    //             name: "%TERMINAL_NAME%",
-    //             role: "",
-    //             password: "",
-    //             // eslint-disable-next-line
-    //             cb: (data: any) => void 0,
-    //         };
-    //     },
-    //     methods: {
-    //         handleClick(answer: boolean) {
-    //             if (answer) {
-    //                 // eslint-disable-next-line
-    //                 let res: { role: any; password?: any } = {
-    //                     role: this.role,
-    //                 };
-    //                 if (this.password.length > 0) res.password = this.password;
-    //                 this.cb(res);
-    //             }
-    //             this.show = false;
-    //         },
-    //         // eslint-disable-next-line
-    //         handleOpen(event: any) {
-    //             const { name, role, cb } = event.ref.params.value;
-    //             this.name = name;
-    //             this.role = role;
-    //             this.password = "";
-    //             this.cb = cb;
-    //         },
-    //     },
-    // });
 </script>
 
 {#if userInfo}
@@ -74,7 +42,7 @@
                     type="text"
                     class="form-control"
                     id="role"
-                    bind:value={role}
+                    bind:value={roleName}
                 />
             </div>
             <div class="pair">
