@@ -21,8 +21,14 @@ const Result = z.discriminatedUnion("success", [
 
 type Result = z.infer<typeof Result>
 
-export class Role {
-    private constructor(private data: RawRole) { }
+export class Role implements RawRole {
+    public readonly id: string
+    public readonly name: string
+    
+    private constructor(data: RawRole) {
+        this.id = data.id
+        this.name = data.name
+    }
 
     // Converts from data
     static from(data: unknown) {
@@ -31,14 +37,6 @@ export class Role {
 
     static fromArray(data: unknown) {
         return z.array(RawRole).parse(data).map(e => new this(e))
-    }
-
-    public get name(): string {
-        return this.data.name
-    }
-
-    public get id(): string {
-        return this.data.id
     }
 }
 
