@@ -49,16 +49,10 @@ function init(config: Config) {
 
         const { terminal } = terminalInfo;
 
-        if (!isDocument(terminal.server)) {
-            res.json({ success: false });
-            return
-        }
-
         terminal.port = parseInt(req.query.port.toString());
         terminal.name = req.query.name.toString();
+        terminal.host = req.query.host.toString();
         terminal.save();
-        terminal.server.host = req.query.host.toString();
-        terminal.server.save();
 
         log('Changes succesfull');
         res.json({ success: true });
@@ -180,7 +174,6 @@ function init(config: Config) {
         if (req.user.admin) {
             const terminal = new TerminalModel();
             terminal.name = "Новый терминал";
-            terminal.server = req.query.server as any;
             terminal.host = '127.0.0.1'
             terminal.port = 20001
             await terminal.save()

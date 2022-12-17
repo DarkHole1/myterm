@@ -80,7 +80,6 @@ interface AllTerminalData {
     host?: string,
     port?: number,
     readonly: boolean,
-    serverName: string,
     comPort: number
 }
 
