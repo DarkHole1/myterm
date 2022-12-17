@@ -7,9 +7,14 @@ export class Folder {
 
     @prop({ ref: () => Terminal, default: [] })
     public terminals!: Ref<Terminal>[]
+
+    public getInfo(this: FolderModel) {
+        return {
+            id: this._id,
+            name: this.name
+        }
+    }
 }
 
 export const FolderModel = getModelForClass(Folder)
 export type FolderModel = DocumentType<Folder>
-
-console.log(FolderModel.schema.obj)

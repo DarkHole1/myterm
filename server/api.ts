@@ -6,9 +6,10 @@ import Config from './config';
 import { COMServerDocument, COMServerModel } from './models/com-server';
 import { TerminalModel } from './models/terminal';
 import { Condition } from 'mongodb';
-import { isDocument } from '@typegoose/typegoose';
+import { isDocument, isDocumentArray } from '@typegoose/typegoose';
 import { RoleModel } from './models/role';
 import { z } from 'zod';
+import { FolderModel } from './models/folder';
 
 const log = debug('app:api');
 
@@ -200,15 +201,27 @@ function init(config: Config) {
         res.json({ success: false })
     })
 
-    router.get('/comserver.list', async (req, res) => {
-        const servers = await COMServerModel.find();
-        res.json(servers.map(server => server.getInfo(req.user.admin)));
+    router.get('/folder.list', async (req, res) => {
+        const folders = await FolderModel.find()
+        res.json(folders.map(folder => folder.getInfo()))
     })
 
-    router.get('/comserver.terminals', async (req, res) => {
-        const terminals = await TerminalModel.find({
-            server: req.query.id as Condition<COMServerDocument>
-        }).populate('server')
+    router.get('/folder.terminals', async (req, res) => {
+        const QuerySchema = z.object({
+            id: z.string()
+        })
+
+        const parsedQuery = QuerySchema.safeParse(req.query)
+        if(!parsedQuery.success) {
+            return res.json([])
+        }
+
+        const folder = await FolderModel.findById(parsedQuery.data.id).populate('terminals')
+        if(!folder || !isDocumentArray(folder.terminals)) {
+            return res.json([])
+        }
+
+        const terminals = folder.terminals
 
         const role = req.user.role
         if (!role) {

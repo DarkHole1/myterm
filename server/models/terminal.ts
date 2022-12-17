@@ -14,6 +14,7 @@ export class Terminal {
     @prop({ required: true })
     public port!: number
 
+    /** @deprecated Don't use server, it's unstable */
     @prop({ ref: () => COMServer, required: true })
     public server!: Ref<COMServer>
 

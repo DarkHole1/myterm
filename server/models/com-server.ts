@@ -27,5 +27,7 @@ export class COMServer {
     }
 }
 
+/** @deprecated Use FolderModel instead */
 export type COMServerDocument = DocumentType<COMServer>
+/** @deprecated Use FolderModel instead */
 export const COMServerModel = getModelForClass(COMServer)
