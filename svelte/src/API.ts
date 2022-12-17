@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { readable, Subscriber, Writable, writable } from "svelte/store";
+import { Folders } from './api/folders';
 import { Roles } from './api/roles';
+import { Terminals } from './api/terminals';
 import { Users } from './api/users';
 
+/** @deprecated User Folders instead */
 class Servers {
     $store: Writable<Server[]> = writable([])
 
@@ -20,38 +23,6 @@ class Servers {
     }
 }
 
-class Terminals {
-    $store: Writable<Server[]> = writable([])
-    serverId: string
-
-    constructor(serverId: string) {
-        this.serverId = serverId
-        setTimeout(() => this.update(), 0)
-    }
-
-    async update() {
-        const { data } = await API.$api.get('/comserver.terminals', {
-            params: {
-                id: this.serverId
-            }
-        })
-        this.$store.set(data.map((terminal: any) => new Terminal(terminal, this)))
-    }
-
-    async create() {
-        const res = await API.$api.post('/terminal.add', null, {
-            params: {
-                server: this.serverId
-            }
-        })
-        await this.update()
-    }
-
-    subscribe(run: Subscriber<Server[]>) {
-        return this.$store.subscribe(run)
-    }
-}
-
 const dev = location.hostname == 'localhost' && location.port != "3000";
 
 const API = {
@@ -60,7 +31,8 @@ const API = {
         withCredentials: true
     }),
     users: new Users,
-    servers: new Servers,
+    folders: new Folders,
+    // servers: new Servers,
     roles: new Roles,
     isAdmin: false,
     loggedIn: false,
@@ -76,8 +48,9 @@ const API = {
         });
         if (res.data.success) {
             API.isAdmin = (await API.$api.get('/user.isAdmin')).data;
+            API.roles.update()
             API.users.update()
-            API.servers.update()
+            API.folders.update()
             API.loggedIn = true;
         }
         return res.data.success;
@@ -93,7 +66,8 @@ async function checkLogin() {
     try {
         API.isAdmin = (await API.$api.get('/user.isAdmin')).data
         API.users.update()
-        API.servers.update()
+        API.roles.update()
+        API.folders.update()
         API.loggedIn = true;
     } catch (e) {
         API.isAdmin = false;
@@ -104,6 +78,7 @@ async function checkLogin() {
 
 checkLogin();
 
+/** @deprecate Use Folder instead */
 class Server {
     parent: Servers
     terminals: Terminals
@@ -114,84 +89,6 @@ class Server {
         Object.assign(this, data)
         this.parent = parent
         this.terminals = new Terminals(this.id)
-    }
-}
-
-export class Terminal {
-    parent: Terminals
-    id!: string
-    editable!: boolean
-    host?: string
-    port?: number
-    name!: string
-
-    // TODO: Add validation
-    constructor(data: any, parent: Terminals) {
-        Object.assign(this, data)
-        this.parent = parent
-    }
-
-    public get canRestart(): boolean {
-        return true;
-    }
-
-    public get canEdit(): boolean {
-        return this.editable;
-    }
-
-
-    public get canChangePermissions(): boolean {
-        return this.editable;
-    }
-
-
-    async restart() {
-        await API.$api.post('/terminal.restart', null, {
-            params: { id: this.id }
-        })
-        await this.parent.update();
-    }
-
-    async update(data: { name?: string, host?: string, port?: string }) {
-        await API.$api.post('/terminal.update', null, {
-            params: {
-                id: this.id,
-                ...data
-            }
-        })
-        await this.parent.update();
-    }
-
-    async delete() {
-        await API.$api.delete('/terminal', {
-            params: {
-                id: this.id
-            }
-        })
-        await this.parent.update()
-    }
-
-    async getPermissions(): Promise<object> {
-        let res = await API.$api.get('/terminal.permissions', {
-            params: {
-                id: this.id
-            }
-        })
-        return res.data;
-    }
-
-    async setPermissions(permissions: object) {
-        // TODO: make shorter
-        const mappedPermissions = Object.fromEntries(await Promise.all(Object.entries(permissions).map(async ([k, v]): Promise<[any, any]> => ([(await API.roles.findOrCreate(k)).id, v]))))
-        await API.$api.post('/terminal.permissions', mappedPermissions, {
-            params: {
-                id: this.id
-            }
-        });
-    }
-
-    link() {
-        return `/terminal.html#${this.id}`;
     }
 }
 
