@@ -12,7 +12,7 @@
   import { edit, permissions, restart } from "../modals";
   import Action from "./Action.svelte";
 
-  export let terminalData;
+  export let terminalData: Terminal;
 
   function open() {
     window.open(terminalData.link(), "_blank");

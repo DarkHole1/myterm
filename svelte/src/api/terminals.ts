@@ -6,8 +6,10 @@ const RawTerminal = z.object({
     id: z.string(),
     name: z.string(),
     editable: z.boolean(),
+    readonly: z.boolean(),
     host: z.string().optional(),
-    port: z.number().int().optional()
+    port: z.number().int().optional(),
+    comPort: z.number().int()
 })
 type RawTerminal = z.infer<typeof RawTerminal>
 
@@ -16,15 +18,19 @@ export class Terminal implements RawTerminal {
     id: string
     name: string
     editable: boolean
+    readonly: boolean
     host?: string
     port?: number
+    comPort: number
 
     private constructor(data: RawTerminal, parent: Terminals) {
         this.id = data.id
         this.name = data.name
         this.editable = data.editable
+        this.readonly = data.readonly
         this.host = data.host
         this.port = data.port
+        this.comPort = data.comPort
         this.parent = parent
     }
 
