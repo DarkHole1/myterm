@@ -56,16 +56,9 @@ export class Terminal {
             port?: number,
             readonly: boolean,
             editable: boolean,
-            comPort: number,
-            serverName: string
+            comPort: number
         }
 
-        const hostAndServerName = isDocument(this.server) ? {
-            host: this.server.host,
-            serverName: this.server.name
-        } : {
-            host: '', serverName: ''
-        }
         let res : IResult = {
             id: this.id,
             name: this.name,
@@ -73,7 +66,7 @@ export class Terminal {
             readonly: false,
             editable: isAdmin,
             comPort: this.port - 20000,
-            ...hostAndServerName
+            host: this.host
         }
 
         if (!isAdmin) {
