@@ -3,9 +3,7 @@ import { UserDocument, UserModel } from './models/user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
-import { COMServerDocument, COMServerModel } from './models/com-server';
 import { TerminalModel } from './models/terminal';
-import { Condition } from 'mongodb';
 import { isDocument, isDocumentArray } from '@typegoose/typegoose';
 import { RoleModel } from './models/role';
 import { z } from 'zod';
@@ -373,8 +371,6 @@ function init(config: Config) {
         await user.delete()
         res.json({ success: true })
     })
-
-    router.use()
 
     return router;
 }
