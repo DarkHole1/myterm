@@ -7,6 +7,9 @@ export async function withConnection(url: string, target: () => Promise<void>) {
     log('Connecting to %o...', url)
     await mongoose.connect(url)
     log('Connected!')
-    await target()
-    await mongoose.disconnect()
+    try {
+        await target()
+    } finally {
+        await mongoose.disconnect()
+    }
 }
