@@ -1,6 +1,7 @@
 import { Readable, Subscriber, Unsubscriber, writable } from "svelte/store";
 import { z } from "zod";
 import API from "../API";
+import { Terminals } from "./terminals";
 
 const RawFolder = z.object({
     id: z.string(),
@@ -11,10 +12,12 @@ type RawFolder = z.infer<typeof RawFolder>
 export class Folder implements RawFolder {
     public id: string
     public name: string
+    public terminals: Terminals
 
     private constructor(data: RawFolder) {
         this.id = data.id
         this.name = data.name
+        this.terminals = new Terminals(this.id)
     }
 
     public static from(data: unknown) {
