@@ -12,7 +12,7 @@
 	import Topbar from "./components/Topbar.svelte";
 	import RolesCollapse from "./components/RolesCollapse.svelte";
 	import RenameModal from "./components/RenameModal .svelte";
-	const { servers, loading } = API;
+	const { folders, loading } = API;
 
 	function handleLogin() {
 		API.loggedIn = API.loggedIn;
@@ -33,7 +33,7 @@
 			<RolesCollapse />
 			<UsersCollapse />
 		{/if}
-		{#each $servers as server}
+		{#each $folders as server}
 			<ServerCollapse {server} />
 		{/each}
 		<RenameModal />

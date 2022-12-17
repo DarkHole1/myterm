@@ -8,6 +8,7 @@
     faUserLock,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
+  import type { Terminal } from "../api/terminals";
   import { edit, permissions, restart } from "../modals";
   import Action from "./Action.svelte";
 
@@ -18,8 +19,8 @@
   }
 
   async function deleteTerminal(e) {
-    e.stopPropagation()
-    await terminalData.delete()
+    e.stopPropagation();
+    await terminalData.delete();
   }
 </script>
 

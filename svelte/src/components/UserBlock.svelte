@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     faPencilAlt,
-    faTerminal,
     faTrashCan,
     faUser,
   } from "@fortawesome/free-solid-svg-icons";

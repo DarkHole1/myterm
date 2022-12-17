@@ -2,7 +2,7 @@
     import Button from "./Button.svelte";
     import { permissions as modalPermissions } from "../modals";
     import { onDestroy } from "svelte";
-    import type { Terminal } from "../API";
+    import type { Terminal } from "../api/terminals";
 
     function handleClick(success: boolean) {
         if (success && terminalInfo != null) {
