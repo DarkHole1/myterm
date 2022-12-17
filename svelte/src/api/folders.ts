@@ -35,7 +35,7 @@ export class Folders implements Readable<Folder[]> {
     }
 
     async update() {
-        const { data } = await API.$api.get<unknown>('/folders.list')
+        const { data } = await API.$api.get<unknown>('/folder.list')
         const folders = Folder.fromArray(data)
         this.folders = folders
         this.$store.set(folders)

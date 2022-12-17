@@ -8,6 +8,7 @@ import { isDocument, isDocumentArray } from '@typegoose/typegoose';
 import { RoleModel } from './models/role';
 import { z } from 'zod';
 import { FolderModel } from './models/folder';
+import rolesEndpoint from './api/roles';
 
 const log = debug('app:api');
 
@@ -371,6 +372,8 @@ function init(config: Config) {
         await user.delete()
         res.json({ success: true })
     })
+
+    router.use(rolesEndpoint(config))
 
     return router;
 }
