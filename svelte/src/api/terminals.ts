@@ -126,7 +126,7 @@ export class Terminals implements Readable<Terminal[]> {
     async create() {
         await API.$api.post('/terminal.add', null, {
             params: {
-                server: this.folderId
+                folder: this.folderId
             }
         })
         await this.update()
