@@ -198,6 +198,9 @@ function init(config: Config) {
             permissions: {}
         })
         await terminal.save()
+        
+        folder.terminals.push(terminal._id)
+        await folder.save()
         res.json({ success: true })
     })
 
