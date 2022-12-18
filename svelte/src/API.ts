@@ -5,24 +5,6 @@ import { Roles } from './api/roles';
 import { Terminals } from './api/terminals';
 import { Users } from './api/users';
 
-/** @deprecated User Folders instead */
-class Servers {
-    $store: Writable<Server[]> = writable([])
-
-    constructor() {
-        // setTimeout(() => this.update(), 0)
-    }
-
-    async update() {
-        const { data } = await API.$api.get('/comserver.list')
-        this.$store.set(data.map((server: any) => new Server(server, this)))
-    }
-
-    subscribe(run: Subscriber<Server[]>) {
-        return this.$store.subscribe(run)
-    }
-}
-
 const dev = location.hostname == 'localhost' && location.port != "3000";
 
 const API = {
@@ -77,19 +59,5 @@ async function checkLogin() {
 }
 
 checkLogin();
-
-/** @deprecate Use Folder instead */
-class Server {
-    parent: Servers
-    terminals: Terminals
-    id!: string
-
-    // TODO: Add validation
-    constructor(data: any, parent: Servers) {
-        Object.assign(this, data)
-        this.parent = parent
-        this.terminals = new Terminals(this.id)
-    }
-}
 
 export default API;
