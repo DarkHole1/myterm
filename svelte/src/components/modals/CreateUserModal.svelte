@@ -22,9 +22,11 @@
 
     function handleClick(success: boolean) {
         if(success) {
-            // TODO
-            API.users.create()
+            API.users.create({
+                name, role, password
+            })
         }
+        createUser.set(false)
     }
 </script>
 
@@ -44,8 +46,8 @@
                 <label for="password">Пароль</label>
                 <input type="password" id="password" bind:value={password} />
             </div>
-            <Button success>Создать</Button>
-            <Button>Отмена</Button>
+            <Button success on:click={() => handleClick(true)}>Создать</Button>
+            <Button on:click={() => handleClick(false)}>Отмена</Button>
         </div>
     </div>
 {/if}
