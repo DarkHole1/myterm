@@ -5,7 +5,9 @@ enum Reason {
     ValidationFailed = 'Каких-то параметров не хватает для работы или они имеют неправильный тип. Если вы видите эту ошибку, обратитесь к разработчику.',
     // Roles
     UserWithRole = 'Такая роль есть у какого-то пользователя.',
-    RoleNotFound = 'Роль не найдена.'
+    RoleNotFound = 'Указанная роль не найдена.',
+    // Folders
+    FolderNotFound = 'Указанная папка не найдена.'
 }
 
 export default Reason

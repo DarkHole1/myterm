@@ -175,6 +175,20 @@ function init(config: Config) {
         if (!req.user.admin) {
             return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
+
+        const RawQuery = z.object({
+            folder: z.string()
+        })
+
+        const parsedQuery = RawQuery.safeParse(req.query)
+        if(!parsedQuery.success) {
+            return res.json({ success: false, reason: Reason.ValidationFailed })
+        }
+
+        const folder = await FolderModel.findById(parsedQuery.data.folder)
+        if(!folder) {
+            return res.json({ success: false, reason: Reason.FolderNotFound })
+        }
         
         log('Creating new terminal')
         const terminal = new TerminalModel({
