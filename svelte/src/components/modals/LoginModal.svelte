@@ -2,8 +2,8 @@
     import { createEventDispatcher } from "svelte";
     import { fly } from "svelte/transition";
     import { FontAwesomeIcon } from "fontawesome-svelte";
-    import API from "../API";
-    import Button from "./Button.svelte";
+    import API from "../../API";
+    import Button from "../Button.svelte";
     import { faSync } from "@fortawesome/free-solid-svg-icons";
 
     const dispatch = createEventDispatcher();

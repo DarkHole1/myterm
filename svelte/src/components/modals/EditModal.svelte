@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Button from "./Button.svelte";
-    import { edit } from "../modals";
+    import Button from "../Button.svelte";
+    import { edit } from "../../modals";
     import { onDestroy } from "svelte";
 
     function handleClick(success: boolean) {

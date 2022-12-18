@@ -4,10 +4,10 @@
 	import API from "./API";
 	import UsersCollapse from "./components/UsersCollapse.svelte";
 	import UserModal from "./components/UserModal.svelte";
-	import RestartModal from "./components/RestartModal.svelte";
-	import EditModal from "./components/EditModal.svelte";
-	import PermissionsModal from "./components/PermissionsModal.svelte";
-	import LoginModal from "./components/LoginModal.svelte";
+	import RestartModal from "./components/modals/RestartModal.svelte";
+	import EditModal from "./components/modals/EditModal.svelte";
+	import PermissionsModal from "./components/modals/PermissionsModal.svelte";
+	import LoginModal from "./components/modals/LoginModal.svelte";
 	import Spinner from "./components/Spinner.svelte";
 	import Topbar from "./components/Topbar.svelte";
 	import RolesCollapse from "./components/RolesCollapse.svelte";

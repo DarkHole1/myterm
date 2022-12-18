@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Button from "./Button.svelte";
-    import { role } from "../modals";
+    import Button from "../Button.svelte";
+    import { role } from "../../modals";
     import { onDestroy } from "svelte";
-    import API from "../API";
-    import type { Role } from "../api/roles";
+    import API from "../../API";
+    import type { Role } from "../../api/roles";
 
     async function handleClick(success: boolean) {
         if (success && oldRole != null) {
