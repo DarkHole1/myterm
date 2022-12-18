@@ -17,6 +17,7 @@ class User {
     @prop({ required: true })
     public password!: string
 
+    /** @deprecated Use folders api instead */
     @prop({ type: () => [TerminalInfo], default: [] })
     public terminals!: TerminalInfo[]
 

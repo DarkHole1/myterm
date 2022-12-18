@@ -9,6 +9,7 @@ import { RoleModel } from './models/role';
 import { z } from 'zod';
 import { FolderModel } from './models/folder';
 import rolesEndpoint from './api/roles';
+import { usersEndpoint } from './api/users';
 
 const log = debug('app:api');
 
@@ -228,143 +229,7 @@ function init(config: Config) {
         res.json(visible.map(term => term.getInfo(req.user.admin, role)));
     })
 
-    router.get('/user.isAdmin', (req, res) => {
-        if (!req.user) {
-            res.status(401);
-            res.end();
-            return;
-        }
-        res.json(req.user.admin);
-    })
-
-    router.get('/user.list', async (req, res) => {
-        if (!req.user.admin) {
-            return res.json([]);
-        }
-
-        log('Starting getting users')
-        const users = await UserModel.find().populate('role')
-        const mapped = users.map(({ id, role, name }) => {
-            if (isDocument(role)) {
-                // Bug in typecheck?
-                return { id, role: (role as any).name, name }
-            }
-            return { id, role, name }
-        });
-        log("Users: %o", mapped);
-        res.json(mapped);
-        return;
-    })
-
-    router.post('/user.update', express.json(), async (req, res) => {
-        if (!req.query.id || !req.user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        const Body = z.object({
-            role: z.string().regex(/[0-9a-f]{24}/i),
-            password: z.string()
-        }).partial()
-        type Body = z.infer<typeof Body>
-        
-        log("Trying to parse changes %o", req.body)
-        const bodyParsedResult = Body.safeParse(req.body)
-        if(!bodyParsedResult.success) {
-            return res.json({ success: false })
-        }
-
-        const bodyParsed = bodyParsedResult.data
-
-        log('Trying change user %s', req.query.id)
-        const user = await UserModel.findById(req.query.id.toString())
-
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        log("Changes: %o", req.body);
-        if(bodyParsed.password) {
-            user.password = bodyParsed.password
-        }
-        if(bodyParsed.role) {
-            user.role = bodyParsed.role
-        }
-        await user.save();
-        log('Changes in user succesfull');
-        res.json({ success: true });
-    })
-
-    router.post('/user.login', express.json(), async (req, res) => {
-        // console.log("%o", UserModel.schema)
-        const user = await UserModel.findOne({
-            name: req.body.name,
-            password: req.body.password
-        })
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        res.cookie('name', req.body.name, {
-            sameSite: 'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.cookie('password', req.body.password, {
-            sameSite: 'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.json({ success: true })
-    })
-
-    router.post('/user.logout', async (req, res) => {
-        res.clearCookie('name', {
-            sameSite: 'none', secure: true
-        });
-        res.clearCookie('password', {
-            sameSite: 'none', secure: true
-        });
-        res.end();
-    })
-
-    router.post('/user.add', async (req, res) => {
-        log('Creating user')
-        if (req.user.admin) {
-            const user = new UserModel();
-            user.name = "Новый пользователь";
-            user.password = 'P@ssw0rd';
-            await user.save();
-            res.json({ success: true })
-            return
-        }
-        res.json({ success: false })
-    })
-
-    router.delete('/user', async (req, res) => {
-        if (!req.user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        log('Deleting user')
-        const user = await UserModel.findById(req.query.id)
-
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        if (user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        await user.delete()
-        res.json({ success: true })
-    })
+    router.use(usersEndpoint(config))
 
     router.use(rolesEndpoint(config))
 
