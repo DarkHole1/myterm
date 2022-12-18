@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Button from "./Button.svelte";
-    import { user } from "../modals";
+    import Button from "../Button.svelte";
+    import { user } from "../../modals";
     import { onDestroy } from "svelte";
-    import type { User } from "../api/users";
-    import API from "../API";
+    import type { User } from "../../api/users";
+    import API from "../../API";
 
     async function handleClick(success: boolean) {
         if (success && userInfo != null) {
