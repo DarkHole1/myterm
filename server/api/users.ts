@@ -130,6 +130,7 @@ export function usersEndpoint(config: Config) {
 
         const parsedOptions = RawOptions.safeParse(req.body)
         if(!parsedOptions.success) {
+            log(parsedOptions.error)
             return res.json({ success: false, reason: Reason.ValidationFailed })
         }
 

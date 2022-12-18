@@ -24,7 +24,7 @@ export class Users implements Readable<User[]> {
         const role = await API.roles.findOrCreate(options.role)
         const { data } = await API.$api.post<unknown>('/user.add', {
             name: options.name,
-            role,
+            role: role.id,
             password: options.password,
             admin: options.admin
         })
