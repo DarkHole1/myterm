@@ -1,26 +1,46 @@
 <script lang="ts">
     import Button from "../Button.svelte";
+    import { createUser } from "../../modals";
+    import { onDestroy } from "svelte";
+
+    let enabled = false;
+    let name = "";
+    let password = "";
+    let role = "";
+
+    const unsubscribe = createUser.subscribe((value) => {
+        enabled = value;
+        if (enabled) {
+            name = "Новый пользователь";
+            role = "";
+            password = "";
+        }
+    });
+
+    onDestroy(unsubscribe);
 </script>
 
-<div class="modal-container">
-    <div class="modal-content">
-        <div class="title">Создание нового пользователя</div>
-        <div class="pair">
-            <label for="name">Имя</label>
-            <input type="text" id="name" />
+{#if enabled}
+    <div class="modal-container">
+        <div class="modal-content">
+            <div class="title">Создание нового пользователя</div>
+            <div class="pair">
+                <label for="name">Имя</label>
+                <input type="text" id="name" bind:value={name} />
+            </div>
+            <div class="pair">
+                <label for="role">Роль</label>
+                <input type="text" id="role" bind:value={role} />
+            </div>
+            <div class="pair">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" bind:value={password} />
+            </div>
+            <Button success>Создать</Button>
+            <Button>Отмена</Button>
         </div>
-        <div class="pair">
-            <label for="role">Роль</label>
-            <input type="text" id="role" />
-        </div>
-        <div class="pair">
-            <label for="password">Пароль</label>
-            <input type="password" id="password" />
-        </div>
-        <Button success>Создать</Button>
-        <Button>Отмена</Button>
     </div>
-</div>
+{/if}
 
 <style>
     .title {
