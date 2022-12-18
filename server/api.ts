@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { FolderModel } from './models/folder';
 import rolesEndpoint from './api/roles';
 import { usersEndpoint } from './api/users';
+import Reason from './api/reasons';
 
 const log = debug('app:api');
 
@@ -171,17 +172,19 @@ function init(config: Config) {
     })
 
     router.post('/terminal.add', async (req, res) => {
-        log('Creating new terminal')
-        if (req.user.admin) {
-            const terminal = new TerminalModel();
-            terminal.name = "Новый терминал";
-            terminal.host = '127.0.0.1'
-            terminal.port = 20001
-            await terminal.save()
-            res.json({ success: true })
-            return
+        if (!req.user.admin) {
+            return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
-        res.json({ success: false })
+        
+        log('Creating new terminal')
+        const terminal = new TerminalModel({
+            name: "Новый терминал",
+            host: "127.0.0.1",
+            port: 20001,
+            permissions: {}
+        })
+        await terminal.save()
+        res.json({ success: true })
     })
 
     router.delete('/terminal', async (req, res) => {
