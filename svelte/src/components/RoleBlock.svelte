@@ -1,12 +1,5 @@
 <script lang="ts">
-  import {
-    faPencilAlt,
-    faShield,
-    faShieldAlt,
-    faTerminal,
-    faTrashCan,
-    faUser,
-  } from "@fortawesome/free-solid-svg-icons";
+  import { faPencilAlt, faShield } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
   import { role as roleModal } from "../modals";

@@ -1,0 +1,1 @@
+declare module 'fontawesome-svelte';

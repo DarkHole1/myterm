@@ -18,7 +18,7 @@
     window.open(terminalData.link(), "_blank");
   }
 
-  async function deleteTerminal(e) {
+  async function deleteTerminal(e: Event) {
     e.stopPropagation();
     await terminalData.delete();
   }

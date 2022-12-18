@@ -61,7 +61,7 @@ export class Terminal implements RawTerminal {
         await this.parent.update();
     }
 
-    async update(data: { name?: string, host?: string, port?: string }) {
+    async update(data: { name?: string, host?: string, port?: number }) {
         await API.$api.post('/terminal.update', null, {
             params: {
                 id: this.id,

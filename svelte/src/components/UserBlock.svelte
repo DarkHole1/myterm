@@ -7,15 +7,16 @@
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
   import { user as userModal } from "../modals";
+  import type { User } from "../api/users";
 
-  export let user;
+  export let user: User;
 
   function handleEdit() {
     userModal.set(user);
   }
 
   async function deleteUser() {
-    await user.delete()
+    await user.delete();
   }
 </script>
 

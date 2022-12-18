@@ -2,9 +2,10 @@
     import Button from "../Button.svelte";
     import { edit } from "../../modals";
     import { onDestroy } from "svelte";
+    import type { Terminal } from "../../api/terminals";
 
     function handleClick(success: boolean) {
-        if (success) {
+        if (success && terminalInfo) {
             const res = {
                 host, port, name
             };
@@ -13,7 +14,7 @@
         edit.set(null);
     }
 
-    let terminalInfo;
+    let terminalInfo: Terminal | null;
     let host = "";
     let port = 0;
     let name = "";
