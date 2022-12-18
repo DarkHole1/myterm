@@ -1,6 +1,7 @@
 import { Readable, Subscriber, writable } from "svelte/store"
-import { string, z } from "zod"
+import { z } from "zod"
 import API from "../API"
+import { EmptyResult } from "./helpers/result"
 
 export class Users implements Readable<User[]> {
     $store = writable<User[]>([])
@@ -14,9 +15,22 @@ export class Users implements Readable<User[]> {
         this.$store.set(User.fromArray(data, this))
     }
 
-    async create() {
-        const res = await API.$api.post('/user.add')
+    async create(options: {
+        name: string,
+        role: string,
+        password: string,
+        admin?: boolean
+    }) {
+        const role = await API.roles.findOrCreate(options.role)
+        const { data } = await API.$api.post<unknown>('/user.add', {
+            name: options.name,
+            role,
+            password: options.password,
+            admin: options.admin
+        })
+        const res = EmptyResult.parse(data)
         await this.update()
+        return res
     }
 
     subscribe(run: Subscriber<User[]>) {
