@@ -2,6 +2,7 @@
     import Button from "../Button.svelte";
     import { createUser } from "../../modals";
     import { onDestroy } from "svelte";
+    import API from "../../API";
 
     let enabled = false;
     let name = "";
@@ -18,6 +19,13 @@
     });
 
     onDestroy(unsubscribe);
+
+    function handleClick(success: boolean) {
+        if(success) {
+            // TODO
+            API.users.create()
+        }
+    }
 </script>
 
 {#if enabled}
