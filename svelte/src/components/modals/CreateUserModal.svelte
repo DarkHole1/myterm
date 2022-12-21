@@ -1,32 +1,34 @@
 <script lang="ts">
     import Button from "../Button.svelte";
-    import { createUser } from "../../modals";
-    import { onDestroy } from "svelte";
     import API from "../../API";
+    import { events } from "../../events";
+    import { FontAwesomeIcon } from "fontawesome-svelte";
+    import { faSync } from "@fortawesome/free-solid-svg-icons";
 
     let enabled = false;
     let name = "";
     let password = "";
     let role = "";
+    let loading = false;
 
-    const unsubscribe = createUser.subscribe((value) => {
-        enabled = value;
-        if (enabled) {
-            name = "Новый пользователь";
-            role = "";
-            password = "";
-        }
+    events.on("createUser", () => {
+        enabled = true;
+        name = "Новый пользователь";
+        password = "";
+        role = "";
     });
 
-    onDestroy(unsubscribe);
-
-    function handleClick(success: boolean) {
-        if(success) {
-            API.users.create({
-                name, role, password
-            })
+    async function handleClick(success: boolean) {
+        if (success) {
+            loading = true;
+            await API.users.create({
+                name,
+                role,
+                password,
+            });
+            loading = false;
         }
-        createUser.set(false)
+        enabled = false;
     }
 </script>
 
@@ -36,17 +38,37 @@
             <div class="title">Создание нового пользователя</div>
             <div class="pair">
                 <label for="name">Имя</label>
-                <input type="text" id="name" bind:value={name} />
+                <input
+                    type="text"
+                    id="name"
+                    bind:value={name}
+                    disabled={loading}
+                />
             </div>
             <div class="pair">
                 <label for="role">Роль</label>
-                <input type="text" id="role" bind:value={role} />
+                <input
+                    type="text"
+                    id="role"
+                    bind:value={role}
+                    disabled={loading}
+                />
             </div>
             <div class="pair">
                 <label for="password">Пароль</label>
-                <input type="password" id="password" bind:value={password} />
+                <input
+                    type="password"
+                    id="password"
+                    bind:value={password}
+                    disabled={loading}
+                />
             </div>
-            <Button success on:click={() => handleClick(true)}>Создать</Button>
+            <Button success on:click={() => handleClick(true)}>
+                Создать
+                {#if loading}
+                    <FontAwesomeIcon icon={faSync} spin />
+                {/if}
+            </Button>
             <Button on:click={() => handleClick(false)}>Отмена</Button>
         </div>
     </div>

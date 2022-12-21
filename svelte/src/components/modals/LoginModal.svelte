@@ -10,18 +10,21 @@
     let user = "";
     let password = "";
     let message: string | null = null;
-    enum Status { Waiting, Logging }
-    let status = Status.Waiting
+    enum Status {
+        Waiting,
+        Logging,
+    }
+    let status = Status.Waiting;
 
     async function handleClick() {
-        status = Status.Logging
-        message = null
+        status = Status.Logging;
+        message = null;
         const success = await API.login(user, password);
-        status = Status.Waiting
-        if(success) {
+        status = Status.Waiting;
+        if (success) {
             dispatch("login", { user, password });
         } else {
-            message = 'Не получилось войти. Попробуйте ещё раз'
+            message = "Не получилось войти. Попробуйте ещё раз";
         }
     }
 </script>

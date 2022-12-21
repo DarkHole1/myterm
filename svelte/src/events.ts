@@ -25,7 +25,7 @@ export const events = {
         eventHandlers[event]!.push(handler)
     },
     dispatch<T extends keyof Events>(event: T, ...values: Parameters<Events[T]>) {
-        const handlers = eventHandlers[event]
+        const handlers: Events[T][] | undefined = eventHandlers[event]
         if (!handlers) return
         for (const handler of handlers) {
             // @ts-ignore: TypeScript forgots type of values 😢
