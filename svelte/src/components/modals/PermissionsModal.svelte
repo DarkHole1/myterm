@@ -1,10 +1,6 @@
 <script lang="ts">
     import Button from "../Button.svelte";
-    import { permissions as modalPermissions } from "../../modals";
-    import { onDestroy } from "svelte";
     import type { Terminal } from "../../api/terminals";
-    import { FontAwesomeIcon } from "fontawesome-svelte";
-    import { faSync } from "@fortawesome/free-solid-svg-icons";
     import Loading from "../helpers/Loading.svelte";
     import { events } from "../../events";
 

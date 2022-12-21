@@ -1,7 +1,5 @@
 <script lang="ts">
     import Button from "../Button.svelte";
-    import { role } from "../../modals";
-    import { onDestroy } from "svelte";
     import API from "../../API";
     import type { Role } from "../../api/roles";
     import Loading from "../helpers/Loading.svelte";
@@ -9,21 +7,21 @@
 
     const handleClick = (success: boolean) => async () => {
         if (success && oldRole != null) {
-            loading = true
+            loading = true;
             await API.roles.rename(oldRole, newName);
-            loading = false
+            loading = false;
         }
-        role.set(null);
-    }
+        oldRole = null;
+    };
 
     let oldRole: Role | null = null;
     let newName = "";
-    let loading = false
+    let loading = false;
 
-    events.on('renameRole', (role) => {
+    events.on("renameRole", (role) => {
         oldRole = role;
         newName = "";
-    })
+    });
 </script>
 
 {#if oldRole}
@@ -40,7 +38,9 @@
                     disabled={loading}
                 />
             </div>
-            <Button danger on:click={handleClick(true)}>Отправить <Loading {loading} /></Button>
+            <Button danger on:click={handleClick(true)}
+                >Отправить <Loading {loading} /></Button
+            >
             <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>

@@ -6,13 +6,13 @@
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
-  import { user as userModal } from "../modals";
   import type { User } from "../api/users";
+  import { events } from "../events";
 
   export let user: User;
 
   function handleEdit() {
-    userModal.set(user);
+    events.dispatch("changeUser", user);
   }
 
   async function deleteUser() {

@@ -6,8 +6,7 @@
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import API from "../API";
-  import { createUser } from "../modals";
-    import { events } from "../events";
+  import { events } from "../events";
 
   let show = false;
   const rotation = tweened(0, {
@@ -18,8 +17,7 @@
   const { users } = API;
 
   async function newUser() {
-    // createUser.set(true);
-    events.dispatch('createUser')
+    events.dispatch("createUser");
   }
 </script>
 
