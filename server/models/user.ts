@@ -17,6 +17,7 @@ class User {
     @prop({ required: true })
     public password!: string
 
+    /** @deprecated Use folders api instead */
     @prop({ type: () => [TerminalInfo], default: [] })
     public terminals!: TerminalInfo[]
 
@@ -24,14 +25,13 @@ class User {
         return this
             .findOne(creds.getCredentials())
             .populate({
-                path: 'terminals.terminal',
-                populate: 'server'
+                path: 'terminals.terminal'
             })
             .exec()
     }
 
     public async getTerminalById(this: DocumentType<User>, id: ObjectId | string) {
-        let terminal = await TerminalModel.findById(id).populate('server');
+        let terminal = await TerminalModel.findById(id);
 
         if (!terminal) {
             return null
@@ -80,7 +80,6 @@ interface AllTerminalData {
     host?: string,
     port?: number,
     readonly: boolean,
-    serverName: string,
     comPort: number
 }
 

@@ -3,16 +3,17 @@
 	import ServerCollapse from "./components/ServerCollapse.svelte";
 	import API from "./API";
 	import UsersCollapse from "./components/UsersCollapse.svelte";
-	import UserModal from "./components/UserModal.svelte";
-	import RestartModal from "./components/RestartModal.svelte";
-	import EditModal from "./components/EditModal.svelte";
-	import PermissionsModal from "./components/PermissionsModal.svelte";
-	import LoginModal from "./components/LoginModal.svelte";
+	import UserModal from "./components/modals/UserModal.svelte";
+	import RestartModal from "./components/modals/RestartModal.svelte";
+	import EditModal from "./components/modals/EditModal.svelte";
+	import PermissionsModal from "./components/modals/PermissionsModal.svelte";
+	import LoginModal from "./components/modals/LoginModal.svelte";
 	import Spinner from "./components/Spinner.svelte";
 	import Topbar from "./components/Topbar.svelte";
 	import RolesCollapse from "./components/RolesCollapse.svelte";
-	import RenameModal from "./components/RenameModal .svelte";
-	const { servers, loading } = API;
+	import RenameModal from "./components/modals/RenameModal.svelte";
+    import CreateUserModal from "./components/modals/CreateUserModal.svelte";
+	const { folders, loading } = API;
 
 	function handleLogin() {
 		API.loggedIn = API.loggedIn;
@@ -33,7 +34,7 @@
 			<RolesCollapse />
 			<UsersCollapse />
 		{/if}
-		{#each $servers as server}
+		{#each $folders as server}
 			<ServerCollapse {server} />
 		{/each}
 		<RenameModal />
@@ -41,12 +42,12 @@
 		<RestartModal />
 		<EditModal />
 		<PermissionsModal />
+		<CreateUserModal />
 	{/if}
 </Container>
 
 <style>
 	@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
-	/* @import url("https://use.fontawesome.com/releases/v5.15.3/css/all.css"); */
 
 	:root {
 		--background-color: #161616;

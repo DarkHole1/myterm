@@ -1,14 +1,12 @@
 <script lang="ts">
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import {
-    faCaretRight,
-    faPlus,
-  } from "@fortawesome/free-solid-svg-icons";
+  import { faCaretRight, faPlus } from "@fortawesome/free-solid-svg-icons";
   import UserBlock from "./UserBlock.svelte";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import API from "../API";
+  import { events } from "../events";
 
   let show = false;
   const rotation = tweened(0, {
@@ -19,7 +17,7 @@
   const { users } = API;
 
   async function newUser() {
-    await users.create();
+    events.dispatch("createUser");
   }
 </script>
 

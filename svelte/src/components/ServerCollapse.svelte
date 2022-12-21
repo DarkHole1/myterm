@@ -1,13 +1,16 @@
 <script lang="ts">
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import { faCaretRight, faCaretDown, faPlug, faPlus } from "@fortawesome/free-solid-svg-icons";
+  import {
+    faCaretRight,
+    faPlus,
+  } from "@fortawesome/free-solid-svg-icons";
   import TerminalBlock from "./TerminalBlock.svelte";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
-  // import type { Terminal } from "../API";
+  import type { Folder } from "../api/folders";
 
-  export let server;
+  export let server: Folder;
   let show = false;
   const rotation = tweened(0, {
     duration: 400,
@@ -17,7 +20,7 @@
   const { terminals } = server;
 
   async function newTerminal() {
-    await terminals.create()
+    await terminals.create();
   }
 </script>
 
@@ -35,11 +38,8 @@
     />
     <span class="text">
       {server.name}
-      {#if server.host}
-        <span>({server.host})</span>
-      {/if}
     </span>
-    <div class="gap"></div>
+    <div class="gap" />
     <span class="new-terminal" on:click|stopPropagation={newTerminal}>
       <span>Новый терминал</span>
       <FontAwesomeIcon icon={faPlus} transform="shrink-2 down-1" />

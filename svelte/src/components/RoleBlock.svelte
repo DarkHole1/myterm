@@ -1,21 +1,14 @@
 <script lang="ts">
-  import {
-    faPencilAlt,
-    faShield,
-    faShieldAlt,
-    faTerminal,
-    faTrashCan,
-    faUser,
-  } from "@fortawesome/free-solid-svg-icons";
+  import { faPencilAlt, faShield } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import Action from "./Action.svelte";
-  import { role as roleModal } from "../modals";
   import type { Role } from "../api/roles";
+  import { events } from "../events";
 
   export let role: Role;
 
   function handleEdit() {
-    roleModal.set(role);
+    events.dispatch("renameRole", role);
   }
 </script>
 

@@ -1,8 +1,9 @@
 <script lang="ts">
+    import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
     import { FontAwesomeIcon } from 'fontawesome-svelte';
 
     export let danger = false;
-    export let icon;
+    export let icon: IconDefinition;
 </script>
 
 <button on:click class:danger>

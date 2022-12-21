@@ -14,9 +14,6 @@ export class Terminal {
     @prop({ required: true })
     public port!: number
 
-    @prop({ ref: () => COMServer, required: true })
-    public server!: Ref<COMServer>
-
     @prop()
     public comPort?: number
 
@@ -24,26 +21,12 @@ export class Terminal {
     public permissions!: Map<string, Permission>
 
     public getData(this: DocumentType<Terminal>): AllTerminalData {
-        const partial = {
+        return {
             id: this.id,
             name: this.name,
+            host: this.host,
             port: this.port,
             comPort: this.port - 20000,
-        }
-        
-        if (isDocument(this.server)) {
-            return {
-                host: this.server.host,
-                serverName: this.server.name,
-                ...partial
-            }
-        }
-
-        // This is unreal case probably
-        // At least it should 🤔
-        return {
-            host: '', serverName: '',
-            ...partial
         }
     }
 
@@ -55,16 +38,9 @@ export class Terminal {
             port?: number,
             readonly: boolean,
             editable: boolean,
-            comPort: number,
-            serverName: string
+            comPort: number
         }
 
-        const hostAndServerName = isDocument(this.server) ? {
-            host: this.server.host,
-            serverName: this.server.name
-        } : {
-            host: '', serverName: ''
-        }
         let res : IResult = {
             id: this.id,
             name: this.name,
@@ -72,7 +48,7 @@ export class Terminal {
             readonly: false,
             editable: isAdmin,
             comPort: this.port - 20000,
-            ...hostAndServerName
+            host: this.host
         }
 
         if (!isAdmin) {
@@ -113,7 +89,6 @@ interface AllTerminalData {
     name: string,
     host: string,
     port: number,
-    serverName: string,
     comPort: number
 }
 

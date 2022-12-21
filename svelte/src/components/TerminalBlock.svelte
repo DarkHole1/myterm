@@ -8,18 +8,19 @@
     faUserLock,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import { edit, permissions, restart } from "../modals";
+  import type { Terminal } from "../api/terminals";
+  import { events } from "../events";
   import Action from "./Action.svelte";
 
-  export let terminalData;
+  export let terminalData: Terminal;
 
   function open() {
     window.open(terminalData.link(), "_blank");
   }
 
-  async function deleteTerminal(e) {
-    e.stopPropagation()
-    await terminalData.delete()
+  async function deleteTerminal(e: Event) {
+    e.stopPropagation();
+    await terminalData.delete();
   }
 </script>
 
@@ -40,8 +41,8 @@
       <Action
         icon={faPencilAlt}
         on:click={(e) => {
-          $edit = terminalData;
           e.stopPropagation();
+          events.dispatch("editTerminal", terminalData);
         }}
       />
     {/if}
@@ -49,8 +50,8 @@
       <Action
         icon={faUserLock}
         on:click={(e) => {
-          $permissions = terminalData;
           e.stopPropagation();
+          events.dispatch("changeTerminalPermissions", terminalData);
         }}
       />
     {/if}
@@ -62,8 +63,8 @@
         icon={faUndo}
         danger
         on:click={(e) => {
-          $restart = terminalData;
           e.stopPropagation();
+          events.dispatch("restartTerminal", terminalData);
         }}
       />
     {/if}

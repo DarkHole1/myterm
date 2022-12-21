@@ -3,12 +3,14 @@ import { UserDocument, UserModel } from './models/user';
 import debug from 'debug';
 import SocketManager from './socket-manager';
 import Config from './config';
-import { COMServerDocument, COMServerModel } from './models/com-server';
 import { TerminalModel } from './models/terminal';
-import { Condition } from 'mongodb';
-import { isDocument } from '@typegoose/typegoose';
+import { isDocument, isDocumentArray } from '@typegoose/typegoose';
 import { RoleModel } from './models/role';
 import { z } from 'zod';
+import { FolderModel } from './models/folder';
+import rolesEndpoint from './api/roles';
+import { usersEndpoint } from './api/users';
+import Reason from './api/reasons';
 
 const log = debug('app:api');
 
@@ -49,16 +51,10 @@ function init(config: Config) {
 
         const { terminal } = terminalInfo;
 
-        if (!isDocument(terminal.server)) {
-            res.json({ success: false });
-            return
-        }
-
         terminal.port = parseInt(req.query.port.toString());
         terminal.name = req.query.name.toString();
+        terminal.host = req.query.host.toString();
         terminal.save();
-        terminal.server.host = req.query.host.toString();
-        terminal.server.save();
 
         log('Changes succesfull');
         res.json({ success: true });
@@ -176,18 +172,36 @@ function init(config: Config) {
     })
 
     router.post('/terminal.add', async (req, res) => {
-        log('Creating new terminal')
-        if (req.user.admin) {
-            const terminal = new TerminalModel();
-            terminal.name = "Новый терминал";
-            terminal.server = req.query.server as any;
-            terminal.host = '127.0.0.1'
-            terminal.port = 20001
-            await terminal.save()
-            res.json({ success: true })
-            return
+        if (!req.user.admin) {
+            return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
-        res.json({ success: false })
+
+        const RawQuery = z.object({
+            folder: z.string()
+        })
+
+        const parsedQuery = RawQuery.safeParse(req.query)
+        if(!parsedQuery.success) {
+            return res.json({ success: false, reason: Reason.ValidationFailed })
+        }
+
+        const folder = await FolderModel.findById(parsedQuery.data.folder)
+        if(!folder) {
+            return res.json({ success: false, reason: Reason.FolderNotFound })
+        }
+        
+        log('Creating new terminal')
+        const terminal = new TerminalModel({
+            name: "Новый терминал",
+            host: "127.0.0.1",
+            port: 20001,
+            permissions: {}
+        })
+        await terminal.save()
+        
+        folder.terminals.push(terminal._id)
+        await folder.save()
+        res.json({ success: true })
     })
 
     router.delete('/terminal', async (req, res) => {
@@ -200,15 +214,27 @@ function init(config: Config) {
         res.json({ success: false })
     })
 
-    router.get('/comserver.list', async (req, res) => {
-        const servers = await COMServerModel.find();
-        res.json(servers.map(server => server.getInfo(req.user.admin)));
+    router.get('/folder.list', async (req, res) => {
+        const folders = await FolderModel.find()
+        res.json(folders.map(folder => folder.getInfo()))
     })
 
-    router.get('/comserver.terminals', async (req, res) => {
-        const terminals = await TerminalModel.find({
-            server: req.query.id as Condition<COMServerDocument>
-        }).populate('server')
+    router.get('/folder.terminals', async (req, res) => {
+        const QuerySchema = z.object({
+            id: z.string()
+        })
+
+        const parsedQuery = QuerySchema.safeParse(req.query)
+        if(!parsedQuery.success) {
+            return res.json([])
+        }
+
+        const folder = await FolderModel.findById(parsedQuery.data.id).populate('terminals')
+        if(!folder || !isDocumentArray(folder.terminals)) {
+            return res.json([])
+        }
+
+        const terminals = folder.terminals
 
         const role = req.user.role
         if (!role) {
@@ -223,145 +249,9 @@ function init(config: Config) {
         res.json(visible.map(term => term.getInfo(req.user.admin, role)));
     })
 
-    router.get('/user.isAdmin', (req, res) => {
-        if (!req.user) {
-            res.status(401);
-            res.end();
-            return;
-        }
-        res.json(req.user.admin);
-    })
+    router.use(usersEndpoint(config))
 
-    router.get('/user.list', async (req, res) => {
-        if (!req.user.admin) {
-            return res.json([]);
-        }
-
-        log('Starting getting users')
-        const users = await UserModel.find().populate('role')
-        const mapped = users.map(({ id, role, name }) => {
-            if (isDocument(role)) {
-                // Bug in typecheck?
-                return { id, role: (role as any).name, name }
-            }
-            return { id, role, name }
-        });
-        log("Users: %o", mapped);
-        res.json(mapped);
-        return;
-    })
-
-    router.post('/user.update', express.json(), async (req, res) => {
-        if (!req.query.id || !req.user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        const Body = z.object({
-            role: z.string().regex(/[0-9a-f]{24}/i),
-            password: z.string()
-        }).partial()
-        type Body = z.infer<typeof Body>
-        
-        log("Trying to parse changes %o", req.body)
-        const bodyParsedResult = Body.safeParse(req.body)
-        if(!bodyParsedResult.success) {
-            return res.json({ success: false })
-        }
-
-        const bodyParsed = bodyParsedResult.data
-
-        log('Trying change user %s', req.query.id)
-        const user = await UserModel.findById(req.query.id.toString())
-
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        log("Changes: %o", req.body);
-        if(bodyParsed.password) {
-            user.password = bodyParsed.password
-        }
-        if(bodyParsed.role) {
-            user.role = bodyParsed.role
-        }
-        await user.save();
-        log('Changes in user succesfull');
-        res.json({ success: true });
-    })
-
-    router.post('/user.login', express.json(), async (req, res) => {
-        // console.log("%o", UserModel.schema)
-        const user = await UserModel.findOne({
-            name: req.body.name,
-            password: req.body.password
-        })
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        res.cookie('name', req.body.name, {
-            sameSite: 'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.cookie('password', req.body.password, {
-            sameSite: 'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.json({ success: true })
-    })
-
-    router.post('/user.logout', async (req, res) => {
-        res.clearCookie('name', {
-            sameSite: 'none', secure: true
-        });
-        res.clearCookie('password', {
-            sameSite: 'none', secure: true
-        });
-        res.end();
-    })
-
-    router.post('/user.add', async (req, res) => {
-        log('Creating user')
-        if (req.user.admin) {
-            const user = new UserModel();
-            user.name = "Новый пользователь";
-            user.password = 'P@ssw0rd';
-            await user.save();
-            res.json({ success: true })
-            return
-        }
-        res.json({ success: false })
-    })
-
-    router.delete('/user', async (req, res) => {
-        if (!req.user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        log('Deleting user')
-        const user = await UserModel.findById(req.query.id)
-
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        if (user.admin) {
-            res.json({ success: false })
-            return
-        }
-
-        await user.delete()
-        res.json({ success: true })
-    })
-
-    router.use()
+    router.use(rolesEndpoint(config))
 
     return router;
 }

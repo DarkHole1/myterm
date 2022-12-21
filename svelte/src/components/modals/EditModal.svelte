@@ -1,33 +1,38 @@
 <script lang="ts">
-    import Button from "./Button.svelte";
-    import { edit } from "../modals";
-    import { onDestroy } from "svelte";
+    import Button from "../Button.svelte";
+    import { edit } from "../../modals";
+    import type { Terminal } from "../../api/terminals";
+    import { events } from "../../events";
+    import { FontAwesomeIcon } from "fontawesome-svelte";
+    import { faSync } from "@fortawesome/free-solid-svg-icons";
+    import Loading from "../helpers/Loading.svelte";
 
-    function handleClick(success: boolean) {
-        if (success) {
+    const handleClick = (success: boolean) => async () => {
+        if (success && terminalInfo) {
             const res = {
-                host, port, name
+                host,
+                port,
+                name,
             };
-            terminalInfo.update(res);
+            loading = true;
+            await terminalInfo.update(res);
+            loading = false;
         }
-        edit.set(null);
-    }
+        terminalInfo = null;
+    };
 
-    let terminalInfo;
+    let loading = false;
+    let terminalInfo: Terminal | null;
     let host = "";
     let port = 0;
     let name = "";
 
-    const unsubscribe = edit.subscribe(terminal => {
+    events.on("editTerminal", (terminal) => {
         terminalInfo = terminal;
-        if (terminal != null) {
-            host = terminal.host ?? '';
-            port = terminal.port ?? 0;
-            name = terminal.name;
-        }
+        host = terminal.host ?? "";
+        port = terminal.port ?? 0;
+        name = terminal.name;
     });
-
-    onDestroy(unsubscribe);
 </script>
 
 {#if terminalInfo}
@@ -41,6 +46,7 @@
                     class="form-control"
                     id="host"
                     bind:value={host}
+                    disabled={loading}
                 />
             </div>
             <div class="pair">
@@ -50,6 +56,7 @@
                     class="form-control"
                     id="port"
                     bind:value={port}
+                    disabled={loading}
                 />
             </div>
             <div class="pair">
@@ -59,10 +66,14 @@
                     class="form-control"
                     id="newName"
                     bind:value={name}
+                    disabled={loading}
                 />
             </div>
-            <Button danger on:click={() => handleClick(true)}>Отправить</Button>
-            <Button on:click={() => handleClick(false)}>Отмена</Button>
+            <Button danger on:click={handleClick(true)}>
+                Отправить
+                <Loading {loading} />
+            </Button>
+            <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>
 {/if}

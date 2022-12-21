@@ -34,8 +34,7 @@ export default function (io: any, config: Config): void {
         }
 
         const { terminal, readonly } = terminalInfo
-        const { port, server } = isDocument(terminal) ? terminal : { port: 0, server: { host: '' } }
-        const host = isDocument(server) ? server.host : ''
+        const { port, host } = isDocument(terminal) ? terminal : { port: 0, host: '' }
         log('Rights: %o', {
             port, host, readonly
         })

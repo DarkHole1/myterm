@@ -2,26 +2,26 @@
     import { createEventDispatcher } from "svelte";
     import { fly } from "svelte/transition";
     import { FontAwesomeIcon } from "fontawesome-svelte";
-    import API from "../API";
-    import Button from "./Button.svelte";
+    import API from "../../API";
+    import Button from "../Button.svelte";
     import { faSync } from "@fortawesome/free-solid-svg-icons";
+    import Loading from "../helpers/Loading.svelte";
 
     const dispatch = createEventDispatcher();
     let user = "";
     let password = "";
     let message: string | null = null;
-    enum Status { Waiting, Logging }
-    let status = Status.Waiting
+    let loading = false;
 
-    async function handleClick() {
-        status = Status.Logging
-        message = null
+    const handleClick = async () => {
+        loading = true;
+        message = null;
         const success = await API.login(user, password);
-        status = Status.Waiting
-        if(success) {
+        loading = false;
+        if (success) {
             dispatch("login", { user, password });
         } else {
-            message = 'Не получилось войти. Попробуйте ещё раз'
+            message = "Не получилось войти. Попробуйте ещё раз";
         }
     }
 </script>
@@ -36,7 +36,7 @@
                 class="form-control"
                 id="role"
                 bind:value={user}
-                disabled={status == Status.Logging}
+                disabled={loading}
             />
         </div>
         <div class="pair">
@@ -46,7 +46,7 @@
                 class="form-control"
                 id="password"
                 bind:value={password}
-                disabled={status == Status.Logging}
+                disabled={loading}
             />
         </div>
         {#if message}
@@ -54,9 +54,7 @@
         {/if}
         <Button success>
             Войти
-            {#if status == Status.Logging}
-                <FontAwesomeIcon icon={faSync} spin />
-            {/if}
+            <Loading {loading} />
         </Button>
     </form>
 </div>

@@ -1,12 +1,11 @@
 <script lang="ts">
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import { faCaretRight, faPlus } from "@fortawesome/free-solid-svg-icons";
-  import UserBlock from "./UserBlock.svelte";
+  import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
   import { tweened } from "svelte/motion";
   import { cubicOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import API from "../API";
-import RoleBlock from "./RoleBlock.svelte";
+  import RoleBlock from "./RoleBlock.svelte";
 
   let show = false;
   const rotation = tweened(0, {
@@ -30,7 +29,7 @@ import RoleBlock from "./RoleBlock.svelte";
       transform={{ rotate: $rotation * 90 }}
     />
     <span class="text">Роли</span>
-    <div class="gap"></div>
+    <div class="gap" />
   </div>
   {#if show}
     <div class="content" transition:slide>
