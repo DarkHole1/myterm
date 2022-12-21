@@ -7,12 +7,14 @@
 
     const handleClick = (success: boolean) => async () => {
         if (success && userInfo != null) {
+            loading = true
             const role = await API.roles.findOrCreate(roleName);
             const res: { role: string; password?: string } = { role: role.id };
             if (password != "") {
                 res.password = password;
             }
-            userInfo.update(res);
+            await userInfo.update(res);
+            loading = false
         }
         userInfo = null;
     };
