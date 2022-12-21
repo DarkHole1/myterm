@@ -3,6 +3,7 @@
     import type { User } from "../../api/users";
     import API from "../../API";
     import { events } from "../../events";
+    import Loading from "../helpers/Loading.svelte";
 
     const handleClick = (success: boolean) => async () => {
         if (success && userInfo != null) {
@@ -39,6 +40,7 @@
                     class="form-control"
                     id="role"
                     bind:value={roleName}
+                    disabled={loading}
                 />
             </div>
             <div class="pair">
@@ -48,9 +50,12 @@
                     class="form-control"
                     id="password"
                     bind:value={password}
+                    disabled={loading}
                 />
             </div>
-            <Button danger on:click={handleClick(true)}>Отправить</Button>
+            <Button danger on:click={handleClick(true)}
+                >Отправить <Loading {loading} /></Button
+            >
             <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>
