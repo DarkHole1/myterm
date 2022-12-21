@@ -3,31 +3,33 @@
     import { permissions as modalPermissions } from "../../modals";
     import { onDestroy } from "svelte";
     import type { Terminal } from "../../api/terminals";
+    import { FontAwesomeIcon } from "fontawesome-svelte";
+    import { faSync } from "@fortawesome/free-solid-svg-icons";
+    import Loading from "../helpers/Loading.svelte";
+    import { events } from "../../events";
 
-    function handleClick(success: boolean) {
+    const handleClick = (success: boolean) => async () => {
         if (success && terminalInfo != null) {
-            terminalInfo.setPermissions(permissions);
+            loading = true;
+            await terminalInfo.setPermissions(permissions);
+            loading = false;
         }
-        modalPermissions.set(null);
-    }
-    
-    // TODO: not any
-    let terminalInfo : Terminal | null;
+        terminalInfo = null;
+    };
+
+    let loading = false;
+    let terminalInfo: Terminal | null;
     let permissions: { [key: string]: { show: boolean; write: boolean } } = {};
     let newuser = "";
 
-    const unsubscribe = modalPermissions.subscribe((terminal) => {
+    events.on("changeTerminalPermissions", (terminal) => {
         terminalInfo = terminal;
-        if (terminal != null) {
-            permissions = {};
-            terminal.getPermissions().then((perm) => {
-                // HACK
-                permissions = perm as any;
-            });
-        }
+        permissions = {};
+        terminal.getPermissions().then((perm) => {
+            // HACK
+            permissions = perm as any;
+        });
     });
-
-    onDestroy(unsubscribe);
 </script>
 
 {#if terminalInfo}
@@ -37,23 +39,37 @@
             {#each Object.entries(permissions) as [key, value]}
                 <div>
                     <span>{key}</span>{" "}
-                    <label for={key + '_read'}>Чтение</label>
-                    <input type="checkbox" bind:checked={value.show} id={key + "_read"} />
-                    <label for={key + '_write'}>Запись</label>
-                    <input type="checkbox" bind:checked={value.write} />
+                    <label for={key + "_read"}>Чтение</label>
+                    <input
+                        type="checkbox"
+                        bind:checked={value.show}
+                        id={key + "_read"}
+                        disabled={loading}
+                    />
+                    <label for={key + "_write"}>Запись</label>
+                    <input
+                        type="checkbox"
+                        bind:checked={value.write}
+                        id={key + "_write"}
+                        disabled={loading}
+                    />
                 </div>
             {/each}
             <div>
-                <input bind:value={newuser} />{" "}
+                <input bind:value={newuser} disabled={loading} />{" "}
                 <button
+                    disabled={loading}
                     on:click={() => {
                         permissions[newuser] = { show: true, write: false };
                         newuser = "";
                     }}>Добавить роль</button
                 >
             </div>
-            <Button danger on:click={() => handleClick(true)}>Отправить</Button>
-            <Button on:click={() => handleClick(false)}>Отмена</Button>
+            <Button danger on:click={handleClick(true)}>
+                Отправить
+                <Loading {loading} />
+            </Button>
+            <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>
 {/if}

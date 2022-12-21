@@ -2,8 +2,7 @@
     import Button from "../Button.svelte";
     import API from "../../API";
     import { events } from "../../events";
-    import { FontAwesomeIcon } from "fontawesome-svelte";
-    import { faSync } from "@fortawesome/free-solid-svg-icons";
+    import Loading from "../helpers/Loading.svelte";
 
     let enabled = false;
     let name = "";
@@ -18,7 +17,7 @@
         role = "";
     });
 
-    async function handleClick(success: boolean) {
+    const handleClick = (success: boolean) => async () => {
         if (success) {
             loading = true;
             await API.users.create({
@@ -63,13 +62,11 @@
                     disabled={loading}
                 />
             </div>
-            <Button success on:click={() => handleClick(true)}>
+            <Button success on:click={handleClick(true)}>
                 Создать
-                {#if loading}
-                    <FontAwesomeIcon icon={faSync} spin />
-                {/if}
+                <Loading {loading} />
             </Button>
-            <Button on:click={() => handleClick(false)}>Отмена</Button>
+            <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>
 {/if}

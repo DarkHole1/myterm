@@ -1,35 +1,31 @@
 <script lang="ts">
     import Button from "../Button.svelte";
-    import { user } from "../../modals";
-    import { onDestroy } from "svelte";
     import type { User } from "../../api/users";
     import API from "../../API";
+    import { events } from "../../events";
 
-    async function handleClick(success: boolean) {
+    const handleClick = (success: boolean) => async () => {
         if (success && userInfo != null) {
-            const role = await API.roles.findOrCreate(roleName)
+            const role = await API.roles.findOrCreate(roleName);
             const res: { role: string; password?: string } = { role: role.id };
             if (password != "") {
                 res.password = password;
             }
             userInfo.update(res);
         }
-        user.set(null);
-    }
+        userInfo = null;
+    };
 
+    let loading = false;
     let userInfo: User | null = null;
     let roleName = "";
     let password = "";
 
-    const unsubscribe = user.subscribe((user) => {
+    events.on("changeUser", (user) => {
         userInfo = user;
-        if (user != null) {
-            roleName = user.role;
-            password = "";
-        }
+        roleName = user.role;
+        password = "";
     });
-
-    onDestroy(unsubscribe);
 </script>
 
 {#if userInfo}
@@ -54,8 +50,8 @@
                     bind:value={password}
                 />
             </div>
-            <Button danger on:click={() => handleClick(true)}>Отправить</Button>
-            <Button on:click={() => handleClick(false)}>Отмена</Button>
+            <Button danger on:click={handleClick(true)}>Отправить</Button>
+            <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>
 {/if}

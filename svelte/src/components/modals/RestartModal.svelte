@@ -1,31 +1,34 @@
 <script lang="ts">
     import Button from "../Button.svelte";
-    import { restart } from "../../modals";
-    import { onDestroy } from "svelte";
     import type { Terminal } from "../../api/terminals";
+    import { events } from "../../events";
+    import Loading from "../helpers/Loading.svelte";
 
-    function handleClick(success: boolean) {
+    const handleClick = (success: boolean) => async () => {
         if (success && terminalInfo != null) {
-            terminalInfo.restart();
+            loading = true;
+            await terminalInfo.restart();
+            loading = false;
         }
-        restart.set(null);
-    }
+        terminalInfo = null;
+    };
 
-    let terminalInfo: Terminal | null;
+    let loading = false;
+    let terminalInfo: Terminal | null = null;
 
-    const unsubscribe = restart.subscribe((terminal) => {
+    events.on("restartTerminal", (terminal) => {
         terminalInfo = terminal;
     });
-
-    onDestroy(unsubscribe);
 </script>
 
 {#if terminalInfo != null}
     <div class="modal-container">
         <div class="modal-content">
             <div class="title">Перезапустить {terminalInfo.name}</div>
-            <Button danger on:click={() => handleClick(true)}>Да</Button>
-            <Button on:click={() => handleClick(false)}>Нет</Button>
+            <Button danger on:click={handleClick(true)}
+                >Да <Loading {loading} /></Button
+            >
+            <Button on:click={handleClick(false)}>Нет</Button>
         </div>
     </div>
 {/if}

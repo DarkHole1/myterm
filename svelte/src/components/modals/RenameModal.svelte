@@ -4,23 +4,26 @@
     import { onDestroy } from "svelte";
     import API from "../../API";
     import type { Role } from "../../api/roles";
+    import Loading from "../helpers/Loading.svelte";
+    import { events } from "../../events";
 
-    async function handleClick(success: boolean) {
+    const handleClick = (success: boolean) => async () => {
         if (success && oldRole != null) {
+            loading = true
             await API.roles.rename(oldRole, newName);
+            loading = false
         }
         role.set(null);
     }
 
     let oldRole: Role | null = null;
     let newName = "";
+    let loading = false
 
-    const unsubscribe = role.subscribe((role) => {
+    events.on('renameRole', (role) => {
         oldRole = role;
         newName = "";
-    });
-
-    onDestroy(unsubscribe);
+    })
 </script>
 
 {#if oldRole}
@@ -34,10 +37,11 @@
                     class="form-control"
                     id="newRole"
                     bind:value={newName}
+                    disabled={loading}
                 />
             </div>
-            <Button danger on:click={() => handleClick(true)}>Отправить</Button>
-            <Button on:click={() => handleClick(false)}>Отмена</Button>
+            <Button danger on:click={handleClick(true)}>Отправить <Loading {loading} /></Button>
+            <Button on:click={handleClick(false)}>Отмена</Button>
         </div>
     </div>
 {/if}
