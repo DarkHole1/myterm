@@ -1,10 +1,7 @@
 <script lang="ts">
     import Button from "../Button.svelte";
-    import { edit } from "../../modals";
     import type { Terminal } from "../../api/terminals";
     import { events } from "../../events";
-    import { FontAwesomeIcon } from "fontawesome-svelte";
-    import { faSync } from "@fortawesome/free-solid-svg-icons";
     import Loading from "../helpers/Loading.svelte";
 
     const handleClick = (success: boolean) => async () => {
