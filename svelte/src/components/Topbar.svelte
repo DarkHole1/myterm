@@ -10,7 +10,7 @@
 </script>
 
 <div class="topbar">
-    <div class="title">MyTerm</div>
+    <div class="title">MyTV</div>
     <div class="fill" />
     <div class="logout" on:click={logout}>
         <FontAwesomeIcon icon={faArrowRightFromBracket} />
