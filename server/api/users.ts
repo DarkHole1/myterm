@@ -12,7 +12,6 @@ const log = debug('app:api:users')
 export function usersEndpoint(config: Config) {
     const router = Router()
 
-
     router.get('/user.isAdmin', (req, res) => {
         if (!req.user) {
             res.status(401);
@@ -79,30 +78,6 @@ export function usersEndpoint(config: Config) {
         await user.save();
         log('Changes in user succesfull');
         res.json({ success: true });
-    })
-
-    router.post('/user.login', express.json(), async (req, res) => {
-        // console.log("%o", UserModel.schema)
-        const user = await UserModel.findOne({
-            name: req.body.name,
-            password: req.body.password
-        })
-        if (!user) {
-            res.json({ success: false })
-            return
-        }
-
-        res.cookie('name', req.body.name, {
-            sameSite: 'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.cookie('password', req.body.password, {
-            sameSite: 'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
-        res.json({ success: true })
     })
 
     router.post('/user.logout', async (req, res) => {

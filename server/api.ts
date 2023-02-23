@@ -11,6 +11,9 @@ import { FolderModel } from './models/folder';
 import rolesEndpoint from './api/roles';
 import { usersEndpoint } from './api/users';
 import Reason from './api/reasons';
+import { unauthorizedEndpoint } from './api/unauthorized';
+import AuthMiddleware from './auth';
+
 
 const log = debug('app:api');
 
@@ -24,6 +27,11 @@ declare global {
 
 function init(config: Config) {
     const router = Router();
+
+    router.use(unauthorizedEndpoint(config))
+
+    router.use(AuthMiddleware)
+
     router.get('/terminal.list', (req, res) => {
         res.json(req.user.getTerminalsData().map(term => Object.assign({}, term, {
             editable: req.user.admin
@@ -181,15 +189,15 @@ function init(config: Config) {
         })
 
         const parsedQuery = RawQuery.safeParse(req.query)
-        if(!parsedQuery.success) {
+        if (!parsedQuery.success) {
             return res.json({ success: false, reason: Reason.ValidationFailed })
         }
 
         const folder = await FolderModel.findById(parsedQuery.data.folder)
-        if(!folder) {
+        if (!folder) {
             return res.json({ success: false, reason: Reason.FolderNotFound })
         }
-        
+
         log('Creating new terminal')
         const terminal = new TerminalModel({
             name: "Новый терминал",
@@ -198,7 +206,7 @@ function init(config: Config) {
             permissions: {}
         })
         await terminal.save()
-        
+
         folder.terminals.push(terminal._id)
         await folder.save()
         res.json({ success: true })
@@ -225,12 +233,12 @@ function init(config: Config) {
         })
 
         const parsedQuery = QuerySchema.safeParse(req.query)
-        if(!parsedQuery.success) {
+        if (!parsedQuery.success) {
             return res.json([])
         }
 
         const folder = await FolderModel.findById(parsedQuery.data.id).populate('terminals')
-        if(!folder || !isDocumentArray(folder.terminals)) {
+        if (!folder || !isDocumentArray(folder.terminals)) {
             return res.json([])
         }
 

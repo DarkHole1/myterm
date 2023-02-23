@@ -32,7 +32,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(cookie());
-app.use(AuthMiddleware);
+// app.use(AuthMiddleware);
 app.use('/api/', APIMiddleware(config));
 
 server.listen(3000, () => {
