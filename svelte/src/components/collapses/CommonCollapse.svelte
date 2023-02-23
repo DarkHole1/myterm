@@ -29,7 +29,7 @@
     <span class="text">{title}</span>
     <div class="gap" />
     {#if buttonTitle}
-      <span class="text" on:click|stopPropagation>
+      <span class="button-create" on:click|stopPropagation>
         <span>{buttonTitle}</span>
         <FontAwesomeIcon icon={faPlus} transform="shrink-2 down-1" />
       </span>
@@ -41,3 +41,33 @@
     </div>
   {/if}
 </div>
+
+<style scoped>
+  .root {
+    flex-grow: 1;
+  }
+  .header {
+    display: flex;
+    color: #ededed;
+    font-size: 2rem;
+    font-family: "Ubuntu Mono", monospace;
+  }
+  .content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .gap {
+    flex-grow: 1;
+  }
+  .text {
+    margin-left: 0.5em;
+  }
+  .button-create {
+    color: var(--main-color);
+    font-size: 1.6rem;
+    line-height: 2rem;
+    vertical-align: middle;
+  }
+</style>
