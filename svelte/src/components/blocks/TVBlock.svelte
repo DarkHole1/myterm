@@ -1,7 +1,11 @@
 <script lang="ts">
   import {
-    faPencilAlt,
+    faLayerGroup,
+    faPlug,
+    faPlugCircleXmark,
     faTv,
+    faVolumeHigh,
+    faVolumeXmark,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
   import type { Terminal } from "../../api/terminals";
@@ -19,13 +23,11 @@
     {tvData.name}
   </h2>
   <div class="actions">
-    <Action
-      icon={faPencilAlt}
-      on:click={(e) => {
-        e.stopPropagation();
-        // events.dispatch("editTerminal", terminalData);
-      }}
-    />
+    <Action icon={faPlug} />
+    <Action icon={faPlugCircleXmark} danger />
+    <Action icon={faLayerGroup} />
+    <Action icon={faVolumeHigh} />
+    <Action icon={faVolumeXmark} danger />
   </div>
 </div>
 
@@ -44,7 +46,7 @@
   .terminal {
     background: var(--block-color);
     color: var(--font-color);
-    width: 180px;
+    min-width: 180px;
     height: 180px;
     padding: 20px;
     display: flex;
