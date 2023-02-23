@@ -6,7 +6,7 @@
   import { slide } from "svelte/transition";
 
   export let title: string;
-  export let buttonTitle: string | undefined;
+  export let buttonTitle: string | null = null;
 
   let show = false;
   const rotation = tweened(0, {

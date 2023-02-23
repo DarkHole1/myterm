@@ -12,7 +12,8 @@
 	import Topbar from "./components/Topbar.svelte";
 	import RolesCollapse from "./components/RolesCollapse.svelte";
 	import RenameModal from "./components/modals/RenameModal.svelte";
-    import CreateUserModal from "./components/modals/CreateUserModal.svelte";
+	import CreateUserModal from "./components/modals/CreateUserModal.svelte";
+	import TVCollapse from "./components/collapses/TVCollapse.svelte";
 	const { folders, loading } = API;
 
 	function handleLogin() {
@@ -30,19 +31,7 @@
 		<LoginModal on:login={handleLogin} />
 	{:else}
 		<div class="gap" />
-		{#if API.isAdmin}
-			<RolesCollapse />
-			<UsersCollapse />
-		{/if}
-		{#each $folders as server}
-			<ServerCollapse {server} />
-		{/each}
-		<RenameModal />
-		<UserModal />
-		<RestartModal />
-		<EditModal />
-		<PermissionsModal />
-		<CreateUserModal />
+		<TVCollapse />
 	{/if}
 </Container>
 
