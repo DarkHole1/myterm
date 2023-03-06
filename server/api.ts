@@ -13,6 +13,7 @@ import { usersEndpoint } from './api/users';
 import Reason from './api/reasons';
 import { unauthorizedEndpoint } from './api/unauthorized';
 import AuthMiddleware from './auth';
+import { tvsEndpoint } from './api/tvs';
 
 
 const log = debug('app:api');
@@ -260,6 +261,8 @@ function init(config: Config) {
     router.use(usersEndpoint(config))
 
     router.use(rolesEndpoint(config))
+
+    router.use(tvsEndpoint(config))
 
     return router;
 }
