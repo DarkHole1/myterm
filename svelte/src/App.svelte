@@ -5,6 +5,7 @@
 	import Spinner from "./components/Spinner.svelte";
 	import Topbar from "./components/Topbar.svelte";
 	import TVCollapse from "./components/collapses/TVCollapse.svelte";
+    import ChangeSourceModal from "./components/modals/ChangeSourceModal.svelte";
 	const { loading } = API;
 
 	function handleLogin() {
@@ -22,6 +23,7 @@
 		<LoginModal on:login={handleLogin} />
 	{:else}
 		<div class="gap" />
+		<ChangeSourceModal />
 		<TVCollapse />
 	{/if}
 </Container>

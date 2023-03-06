@@ -11,7 +11,7 @@ const RawTV = z.object({
 })
 type RawTV = z.infer<typeof RawTV>
 
-type Source = "vga" | "hdmi1" | "hdmi2" | "hdmi3" | "component" | "composite" | "usb"
+export type Source = "vga" | "hdmi1" | "hdmi2" | "hdmi3" | "component" | "composite" | "usb"
 export class TV implements RawTV {
     parent: TVs
     id: string

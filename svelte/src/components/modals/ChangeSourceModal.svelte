@@ -2,12 +2,12 @@
     import Button from "../Button.svelte";
     import { events } from "../../events";
     import Loading from "../helpers/Loading.svelte";
-    import type { TV } from "../../api/tvs";
+    import type { Source, TV } from "../../api/tvs";
 
     const handleClick = (success: boolean) => async () => {
         if (success && tvData != null) {
             loading = true;
-            // await tvData.restart();
+            await tvData.selectSource(newSource);
             loading = false;
         }
         tvData = null;
@@ -15,6 +15,7 @@
 
     let loading = false;
     let tvData: TV | null = null;
+    let newSource: Source = "vga";
 
     events.on("changeSource", (tv) => {
         tvData = tv;
@@ -24,15 +25,17 @@
 {#if tvData != null}
     <div class="modal-container">
         <div class="modal-content">
-            <div class="title">Переключить {tvData.name} на другой источник</div>
-            <select>
-                <option>VGA</option>
-                <option>HDMI1</option>
-                <option>HDMI2</option>
-                <option>HDMI3</option>
-                <option>Component</option>
-                <option>Composite</option>
-                <option>USB</option>
+            <div class="title">
+                Переключить {tvData.name} на другой источник
+            </div>
+            <select bind:value={newSource}>
+                <option value="vga">VGA</option>
+                <option value="hdmi1">HDMI1</option>
+                <option value="hdmi2">HDMI2</option>
+                <option value="hdmi3">HDMI3</option>
+                <option value="component">Component</option>
+                <option value="composite">Composite</option>
+                <option value="usb">USB</option>
             </select>
             <Button danger on:click={handleClick(true)}
                 >Да <Loading {loading} /></Button
