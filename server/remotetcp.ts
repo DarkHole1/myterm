@@ -39,6 +39,10 @@ class RemoteTCP {
         })
     }
 
+    send(data: string | Uint8Array) {
+        this._socket.write(data)
+    }
+
     close(): void {
         this._socket.destroy();
     }

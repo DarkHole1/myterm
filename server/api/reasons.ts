@@ -7,7 +7,9 @@ enum Reason {
     UserWithRole = 'Такая роль есть у какого-то пользователя.',
     RoleNotFound = 'Указанная роль не найдена.',
     // Folders
-    FolderNotFound = 'Указанная папка не найдена.'
+    FolderNotFound = 'Указанная папка не найдена.',
+    // TVs
+    TVNotFound = 'Указанный телевизор не найден.',
 }
 
 export default Reason

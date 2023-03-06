@@ -13,10 +13,9 @@ const API = {
         baseURL: (dev ? 'https://localhost:3000' : '') + '/api',
         withCredentials: true
     }),
-    // users: new Users,
-    // folders: new Folders,
-    // servers: new Servers,
-    // roles: new Roles,
+    users: new Users,
+    folders: new Folders,
+    roles: new Roles,
     tvs: new TVs,
     isAdmin: false,
     loggedIn: false,
@@ -32,9 +31,9 @@ const API = {
         });
         if (res.data.success) {
             API.isAdmin = (await API.$api.get('/user.isAdmin')).data;
-            // API.roles.update()
-            // API.users.update()
-            // API.folders.update()
+            API.roles.update()
+            API.users.update()
+            API.folders.update()
             API.tvs.update()
             API.loggedIn = true;
         }
@@ -50,9 +49,9 @@ const API = {
 async function checkLogin() {
     try {
         API.isAdmin = (await API.$api.get('/user.isAdmin')).data
-        // API.users.update()
-        // API.roles.update()
-        // API.folders.update()
+        API.users.update()
+        API.roles.update()
+        API.folders.update()
         API.tvs.update()
         API.loggedIn = true;
     } catch (e) {
