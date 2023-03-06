@@ -67,7 +67,7 @@ export class TVs implements Readable<TV[]> {
     $store = writable<TV[]>([])
 
     async update() {
-        const { data } = await API.$api.get<unknown>('/user.list')
+        const { data } = await API.$api.get<unknown>('/tv.list')
         this.$store.set(TV.fromArray(data, this))
     }
 

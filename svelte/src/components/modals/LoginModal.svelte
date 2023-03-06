@@ -26,7 +26,7 @@
 
 <div class="modal-container" transition:fly={{ y: -200 }}>
     <form class="modal-content" on:submit|preventDefault={handleClick}>
-        <div class="title">Вход MyTerm</div>
+        <div class="title">Вход MyTV</div>
         <div class="pair">
             <label for="role" class="form-label">Логин</label>
             <input
