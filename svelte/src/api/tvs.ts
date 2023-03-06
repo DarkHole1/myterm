@@ -1,7 +1,7 @@
-import { Readable, Subscriber, Unsubscriber, writable } from "svelte/store";
+import { Readable, Subscriber, writable } from "svelte/store";
 import { z } from "zod";
 import API from "../API";
-import { User } from "./users";
+import { EmptyResult } from "./helpers/result";
 
 const RawTV = z.object({
     id: z.string(),
@@ -35,16 +35,31 @@ export class TV implements RawTV {
         return z.array(RawTV).parse(data).map(e => new this(e, parent))
     }
 
-    setPower(enable: boolean) {
-        // TODO
+    async setPower(enable: boolean) {
+        const { data } = await API.$api.post<unknown>('/tv.power', {
+            id: this.id,
+            power: enable
+        })
+
+        return EmptyResult.parse(data);
     }
 
-    setMute(enable: boolean) {
-        // TODO
+    async setMute(enable: boolean) {
+        const { data } = await API.$api.post<unknown>('/tv.mute', {
+            id: this.id,
+            mute: enable
+        })
+
+        return EmptyResult.parse(data);
     }
 
-    selectSource(source : Source) {
-        // TODO
+    async selectSource(source: Source) {
+        const { data } = await API.$api.post<unknown>('/tv.source', {
+            id: this.id,
+            source
+        })
+
+        return EmptyResult.parse(data);
     }
 }
 

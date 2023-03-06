@@ -25,6 +25,7 @@ export function tvsEndpoint(_: Config) {
         }
 
         const RawOptions = z.object({
+            id: z.string(),
             source: z.enum(['vga', 'hdmi1', 'hdmi2', 'hdmi3', 'component', 'composed', 'usb'])
         })
         type RawOptions = z.infer<typeof RawOptions>
@@ -47,6 +48,7 @@ export function tvsEndpoint(_: Config) {
         }
 
         const RawOptions = z.object({
+            id: z.string(),
             mute: z.boolean()
         })
         type RawOptions = z.infer<typeof RawOptions>
@@ -69,6 +71,7 @@ export function tvsEndpoint(_: Config) {
         }
 
         const RawOptions = z.object({
+            id: z.string(),
             power: z.boolean()
         })
         type RawOptions = z.infer<typeof RawOptions>
