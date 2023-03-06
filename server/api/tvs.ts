@@ -1,5 +1,5 @@
 import debug from "debug"
-import { Router } from "express"
+import express, { Router } from "express"
 import { z } from "zod"
 import Config from "../config"
 import { TVModel } from "../models/tv"
@@ -16,10 +16,16 @@ export function tvsEndpoint(_: Config) {
 
         log('Starting getting tvs')
         const tvs = await TVModel.find()
-        return res.json(tvs.map(tv => tv.getInfo()));
+        // return res.json(tvs.map(tv => tv.getInfo()));
+        return res.json([{
+            id: '000',
+            name: 'hello',
+            host: '127.0.0.1',
+            port: 999
+        }])
     })
 
-    router.post('/tv.source', async (req, res) => {
+    router.post('/tv.source', express.json(), async (req, res) => {
         if (!req.user.admin) {
             return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
@@ -42,7 +48,7 @@ export function tvsEndpoint(_: Config) {
         return res.json({ success: false, reason: Reason.ImATeapot })
     })
 
-    router.post('/tv.mute', async (req, res) => {
+    router.post('/tv.mute', express.json(), async (req, res) => {
         if (!req.user.admin) {
             return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
@@ -65,7 +71,7 @@ export function tvsEndpoint(_: Config) {
         return res.json({ success: false })
     })
 
-    router.post('/tv.power', async (req, res) => {
+    router.post('/tv.power', express.json(), async (req, res) => {
         if (!req.user.admin) {
             return res.json({ success: false, reason: Reason.NotAnAdmin })
         }
