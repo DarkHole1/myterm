@@ -8,14 +8,14 @@
     faVolumeXmark,
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "fontawesome-svelte";
-  import type { Terminal } from "../../api/terminals";
+  import type { TV } from "../../api/tvs";
   import { events } from "../../events";
   import Action from "../Action.svelte";
 
-  export let tvData: any;
+  export let tvData: TV;
 </script>
 
-<div class="terminal">
+<div class="tv">
   <div class="header">
     <FontAwesomeIcon class="logo" icon={faTv} />
   </div>
@@ -39,11 +39,11 @@
     transition: 0.5s;
   }
 
-  .terminal :global(.logo) {
+  .tv :global(.logo) {
     margin-left: 0.3em;
   }
 
-  .terminal {
+  .tv {
     background: var(--block-color);
     color: var(--font-color);
     min-width: 180px;
@@ -58,22 +58,22 @@
     margin: 1rem;
   }
 
-  .terminal:hover {
+  .tv:hover {
     background: var(--block-highlight-color);
   }
 
-  .terminal:hover > .header {
+  .tv:hover > .header {
     font-size: 3rem;
   }
 
-  .terminal > .actions {
+  .tv > .actions {
     margin-bottom: 1em;
     height: 0;
     opacity: 0;
     transition: 0.5s;
   }
 
-  .terminal:hover > .actions {
+  .tv:hover > .actions {
     height: 1.2rem;
     opacity: 1;
   }

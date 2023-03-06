@@ -3,6 +3,7 @@ import { readable, Subscriber, Writable, writable } from "svelte/store";
 import { Folders } from './api/folders';
 import { Roles } from './api/roles';
 import { Terminals } from './api/terminals';
+import { TVs } from './api/tvs';
 import { Users } from './api/users';
 
 const dev = location.hostname == 'localhost' && location.port != "3000";
@@ -12,10 +13,11 @@ const API = {
         baseURL: (dev ? 'https://localhost:3000' : '') + '/api',
         withCredentials: true
     }),
-    users: new Users,
-    folders: new Folders,
+    // users: new Users,
+    // folders: new Folders,
     // servers: new Servers,
-    roles: new Roles,
+    // roles: new Roles,
+    tvs: new TVs,
     isAdmin: false,
     loggedIn: false,
     $setLoading: (s: boolean) => { },
@@ -30,9 +32,10 @@ const API = {
         });
         if (res.data.success) {
             API.isAdmin = (await API.$api.get('/user.isAdmin')).data;
-            API.roles.update()
-            API.users.update()
-            API.folders.update()
+            // API.roles.update()
+            // API.users.update()
+            // API.folders.update()
+            API.tvs.update()
             API.loggedIn = true;
         }
         return res.data.success;
@@ -47,9 +50,10 @@ const API = {
 async function checkLogin() {
     try {
         API.isAdmin = (await API.$api.get('/user.isAdmin')).data
-        API.users.update()
-        API.roles.update()
-        API.folders.update()
+        // API.users.update()
+        // API.roles.update()
+        // API.folders.update()
+        API.tvs.update()
         API.loggedIn = true;
     } catch (e) {
         API.isAdmin = false;

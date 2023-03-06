@@ -1,12 +1,13 @@
 <script lang="ts">
     import TvBlock from "../blocks/TVBlock.svelte";
     import CommonCollapse from "./CommonCollapse.svelte";
+    import API from "../../API";
 
-    let data = [{ name: "Foo" }, { name: "Bar" }];
+    const { tvs } = API 
 </script>
 
 <CommonCollapse title="TVs">
-    {#each data as tvData}
+    {#each $tvs as tvData}
         <TvBlock {tvData} />
     {/each}
 </CommonCollapse>
