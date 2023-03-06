@@ -1,5 +1,6 @@
 import type { Role } from "./api/roles"
 import type { Terminal } from "./api/terminals"
+import type { TV } from "./api/tvs"
 import type { User } from "./api/users"
 
 interface Events {
@@ -9,6 +10,7 @@ interface Events {
     restartTerminal: (terminal: Terminal) => void
     editTerminal: (terminal: Terminal) => void
     renameRole: (role: Role) => void
+    changeSource: (tv: TV) => void
 }
 
 type EventHandlers = Partial<{

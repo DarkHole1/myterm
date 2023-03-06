@@ -23,11 +23,18 @@
     {tvData.name}
   </h2>
   <div class="actions">
-    <Action icon={faPlug} />
-    <Action icon={faPlugCircleXmark} danger />
-    <Action icon={faLayerGroup} />
-    <Action icon={faVolumeHigh} />
-    <Action icon={faVolumeXmark} danger />
+    <Action icon={faPlug} on:click={() => tvData.setPower(true)} />
+    <Action
+      icon={faPlugCircleXmark}
+      danger
+      on:click={() => tvData.setPower(false)}
+    />
+    <Action
+      icon={faLayerGroup}
+      on:click={() => events.dispatch("changeSource", tvData)}
+    />
+    <Action icon={faVolumeHigh} on:click={() => tvData.setMute(false)} />
+    <Action icon={faVolumeXmark} danger on:click={() => tvData.setMute(true)} />
   </div>
 </div>
 
