@@ -1,4 +1,7 @@
+import { Readable, Subscriber, Unsubscriber, writable } from "svelte/store";
 import { z } from "zod";
+import API from "../API";
+import { User } from "./users";
 
 const RawTV = z.object({
     id: z.string(),
@@ -45,4 +48,15 @@ export class TV implements RawTV {
     }
 }
 
-class TVs { }
+export class TVs implements Readable<TV[]> {
+    $store = writable<TV[]>([])
+
+    async update() {
+        const { data } = await API.$api.get<unknown>('/user.list')
+        this.$store.set(TV.fromArray(data, this))
+    }
+
+    subscribe(run: Subscriber<TV[]>) {
+        return this.$store.subscribe(run)
+    }
+}
