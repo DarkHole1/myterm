@@ -18,6 +18,7 @@ const io = new Server(server);
 const log = require('debug')('app:server');
 log('Starting server...');
 import mongoose from 'mongoose';
+import { unauthorizedEndpoint } from './api/unauthorized'
 mongoose.connect(config.mongodbURI, (err) => {
     log('DB connected, error: %o', err);
     log('DB uri "%s"', config.mongodbURI);
@@ -32,6 +33,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(cookie());
+app.use('/api/', unauthorizedEndpoint());
 app.use(AuthMiddleware);
 app.use('/api/', APIMiddleware(config));
 
